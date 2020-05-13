@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="IMAGING" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>IMAGING-2-1-3 IMAGING COMMAND ABSOLUTE MOVE</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.IMAGING-2-1-3.01" ONVIFTestID="IMAGING-2-1-3" Enabled="true">
+    <TestName>IMAGING COMMAND ABSOLUTE MOVE</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check IMAGING COMMAND ABSOLUTE MOVE test
+      when DUT returns correct response.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        IMAGING-2-1-3 IMAGING COMMAND ABSOLUTE MOVE
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        STEP PASSED
+
+        STEP 5 - Get move options
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Validate move options structure
+        STEP PASSED
+
+        STEP 7 - Check if Absolute Move is supported
+        Supported
+        STEP PASSED
+
+        STEP 8 - Send Move command
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 9 - Check if Speed for Absolute Move is supported
+        Supported
+        STEP PASSED
+
+        STEP 10 - Send Move command
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Imaging20.GetMoveOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <MoveOptions20 p2:any_Attr="anySimpleType"
+                       xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl"
+                       xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Absolute>
+            <tt:Position>
+              <tt:Min>1</tt:Min>
+              <tt:Max>10</tt:Max>
+            </tt:Position>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>10</tt:Max>
+            </tt:Speed>
+          </tt:Absolute>
+          <tt:Relative>
+            <tt:Distance>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Distance>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Relative>
+          <tt:Continuous>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Continuous>
+        </MoveOptions20>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Imaging20.Move</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+        <Focus>
+          <Absolute>
+              <Position>4</Position>
+          </Absolute>
+        </Focus>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Imaging20.Move</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+        <Focus>
+          <Absolute>
+            <Position>7</Position>
+            <Speed>5.5</Speed>
+          </Absolute>
+        </Focus>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-2-1-3.02" ONVIFTestID="IMAGING-2-1-3" Enabled="true">
+    <TestName>IMAGING COMMAND ABSOLUTE MOVE</TestName>
+    <Name>Absolute Move is not supported by DUT</Name>
+    <Description>
+      Check IMAGING COMMAND ABSOLUTE MOVE test
+      when Absolute Move is not supported by DUT.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        IMAGING-2-1-3 IMAGING COMMAND ABSOLUTE MOVE
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        STEP PASSED
+
+        STEP 5 - Get move options
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Validate move options structure
+        STEP PASSED
+
+        STEP 7 - Check if Absolute Move is supported
+        Not supported
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Imaging20.GetMoveOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <MoveOptions20 p2:any_Attr="anySimpleType"
+                       xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl"
+                       xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Relative>
+            <tt:Distance>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Distance>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Relative>
+          <tt:Continuous>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Continuous>
+        </MoveOptions20>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-2-1-3.03" ONVIFTestID="IMAGING-2-1-3" Enabled="true">
+    <TestName>IMAGING COMMAND ABSOLUTE MOVE</TestName>
+    <Name>Speed in Absolute Move is not supported by DUT</Name>
+    <Description>
+      Check IMAGING COMMAND ABSOLUTE MOVE test
+      when Speed in Absolute Move is not supported by DUT.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        IMAGING-2-1-3 IMAGING COMMAND ABSOLUTE MOVE
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        STEP PASSED
+
+        STEP 5 - Get move options
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Validate move options structure
+        STEP PASSED
+
+        STEP 7 - Check if Absolute Move is supported
+        Not supported
+        STEP PASSED
+
+        STEP 8 - Send Move command
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 9 - Check if Speed for Absolute Move is supported
+        Not supported
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Imaging20.GetMoveOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <MoveOptions20 p2:any_Attr="anySimpleType"
+                       xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl"
+                       xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Absolute>
+            <tt:Position>
+              <tt:Min>1</tt:Min>
+              <tt:Max>10</tt:Max>
+            </tt:Position>
+          </tt:Absolute>
+          <tt:Relative>
+            <tt:Distance>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Distance>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Relative>
+          <tt:Continuous>
+            <tt:Speed>
+              <tt:Min>1</tt:Min>
+              <tt:Max>1</tt:Max>
+            </tt:Speed>
+          </tt:Continuous>
+        </MoveOptions20>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Imaging20.Move</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+        <Focus>
+          <Absolute>
+            <Position>4</Position>
+          </Absolute>
+        </Focus>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

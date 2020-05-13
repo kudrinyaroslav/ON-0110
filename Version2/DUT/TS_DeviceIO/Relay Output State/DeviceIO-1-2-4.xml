@@ -1,0 +1,4586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>DeviceIO commands template</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <!--Positive tests-->
+  <Test ID = "TC.DEVICEIO-1-2-4.101" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Correct response. Discrete = false in GetRelayOutputOptions</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.102" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – BISTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>OutputOptions.Discrete = True, DelayTime 20 and 120</Name>
+    <Description>
+      !!! Compare parameter: Set DelayTime should be PT20S !!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT120S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+            <RelayOutput token="Relay4">
+              <tt:Properties>
+                <tt:Mode>Bistable</tt:Mode>
+                <tt:DelayTime>PT10S</tt:DelayTime>
+                <tt:IdleState>closed</tt:IdleState>
+              </tt:Properties>
+            </RelayOutput>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A3-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay3</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay3">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A3-->
+
+
+    <Step id="6">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT20S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay3" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="14">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay4" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT120S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.103" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Discrete skipped in Options</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <!--<Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>-->
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.104" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Discrete and DelayTimes skipped in Options</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <!--<DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>-->
+            <!--<Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>-->
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.105" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – BISTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>OutputOptions.Discrete = True. DelayTime= 5 5.5</Name>
+    <Description>
+      !!! Compare parameter: Set DelayTime should be PT5S !!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT120S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+            <RelayOutput token="Relay4">
+              <tt:Properties>
+                <tt:Mode>Bistable</tt:Mode>
+                <tt:DelayTime>PT10S</tt:DelayTime>
+                <tt:IdleState>closed</tt:IdleState>
+              </tt:Properties>
+            </RelayOutput>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A3-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">5 5.5</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay3</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay3">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A3-->
+
+
+    <Step id="6">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT20S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay3" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="14">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay4" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT120S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.106" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – BISTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>OutputOptions.Discrete = True. DelayTime= 1 5.5 10</Name>
+    <Description>
+      !!! Compare parameter: Set DelayTime should be PT5.5S !!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT120S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+            <RelayOutput token="Relay4">
+              <tt:Properties>
+                <tt:Mode>Bistable</tt:Mode>
+                <tt:DelayTime>PT10S</tt:DelayTime>
+                <tt:IdleState>closed</tt:IdleState>
+              </tt:Properties>
+            </RelayOutput>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A3-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 5.5 10</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay3</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay3">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 5.5 10</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A3-->
+
+
+    <Step id="6">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT20S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay3" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="14">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay4" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT120S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.107" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>No Monostable mode in Options</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay3">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.108" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – BISTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>OutputOptions.Discrete = True. DelayTime= 1 3 7 120</Name>
+    <Description>
+      !!! Compare parameter: Set DelayTime should be PT3S !!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT120S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay4">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A3-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3 7 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay3</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay3">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <!--<Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>-->
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3 7 120</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3 7 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A3-->
+
+
+    <Step id="6">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT3S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay3" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="14">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay4" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT120S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <!--Negative tests-->
+  <Test ID = "TC.DEVICEIO-1-2-4.201" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Discrete=true, DelayTimes skipped</Name>
+    <Description>
+      Should set PT5S
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <!--<DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>-->
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.202" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>No Initialized event. PropertyOperation="Initialized" is absent</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.203" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>No Changed event for required token</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.204" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Incorrect state after 2nd set</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.205" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Empty pullMessages</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <!--<NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>-->
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <!--<NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  -->
+          <!--if not inactive fail-->
+          <!--
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>-->
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <!--<NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>-->
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.206" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Fault response on GetRelayOutputs</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Fault</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.207" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Fault response on SetRelayOutputState</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-2-4.208" ONVIFTestID="DEVICEIO-1-2-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSTATE – MONOSTABLE MODE (OPENED IDLE STATE)</TestName>
+    <Name>Fault response on SetRelayOutputSettings</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="Relay1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="Relay3">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="Relay1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">20 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:TopicExpression>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:2634/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>inactive</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="inactive" />
+                  <!--if not inactive fail-->
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>DeviceIO10.SetRelayOutputState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <LogicalState>active</LogicalState>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">65</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device/Trigger/Relay</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="RelayToken" Value="Relay1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="LogicalState" Value="active" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>Relay1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

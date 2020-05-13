@@ -1,0 +1,2791 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</Name>
+    <Description>
+
+    </Description>
+  </Parameters>
+
+  <!-- positive -->
+
+  <Test ID = "MEDIA2-1-1-7.101" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>Correct: 1 profile (fixed) - w/2 confs</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+	
+	<Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	</Test>  
+
+  <Test ID = "MEDIA2-1-1-7.102" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>Empty 1st GetProfiles response</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+
+	</Test>  
+
+  <Test ID = "MEDIA2-1-1-7.103" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>1 profile (fixed)- no configurations</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="3">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+	</Test> 
+	
+  <Test ID = "MEDIA2-1-1-7.104" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>4 profiles - only 3rd is fixed</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+		   <MediaProfile token="media_profile2" fixed="false">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName2</tt:Name>
+                <tt:UseCount>5</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+	   
+          <MediaProfile token="media_profile3">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+		  
+		  
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+       
+
+
+          <MediaProfile token="media_profile4">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+		  
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+		  
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	
+	</Test>  
+		
+  <Test ID = "MEDIA2-1-1-7.105" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>3 fixed profiles (+ 1 not fixed)</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+	  </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+       
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName2</tt:Name>
+                <tt:UseCount>5</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+	   
+          <MediaProfile token="media_profile3">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+
+          <MediaProfile token="media_profile4" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<!-- next -->
+	
+    <Step id="7">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile2</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="8">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+	<Step id="9">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile2</ProfileToken>
+			<Configuration>
+				<Type>AudioOutput</Type>
+				<Token>AOC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>AudioDecoder</Type>
+				<Token>ADC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	<Step id="10">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+
+       
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName2</tt:Name>
+                <tt:UseCount>5</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+
+	
+	<!-- restore -->
+
+	<Step id="11">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="12">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+
+       
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName2</tt:Name>
+                <tt:UseCount>5</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="13">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile4</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+
+
+          <MediaProfile token="media_profile4" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	
+	
+	</Test>  
+	
+	
+
+	
+  <!--negative-->
+
+  <Test ID = "MEDIA2-1-1-7.201" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+	  <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>Correct: VideoEncoder conf after remove</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+			<VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+	<Step id="5">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+			<VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="6">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	</Test>  
+  
+  <Test ID = "MEDIA2-1-1-7.202" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>Empty 2nd GetProfiles response</Name>
+    <Description>
+		</Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+	<Step id="5">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+	<Step id="6">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	
+	<Step id="7">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	</Test>  
+	
+  <Test ID = "MEDIA2-1-1-7.204" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>4 profiles - incorrect 2nd profile</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+       
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName2</tt:Name>
+                <tt:UseCount>5</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+	   
+          <MediaProfile token="media_profile3">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+
+          <MediaProfile token="media_profile4">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+
+            </Configurations>
+          </MediaProfile>
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+       
+
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<!-- next -->
+	
+    <Step id="7">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile2</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="8">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+			<AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+
+<!-- restore -->
+
+	<Step id="9">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+       
+
+
+	   </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+
+
+	<Step id="10">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+			<AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="11">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile2</ProfileToken>
+			<Configuration>
+				<Type>AudioOutput</Type>
+				<Token>AOC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	
+	
+	
+	
+	</Test>  
+ 
+  
+	<!-- restore -->
+
+  <Test ID = "MEDIA2-1-1-7.205" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>no configurations after in GetProfilesResponse from restore</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+             <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+<!--               <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder> -->
+            </Configurations> 
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<!-- stand. rest. -->
+	
+	<Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	</Test>  
+
+  <Test ID = "MEDIA2-1-1-7.206" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>not all configurations after in GetProfilesResponse from restore</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+             <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+<!--               <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder> -->
+            </Configurations> 
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<!-- stand. rest. -->
+	
+	<Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	</Test>  
+
+  <Test ID = "MEDIA2-1-1-7.207" ONVIFTestID="MEDIA2-1-1-7" Enabled="true">
+    <TestName>REMOVE ALL CONFIGURATIONS FROM MEDIA PROFILE</TestName>
+    <Name>GetProfilesResponse from restore has no profiles</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/ptz/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+	<Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<Token>media_profile1</Token>-->
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>All</Type>
+				<!-- <Token>VSC1</Token> -->
+			</Configuration> 
+	</RequestParameters>
+      <ResponseParameters>
+			<RemoveConfigurationResponse></RemoveConfigurationResponse>
+      </ResponseParameters>
+    </Step> 
+
+	<Step id="4">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>	
+	
+	<Step id="5">
+	<Command>Media210.AddConfiguration</Command>
+		<Response>Normal</Response>
+		<RequestParameters>
+			<ProfileToken>media_profile1</ProfileToken>
+			<Configuration>
+				<Type>VideoSource</Type>
+				<Token>VSC1</Token>
+			</Configuration>
+			<Configuration>
+				<Type>VideoEncoder</Type>
+				<Token>VEC1</Token>
+			</Configuration>
+		</RequestParameters>
+		<ResponseParameters>
+			<AddConfigurationResponse>
+			</AddConfigurationResponse>
+		</ResponseParameters>
+    </Step>
+	
+	<Step id="6">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	<!-- stand. rest. -->
+	
+	<Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>All</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1" fixed="true">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoSource token="VSC1">
+                <tt:Name>VideoSourceConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:SourceToken>1</tt:SourceToken>
+                <tt:Bounds height="1080" width="1920" y="1" x="1">
+                </tt:Bounds>
+              </VideoSource>
+              <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+	</Test>  
+
+  
+  
+  
+  
+  
+</TestSuit>

@@ -1,0 +1,4094 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Recording service" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID="TC.RECORDING-5-1-10.F00" ONVIFTestID="Features" Enabled="true">
+    <TestName>RECORDING-5-1-10 Features detection</TestName>
+    <Name>GetServices and Digest suported</Name>
+    <Description>
+      GetServices - supported.
+      Digest - supported.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="0" />
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3" />
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.01" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Annex A.10: Number of existing recordings less than MexRecordings
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="9">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.02" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Correct response. A.10: Number of recordings = MaxRecordings</Name>
+    <Description>
+      Annex A.10: Number of existing recordings equal to MexRecordings
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="1">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording001</RecordingToken>
+      </RequestParameters>
+    </Step>
+    <!--Test-->
+    <Step id="5">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="6">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording001</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording001" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording001" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording001" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording001</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.03" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect response. A.10: Fault on DeleteRecording</Name>
+    <Description>
+      Annex A.10: Number of existing recordings equal to MexRecordings
+      DUT sends fault message
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="2">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording002</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>CannotDelete</Subcode>
+      <RequestParameters>
+        <RecordingToken>recording001</RecordingToken>
+      </RequestParameters>
+    </Step>
+    <Step id="5">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>CannotDelete</Subcode>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.04" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Correct response. A.10: first recording can not be deleted</Name>
+    <Description>
+      Annex A.10: one of recordings can not be deleted
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="2">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording002</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>CannotDelete</Subcode>
+      <RequestParameters>
+        <RecordingToken>recording001</RecordingToken>
+      </RequestParameters>
+    </Step>
+    <Step id="5">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+    <!--Test-->
+    <Step id="6">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="8">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording003</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="9">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording003" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording003" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording003" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="12">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="13">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording003</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.05" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Fault on CreateRecordingResponse message</Name>
+    <Description>
+      The DUT did not send valid CreateRecordingResponse message.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <Subcode>NotImplemented</Subcode>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.06" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>No CreateRecordingResponse message</Name>
+    <Description>
+      The DUT did not send CreateRecordingResponse message.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.07" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>No CreatePullPointSubscriptionResponse message</Name>
+    <Description>
+      The DUT did not send CreatePullPointSubscriptionResponse message.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--Notification-->
+  <Test ID="TC.RECORDING-5-1-10.08" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>No PMSPullMessagesResponse message</Name>
+    <Description>
+      DUT did not send PMSPullMessagesResponse message
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.09" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: no notification for Video Track</Name>
+    <Description>
+      DUT did not send notification for Video Track
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.10" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: no notification for Audio Track</Name>
+    <Description>
+      DUT did not send notification for Audio Track
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.11" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: no notification for Metadata Track</Name>
+    <Description>
+      DUT did not send notification for Metadata Track
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.12" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: Wrong UTC-Time</Name>
+    <Description>
+      DUT sends message with wrong UTC-Time
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="9">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012:12:01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.13" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect response: no event with Topic tns1:RecordingConfig/CreateTrack</Name>
+    <Description>
+      DUT did not send event with Topic tns1:RecordingConfig/CreateTrack
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/DeleteTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/DeleteTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="9">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/DeleteTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.14" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: no Source.SimpleItem item with Name="RecordingToken"</Name>
+    <Description>
+      DUT sends message without Source.SimpleItem item with Name="RecordingToken"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Data>
+                  <tt:SimpleItem Name="TrackToken" Value="recording002" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.15" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: Source.SimpleItem item with wrong Name</Name>
+    <Description>
+      DUT sends message with Source.SimpleItem item with wrong Name
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingJobToken" Value="recording002" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.16" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: message for not existing RecordingToken</Name>
+    <Description>
+      DUT sends message for not existing RecordingToken
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording005" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.17" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: DUT sends 3 messages</Name>
+    <Description>
+      DUT sends 3 messages instead of 2
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.RECORDING-5-1-10.18" ONVIFTestID="RECORDING-5-1-10" Enabled="true">
+    <TestName>RECORDING-5-1-10 RECORDING CONTROL – CREATE TRACK EVENT (CREATE RECORDING)</TestName>
+    <Name>Incorrect notification: message for not existing TrackToken</Name>
+    <Description>
+      DUT sends message for not existing TrackToken
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.10-->
+    <Step id="2">
+      <Command>Recording10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities DynamicRecordings="true" DynamicTracks="true" Encoding="H264" MaxRate="8" MaxTotalRate="8" MaxRecordings="10">
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Recording10.GetRecordings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingsResponseItem>
+          <GetRecordingsResponseItem>
+            <RecordingToken xmlns="http://www.onvif.org/ver10/schema">recording001</RecordingToken>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Source>
+                <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+                <Name>CameraName</Name>
+                <Location>LocationDescription</Location>
+                <Description>SourceDescription</Description>
+                <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+              </Source>
+              <Content>Recording from device</Content>
+              <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+            </Configuration>
+            <Tracks xmlns="http://www.onvif.org/ver10/schema">
+              <Track>
+                <TrackToken>video001</TrackToken>
+                <Configuration>
+                  <TrackType>Video</TrackType>
+                  <Description>VIDEO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>audio001</TrackToken>
+                <Configuration>
+                  <TrackType>Audio</TrackType>
+                  <Description>AUDIO</Description>
+                </Configuration>
+              </Track>
+              <Track>
+                <TrackToken>metadata001</TrackToken>
+                <Configuration>
+                  <TrackType>Metadata</TrackType>
+                  <Description>METADATA</Description>
+                </Configuration>
+              </Track>
+            </Tracks>
+          </GetRecordingsResponseItem>
+        </ArrayOfGetRecordingsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <!--Test-->
+    <Step id="4">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter><![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/CreateTrack</wsnt:TopicExpression>]]></Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters />
+          <wsa:Metadata />
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="6">
+      <Command>Recording10.CreateRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>recording002</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <Configuration xmlns="http://www.onvif.org/ver10/schema">
+          <Source>
+            <SourceId>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</SourceId>
+            <Name>CameraName</Name>
+            <Location>LocationDescription</Location>
+            <Description>SourceDescription</Description>
+            <Address>http://localhost:3246/onvif/ServiceDevice10/DeviceServiceFake.asmx</Address>
+          </Source>
+          <Content>CREATE TRACK EVENT (CREATE RECORDING) test</Content>
+          <MaximumRetentionTime>PT10S</MaximumRetentionTime>
+        </Configuration>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="AUDIO001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="9">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now">
+        </CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="VIDEO007" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/CreateTrack</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingToken" Value="recording002" />
+                  <tt:SimpleItem Name="TrackToken" Value="META001" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id="10">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="11">
+      <Command>Recording10.DeleteRecording</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>recording002</RecordingToken>
+      </RequestParameters>
+    </Step>
+  </Test>
+</TestSuit>

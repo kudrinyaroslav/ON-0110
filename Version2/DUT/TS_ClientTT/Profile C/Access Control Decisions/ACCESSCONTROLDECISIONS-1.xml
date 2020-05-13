@@ -1,0 +1,954 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>EVENT-3-1-16 REALTIME PULLPOINT SUBSCRIPTION - PULLMESSAGES FILTER</Name>
+    <Description>
+    </Description>
+  </Parameters>
+
+
+  <Test ID = "TC.ACCESSCONTROLDECISIONS-1.01" ONVIFTestID="ACCESSCONTROLDECISIONS-1" Enabled="true">
+    <TestName>RETRIEVE NOTIFICATIONS ABOUT ACCESS CONTROL DECISIONS</TestName>
+    <Name>Correct response</Name>
+    <Description>     
+      Event topic: tns1:/AccessGranted/Credential
+      Namespaces:
+      tns1="http://www.onvif.org/ver10/topics"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+
+    <Step id ="6">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:AccessControl/AccessGranted/Credential</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="AccessPointToken" Value="tokenAccessPoint1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="CredentialHolderName" Value="Other" />
+                  <tt:SimpleItem Name="CredentialToken" Value="Other" />
+
+                  <tt:SimpleItem Name="External" Value="false" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROLDECISIONS-1.02" ONVIFTestID="ACCESSCONTROLDECISIONS-1" Enabled="true">
+    <TestName>RETRIEVE NOTIFICATIONS ABOUT ACCESS CONTROL DECISIONS</TestName>
+    <Name>Fault to CPPS</Name>
+    <Description>     
+      Event topic: tns1:/AccessGranted/Credential
+      Namespaces:
+      tns1="http://www.onvif.org/ver10/topics"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+
+    <Step id ="6">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:AccessControl/AccessGranted/Credential</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="AccessPointToken" Value="tokenAccessPoint1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="CredentialHolderName" Value="Other" />
+                  <tt:SimpleItem Name="CredentialToken" Value="Other" />
+
+                  <tt:SimpleItem Name="External" Value="false" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+<Test ID = "TC.ACCESSCONTROLDECISIONS-1.03" ONVIFTestID="ACCESSCONTROLDECISIONS-1" Enabled="true">
+    <TestName>RETRIEVE NOTIFICATIONS ABOUT ACCESS CONTROL DECISIONS</TestName>
+    <Name>No response to CPPS</Name>
+    <Description>     
+      Event topic: tns1:/AccessGranted/Credential
+      Namespaces:
+      tns1="http://www.onvif.org/ver10/topics"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>NoResponse</Response>     
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+
+    <Step id ="6">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:AccessControl/AccessGranted/Credential</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="AccessPointToken" Value="tokenAccessPoint1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="CredentialHolderName" Value="Other" />
+                  <tt:SimpleItem Name="CredentialToken" Value="Other" />
+
+                  <tt:SimpleItem Name="External" Value="false" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+
+
+
+
+
+
+  <Test ID = "TC.EVENT-3-1-16.18" ONVIFTestID="EVENT-3-1-16" Enabled="true">
+    <TestName>REALTIME PULLPOINT SUBSCRIPTION - PULLMESSAGES FILTER</TestName>
+    <Name>Fault on PullMessages (TerminationTime)</Name>
+    <Description>
+      On management tab select:
+      Event topic: tns1:VideoSource/SignalLoss
+      Namespaces:
+      tns1="http://www.onvif.org/ver10/topics"
+
+      DUT does not accept Termination Time on PullMessages requests and sends PullMessagesFaultResponse
+      DUT can re-send PM with new Termination Time (Check  that Termination Time in request is correct)
+    </Description>
+    <ExpectedResult>
+
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+          <tns1:VideoSource>
+            <SignalLoss wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalLoss>
+            <SignalTooBlurry wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooBlurry>
+            <SignalTooNoisy wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooNoisy>
+            <SignalTooDark wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooDark>
+            <SignalTooBright wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooBright>
+            <CameraRedirected wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </CameraRedirected>
+            <MotionAlarm wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </MotionAlarm>
+
+          </tns1:VideoSource>
+          <tns1:Device>
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <DigitalInput wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="InputToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="xsd:boolean" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </DigitalInput>
+            </Trigger>
+          </tns1:Device>
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT20S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <Details>
+        <soap:Detail xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+          <PullMessagesFaultResponse xmlns="http://www.onvif.org/ver10/events/wsdl">
+            <MaxTimeout>PT10S</MaxTimeout>
+            <MaxMessageLimit>2</MaxMessageLimit>
+          </PullMessagesFaultResponse>
+        </soap:Detail>
+      </Details>
+    </Step>
+    <Step id ="4">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT10S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="VideoSourceConfigurationToken" Value="1"/>
+                  <tt:SimpleItem Name="VideoAnalyticsConfigurationToken" Value="2"/>
+                  <tt:SimpleItem Value="MyImportantFence1" Name="Rule"/>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="ObjectId" Value="15" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>PMSSetSynchronizationPoint</Command>
+      <Response>Normal</Response>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-3-1-16.19" ONVIFTestID="EVENT-3-1-16" Enabled="true">
+    <TestName>REALTIME PULLPOINT SUBSCRIPTION - PULLMESSAGES FILTER</TestName>
+    <Name>Fault on PullMessages (MessageLimit)</Name>
+    <Description>
+      On management tab select:
+      Event topic: tns1:VideoSource/SignalLoss
+      Namespaces:
+      tns1="http://www.onvif.org/ver10/topics"
+
+      DUT does not accept Message Limit on PullMessages requests and sends PullMessagesFaultResponse
+      DUT can re-send PM with new Termination Time (Check  that Message Limit in request is correct)
+    </Description>
+    <ExpectedResult>
+
+      <TestSummary>
+        <![CDATA[
+EVENT-3-1-16 REALTIME PULLPOINT SUBSCRIPTION - PULLMESSAGES FILTER
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Get Event Properties
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Parse topic
+      Topic: tns1:VideoSource/SignalLoss; Namespaces: tns1="http://www.onvif.org/ver10/topics"
+   STEP PASSED
+
+   Timeout of 20 seconds will be used
+   
+   STEP 4 - Create Pull Point Subsciption
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 7 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 8 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 9 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 10 - Send PullMessages request
+      Transmit done
+      Waiting for PullMessagesResponse message 
+   STEP PASSED
+
+   STEP 11 - Set Synchronization Point
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 12 - Get PullMessages response
+      Receive done
+      Exception of type FaultException<PullMessagesFaultResponseType> received. Will try to pull messages with new parameters
+   STEP PASSED
+
+   STEP 13 - Check if correct paramters are specified in fault
+   STEP PASSED
+
+   STEP 14 - Send PullMessages request (retry)
+      Transmit done
+      Waiting for PullMessagesResponse message 
+   STEP PASSED
+
+   STEP 15 - Set Synchronization Point
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 16 - Get PullMessages response
+      Receive done
+   STEP PASSED
+
+   STEP 17 - Check that DUT sent notification messages
+   STEP PASSED
+
+   STEP 18 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 19 - Check that a maximum number of 1 Notification Messages is included in PullMessagesResponse
+   STEP PASSED
+
+   STEP 20 - Response is not empty
+   STEP PASSED
+
+   STEP 21 - Validate messages
+   STEP PASSED
+
+   STEP 22 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+TEST PASSED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+          <tns1:VideoSource>
+            <SignalLoss wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalLoss>
+            <SignalTooBlurry wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooBlurry>
+            <SignalTooNoisy wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooNoisy>
+            <SignalTooDark wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooDark>
+            <SignalTooBright wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </SignalTooBright>
+            <CameraRedirected wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </CameraRedirected>
+            <MotionAlarm wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoSourceToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xsd:boolean" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </MotionAlarm>
+
+          </tns1:VideoSource>
+          <tns1:Device>
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <DigitalInput wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="InputToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="xsd:boolean" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </DigitalInput>
+            </Trigger>
+          </tns1:Device>
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT20S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id="5">
+      <Command>PMSPullMessages</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <Details>
+        <soap:Detail xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+          <PullMessagesFaultResponse xmlns="http://www.onvif.org/ver10/events/wsdl">
+            <MaxTimeout>PT60S</MaxTimeout>
+            <MaxMessageLimit>1</MaxMessageLimit>
+          </PullMessagesFaultResponse>
+        </soap:Detail>
+      </Details>
+    </Step>
+    <Step id ="4">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tns1="http://www.onvif.org/ver10/topics">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:VideoSource/SignalLoss</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="VideoSourceConfigurationToken" Value="1"/>
+                  <tt:SimpleItem Name="VideoAnalyticsConfigurationToken" Value="2"/>
+                  <tt:SimpleItem Value="MyImportantFence1" Name="Rule"/>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="ObjectId" Value="15" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>PMSSetSynchronizationPoint</Command>
+      <Response>Normal</Response>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+</TestSuit>

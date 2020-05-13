@@ -1,0 +1,2816 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>6.2.8 NVT SET DNS CONFIGURATION - FROMDHCP</Name>
+    <Description>
+
+    </Description>
+  </Parameters>
+  <Test ID = "TC.DM.NET.6_2_8.01" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: FromDHCP = true, no SearchDomain, no DNSManual</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (FromDHCP = true, no SearchDomain, no DNSManual).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Device10.SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.02" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: FromDHCP = false, no SearchDomain, no DNSManual</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (FromDHCP = false, no SearchDomain, no DNSManual).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">false</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+     <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>False</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.03" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: FromDHCP = false, several SearchDomains, no DNSManual</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (FromDHCP = false, several SearchDomains, no DNSManual).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">false</FromDHCP>
+          <SearchDomain xmlns="http://www.onvif.org/ver10/schema">SearchDomain1</SearchDomain>
+          <SearchDomain xmlns="http://www.onvif.org/ver10/schema">SearchDomain2</SearchDomain>
+          <SearchDomain xmlns="http://www.onvif.org/ver10/schema">SearchDomain3</SearchDomain>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>False</FromDHCP>
+        <SearchDomain>SearchDomain1</SearchDomain>
+        <SearchDomain>SearchDomain2</SearchDomain>
+        <SearchDomain>SearchDomain3</SearchDomain>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.04" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: FromDHCP = false, no SearchDomains, several DNSMANUAL IPV6 and IPv6</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (FromDHCP = false, several SearchDomains, no DNSMANUAL IPV6 and IPv6).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">false</FromDHCP>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSManual>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSManual>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSManual>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSManual>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>False</FromDHCP>
+        <DNSManual>IPv4 192.168.10.11</DNSManual>
+        <DNSManual>IPv6 2001:db8:85a3::8a2e:370:7335</DNSManual>
+        <DNSManual>IPv4 192.168.10.12</DNSManual>
+        <DNSManual>IPv6 2001:db8:85a3::8a2e:370:7334</DNSManual>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.05" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: FromDHCP = true, no SearchDomains, no DNSManual, several DNSfromDHCP IPv4 and IPv6</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (FromDHCP = false, several SearchDomains, no DNSManual, several DNSfromDHCP IPv4 and IPv6).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+      </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.06" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Wrong response: FromDHCP = false</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return wrong response
+      (FromDHCP = true).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        DNSFromDHCP is not empty, while FromDHCP is false
+        STEP FAILED
+
+        STEP 9 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">false</FromDHCP>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSManual>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.07" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Wrong response: DNSFromDHCP Type = IPv4 with IPv6 adress</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return wrong response
+      (DNSFromDHCP Type = IPv4 with IPv6 address).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv4 - '']}
+        STEP FAILED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.08" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Wrong response: no DNSFromDHCP</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return wrong response
+      (no DNSFromDHCP).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual -  NULL
+        Current DNS configuration differs from configuration was set
+        STEP FAILED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.09" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Wrong response: DNSFromDHCP IPv4Address instead of IPv6Address</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return wrong response
+      (DNSFromDHCP IPv4Address instead of IPv6Address).
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv4Address>2001:1:1:1:1:1:1:1</IPv4Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.10" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: additional DNSManual</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (additional DNSManual).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        DNSManual is not empty, while FromDHCP is true
+        STEP FAILED
+
+        STEP 9 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST FAILED
+
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+          <DNSManual xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>10.1.1.2</IPv4Address>
+          </DNSManual>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.11" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Wrong response: additional SearchDomain</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return wrong response
+      (additional SearchDomain).
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <SearchDomain xmlns="http://www.onvif.org/ver10/schema">SearchDomain1</SearchDomain>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.12" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Correct response: additional DNSfromDHCP</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP
+      test when DUT return wrong response
+      (additional DNSfromDHCP).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:2</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.13" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Corect response: additional Extension</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return correct response
+      (additional Extension).
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Wait 10,000 seconds to allow the DUT to interact with DHCP server
+        STEP PASSED
+
+        STEP 7 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that original DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 9 - Check that current DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 10 - Check current DNS configuration
+        FromDHCP: expected - True, actual - True
+        DNSManual: expected - No IP Address, actual -  NULL
+        DNSFromDHCP: expected - List of DNS servers, actual - Array of 1 elements {[IPv6 - '2001:1:1:1:1:1:1:1']}
+        STEP PASSED
+
+        STEP 11 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.14" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Fault on first request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return failt on first request.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Subcode: InvalidArgVal
+        Subcode: InvalidIPv6Address
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Device10.DeviceServiceFake.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 61
+        at DUT.CameraWebService.Device10.DeviceServiceFake.GetDNS() in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 469
+        STEP FAILED
+
+        TEST FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>InvalidIPv6Address</Subcode>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.15" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Fault on second request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return fault on second request.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        DEVICE-2-1-8 SET DNS CONFIGURATION - FROMDHCP
+
+        STEP 1 - Get DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Check that valid DNS configuration returned from the DUT
+        STEP PASSED
+
+        STEP 3 - Get network interfaces
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if DHCP must be turned on
+        DHCP is ON
+        STEP PASSED
+
+        STEP 5 - Set DNS configuration
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Subcode: InvalidArgVal
+        Subcode: InvalidIPv6Address
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Device10.DeviceServiceFake.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 61
+        at DUT.CameraWebService.Device10.DeviceServiceFake.SetDNS(Boolean FromDHCP, String[] SearchDomain, IPAddress[] DNSManual) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 482
+        STEP FAILED
+
+        STEP 6 - Restore DNS configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>InvalidIPv6Address</Subcode>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.16" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Fault on third request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return fault on third request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>InvalidIPv6Address</Subcode>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.17" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>Fault on fourth request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return fault on fourth request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>InvalidIPv6Address</Subcode>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.18" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>No response on first request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return no response on first request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>NoResponse</Response>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.19" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>No response on second request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return no response on second request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.20" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>No response on third request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return no response on third request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>NoResponse</Response>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DM.NET.6_2_8.21" ONVIFTestID="6.2.8" Enabled="true">
+    <TestName>NVT SET DNS CONFIGURATION - FROMDHCP</TestName>
+    <Name>No response on fourth request</Name>
+    <Description>
+      Check NVT SET DNS CONFIGURATION - FROMDHCP test
+      when DUT return no response on fourth request.
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters UseAnyNodes="false">
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.11</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7335</IPv6Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv4</Type>
+            <IPv4Address>192.168.10.12</IPv4Address>
+          </DNSFromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:db8:85a3::8a2e:370:7334</IPv6Address>
+          </DNSFromDHCP>
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.10.201</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>true</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Auto</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+                <tt:FromDHCP>
+                  <tt:Address>2001:1:1:1:1:1:1:1</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:FromDHCP>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetDNS</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Device10.GetDNS</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <DNSInformation>
+          <FromDHCP xmlns="http://www.onvif.org/ver10/schema">true</FromDHCP>
+          <DNSFromDHCP xmlns="http://www.onvif.org/ver10/schema">
+            <Type>IPv6</Type>
+            <IPv6Address>2001:1:1:1:1:1:1:1</IPv6Address>
+          </DNSFromDHCP>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </DNSInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>SetDNS</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <FromDHCP>True</FromDHCP>
+      </RequestParameters>
+    </Step>
+  </Test>
+</TestSuit>

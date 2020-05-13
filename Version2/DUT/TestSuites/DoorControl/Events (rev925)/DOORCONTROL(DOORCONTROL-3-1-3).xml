@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Draft Capabilities" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>DOORCONTROL-3-1-3 DOUBLELOCK DOOR</Name>
+    <Description>
+      TODO:
+
+    </Description>
+  </Parameters>
+
+  <Test ID = "TC.DOORCONTROL-3-1-3.01" ONVIFTestID="DOORCONTROL-3-1-3" Enabled="true">
+    <TestName>Double Lock Door Verification</TestName>
+    <Name>Correct response</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Limit>10</Limit>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor2">
+            <tdc:Name>Door2 Name</tdc:Name>
+            <tdc:Description>Door2 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor3">
+            <tdc:Name>Door3 Name</tdc:Name>
+            <tdc:Description>Door3 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:DoorControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <DoorMode wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="DoorToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="DoorMode" Type="tdc:DoorMode" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </DoorMode>
+          </tns1:DoorControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Door/State/DoorMode</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="6">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Unlocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Unlocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Unlocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Door12.DoubleLockDoor</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>tokenDoor1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+        <BlockDoorResponse></BlockDoorResponse>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="DoubleLocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="DoubleLocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Locked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="DoubleLocked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="14">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Door/State/DoorMode</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Changed">
+                <tt:Source>
+                  <tt:SimpleItem Name="DoorToken" Value="tokenDoor2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Locked" />
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="15">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <Timeout>20000</Timeout>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="18">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="19">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="nowDiff">20</CurrentTime>
+        <TerminationTime differance="true">80</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+</TestSuit>

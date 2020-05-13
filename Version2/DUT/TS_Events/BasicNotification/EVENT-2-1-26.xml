@@ -1,0 +1,3006 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="EVENT" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</Name>
+    <Description>
+    </Description>
+  </Parameters>
+
+  <!--Positive tests-->
+  <Test ID = "TC.EVENT-2-1-26.101" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      tns1:Device//.
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+            </Trigger>
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.102" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>two notifications message in one notification (needed notification is second)</Name>
+    <Description>
+      tns1:Device//.
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+            </Trigger>
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.103" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>two notifications with the same root elements (relay and Output)</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.104" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>topicSet does not contain at least one topic with IsPropery= ”true”</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.105" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>two notifications in different package (relay and Output)</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.106" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>two notifications in different Notify (relay and Output)</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+       <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+       </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-27.107" ONVIFTestID="EVENT-2-1-27" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – CONJUNCTION IN NOTIFY FILTER (TOPIC SUB-TREE AND OR OPERATION)</TestName>
+    <Name>Empty topicSet</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <!--<tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          --><!-- tns1:Device/Trigger/Relay--><!--
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>-->
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.|tns1:MediaConfiguration/Profile</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.108" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>topicSet contain at least one topic with IsPropery= ”true”</Name>
+    <Description>
+      check that not appear widow for operator
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.109" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>#1614: tns1 prefix is defined in Topic element</Name>
+    <Description>
+      tns1:Device//.
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+            </Trigger>
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+     >
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic  xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="RelayToken" Value="Relay"/>
+            </Source>
+            <Key xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="Open"/>
+            </Key>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="LogicalState" Value="inactive" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--Negative-->
+  <Test ID = "TC.EVENT-2-1-26.201" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>Notifications list does not contain notification from management tab (tns1:Device/Trigger/Relay)</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="true">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.202" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>Notifications list contain notification with different root element (tns1:MediaConfiguration/Profile)</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+         <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:MediaConfiguration/Profile</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Relay</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.203" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>Notifications list does not contain notification from management tab (tns1:Device/Trigger/Relay) two notify recieved</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      </Notify>
+      <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EVENT-2-1-26.204" ONVIFTestID="EVENT-2-1-26" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE – TOPIC SUB-TREE IN PULLMESSAGES FILTER</TestName>
+    <Name>Notifications list does not contain notification from management tab (tns1:Device/Trigger/Relay) two notification recieved</Name>
+    <Description>
+      Use "tns1:Device/Trigger/Relay" on Management tab
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!-- tns1:MediaConfiguration/Profile/, tns1:MediaConfiguration/VideoEncoderConfiguration-->
+          <tns1:MediaConfiguration>
+            <Profile wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="ProfileToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:Profile" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </Profile>
+            <VideoEncoderConfiguration wstop:topic="true">
+              <tt:MessageDescription IsProperty="false">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:ElementItemDescription Name="Config" Type="tt:VideoEncoderConfiguration" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </VideoEncoderConfiguration>
+          </tns1:MediaConfiguration>
+          <!-- tns1:Device/Trigger/Relay-->
+          <tns1:Device xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl" xmlns:pt="http://www.onvif.org/ver10/pacs" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+            <Trigger>
+              <Relay wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="RelayToken" Type="tt:ReferenceToken"/>
+                    <tt:SimpleItemDescription Name="RelayToken1" Type="tt:ReferenceToken"/>
+                  </tt:Source>
+                  <tt:Key>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                  </tt:Key>
+                  <tt:Data>
+                    <tt:SimpleItemDescription Name="LogicalState" Type="tt:RelayLogicalState"/>
+                    <tt:SimpleItemDescription Name="LogicalState1" Type="tt:RelayLogicalState"/>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Relay>
+              <Output wstop:topic="true">
+                <tt:MessageDescription IsProperty="false">
+                  <tt:Source>
+                    <tt:SimpleItemDescription Name="VideoEncoderConfigurationToken" Type="tt:ReferenceToken" />
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:ElementItemDescription Name="Config" Type="tt:Output" />
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Output>
+            </Trigger>
+
+          </tns1:Device>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConsumerReference>
+          <Address ignore="1">http://192.168.10.66/onvif_notify_server/</Address>
+        </ConsumerReference>
+        <Filter>
+          <wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Device//.</wsnt:TopicExpression>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">200</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+      </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+      <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Device/Trigger/Output</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ProfileToken" Value="token1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="Config" Value="Config1" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+      </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

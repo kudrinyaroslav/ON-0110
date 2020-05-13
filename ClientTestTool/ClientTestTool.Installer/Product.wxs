@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <?include Variables.wxi?>
+
+  <Product Id="$(var.ProductCode)" Name="$(var.Manufacturer) $(var.ProductName)" Language="1033" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
+    <Package InstallerVersion="300" Compressed="yes" />
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <Icon Id="onvif.ico" SourceFile="res\onvif.ico"/>
+    
+    <WixVariable Id="WixUIBannerBmp"  Value="res\Banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp"  Value="res\Dialog.bmp" />
+    <WixVariable Id="WixUIInfoIco"    Value="res\Info.ico" />
+    <WixVariable Id="WixUINewIco"     Value="res\New.ico" />
+    <WixVariable Id="WixUIUpIco"      Value="res\Up.ico" />
+    <WixVariable Id="WixUILicenseRtf" Value="res\License.rtf" />
+
+    <Property Id="ARPPRODUCTICON" Value="onvif.ico"/>
+
+    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."/>
+
+    <PropertyRef Id ="NETFRAMEWORK45"/>
+    <Condition Message="This application requires .NET Framework 4.5 Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="$(var.Manufacturer) $(var.ProductName)" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)" />
+      </Directory>
+    </Directory>
+    <FeatureRef Id="ProductFeature"/>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+    <!--<WixVariable Id="WixUILicenseRtf" Overridable="yes" Value="License.rtf" />-->
+    <UIRef Id="WixUI_InstallDir" />
+  </Product>
+</Wix>

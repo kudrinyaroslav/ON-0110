@@ -1,0 +1,88 @@
+﻿DUT Pull Point Subscription Service Help
+
+To use it in CreatePullPointSubscribtion - use special = 3
+
+
+Seek Command************************************************************
+Example:
+    <Step id ="3">
+      <Command>PullPointSubscriptionService10.Seek</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Reverse>True</Reverse>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+Reverse - could be skipped, possible values (True, False)
+
+PullMessages Connamd************************************************************
+Example:
+    <Step id ="4">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>120</TimeShift>
+		<Prefixes>
+          <tns3>http://www.onvif.org/ver10/topics3</tns3>
+          <tns2>http://www.onvif.org/ver10/topics2</tns2>
+        </Prefixes>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:EventBuffer/Begin</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2008-10-10T12:24:57.321"/>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+
+CurrentTime 'type' flag:
+now - returns system current time
+value - returns tag value
+nowDiff - returns system current time + number of seconds from tag value
+
+TerminationTime 'differance' flag:
+true - returns CurrentTime + number of seconds from tag value
+false - returns tag value
+
+Flag 'special' for response:
+skipped - no changes
+1 - tt:Message.UtcTime = current system time + TimeShift for first message
+Note: TimeShift could be less than 0
+
+RequestParameters:
+Timeout - could be skipped, values in duration format (PT20S)
+MessageLimit - could be skipped, values intager
+
+ResponseParametersAdditional:
+CurrentTime - mandatory
+TerminationTime - mandatory
+TimeShift - mandatory
+Prefixes - could be skipped, adds corresponding namespaces to NotificationMessageHolder
+
+Topic Namespaces:
+Put topic prefixes into NotificationMessageHolderType tags.
+
+Unsubscribe Command************************************************************
+Example:
+    <Step id ="5">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+

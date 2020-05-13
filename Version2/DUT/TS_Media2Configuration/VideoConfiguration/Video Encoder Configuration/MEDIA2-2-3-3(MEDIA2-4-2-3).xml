@@ -1,0 +1,589 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>PROFILES AND VIDEO ENCODER CONFIGURATION OPTIONS CONSISTENCY VALIDATION</Name>
+    <Description>
+      Media service must be: http://localhost:2780/MediaService.asmx
+    </Description>
+  </Parameters>
+  
+    
+  <Test ID = "TC.MEDIA2-4-2-3.01" ONVIFTestID="MEDIA2-4-2-3" Enabled="true">
+    <TestName>PROFILES AND VIDEO ENCODER CONFIGURATION OPTIONS CONSISTENCY VALIDATION</TestName>
+    <Name>Correct response: only optional fields</Name>
+    <Description>  
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>   
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+         <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>    
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+        <Type>VideoEncoder</Type>
+		<Type>VideoSource</Type>
+      </RequestParameters> 
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+             <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+               
+                <!--<tt:RateControl>
+                  <tt:FrameRateLimit>1</tt:FrameRateLimit>
+                  --><!--<tt:EncodingInterval>0</tt:EncodingInterval>--><!--
+                  <tt:BitrateLimit>2048</tt:BitrateLimit>
+                </tt:RateControl>-->
+                <!--<tt:H264>
+                <tt:GovLength>32</tt:GovLength>
+                <tt:H264Profile>Baseline</tt:H264Profile>
+              </tt:H264>-->
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            
+            
+              </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    <Step id ="3">
+      <Command>Media210.GetVideoEncoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>0</ConfigurationToken>
+        <ProfileToken>0</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfVideoEncoder2ConfigurationOptions>
+        <VideoEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Encoding>H264</tt:Encoding>
+          <tt:QualityRange>
+            <tt:Min>0</tt:Min>
+            <tt:Max>100</tt:Max>
+          </tt:QualityRange>         
+           <tt:ResolutionsAvailable>
+            <tt:Width>40</tt:Width>
+          <tt:Height>80</tt:Height>
+          </tt:ResolutionsAvailable>
+          <tt:BitrateRange>
+            <tt:Min>0</tt:Min>
+            <tt:Max>100</tt:Max>
+          </tt:BitrateRange>
+
+        </VideoEncoder2ConfigurationOptions>
+       </ArrayOfVideoEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    
+  </Test>
+  <Test ID = "TC.MEDIA2-4-2-3.02" ONVIFTestID="MEDIA2-4-2-3" Enabled="true">
+    <TestName>PROFILES AND VIDEO ENCODER CONFIGURATION OPTIONS CONSISTENCY VALIDATION</TestName>
+    <Name>Ticket #1259: there is Rate Control in GetProfiles and no FrameRatesSupported in Options</Name>
+    <Description>  
+    Incorrect DUT behaviour
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>   
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+         <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>    
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+        <Type>VideoEncoder</Type>
+		<Type>VideoSource</Type>
+      </RequestParameters> 
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+             <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>320</tt:Width>
+                  <tt:Height>184</tt:Height>
+                </tt:Resolution>
+               
+                <tt:RateControl>
+                  <tt:FrameRateLimit>1</tt:FrameRateLimit>                 
+                  <tt:BitrateLimit>2048</tt:BitrateLimit>
+                </tt:RateControl>
+                       
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            
+            
+              </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    <Step id ="3">
+      <Command>Media210.GetVideoEncoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>0</ConfigurationToken>
+        <ProfileToken>0</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfVideoEncoder2ConfigurationOptions>
+        <VideoEncoder2ConfigurationOptions ConstantBitRateSupported="false" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Encoding>JPEG</tt:Encoding> 
+<tt:QualityRange>
+<tt:Min>1.000000</tt:Min> 
+<tt:Max>10.000000</tt:Max> 
+</tt:QualityRange>
+<tt:ResolutionsAvailable>
+<tt:Width>320</tt:Width>
+<tt:Height>184</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable>
+<tt:Width>640</tt:Width>
+<tt:Height>360</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable>
+<tt:Width>1280</tt:Width>
+<tt:Height>720</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:BitrateRange>
+<tt:Min>32</tt:Min>
+<tt:Max>4096</tt:Max>
+</tt:BitrateRange> 
+
+        </VideoEncoder2ConfigurationOptions>
+        <VideoEncoder2ConfigurationOptions ProfilesSupported="Baseline" GovLengthRange="1 150" ConstantBitRateSupported="true" xmlns:tt="http://www.onvif.org/ver10/schema">
+         <tt:Encoding>H264</tt:Encoding>
+<tt:QualityRange>
+<tt:Min>1.000000</tt:Min>
+<tt:Max>10.000000</tt:Max>
+</tt:QualityRange>
+<tt:ResolutionsAvailable>
+<tt:Width>320</tt:Width>
+<tt:Height>184</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable> 
+
+<tt:Width>640</tt:Width>
+<tt:Height>360</tt:Height>
+</tt:ResolutionsAvailable> 
+<tt:ResolutionsAvailable>
+<tt:Width>1280</tt:Width>
+<tt:Height>720</tt:Height>
+</tt:ResolutionsAvailable> 
+<tt:BitrateRange>
+<tt:Min>64</tt:Min>
+<tt:Max>16384</tt:Max>
+</tt:BitrateRange>
+        </VideoEncoder2ConfigurationOptions>
+       </ArrayOfVideoEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    
+  </Test>
+  <Test ID = "TC.MEDIA2-4-2-3.03" ONVIFTestID="MEDIA2-4-2-3" Enabled="true">
+    <TestName>PROFILES AND VIDEO ENCODER CONFIGURATION OPTIONS CONSISTENCY VALIDATION</TestName>
+    <Name>Ticket #1259: no Rate Control in GetProfiles and no FrameRatesSupported in Options</Name>
+    <Description>  
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>   
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+         <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>    
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+	  <RequestParameters>
+        <Type>VideoEncoder</Type>
+		<Type>VideoSource</Type>
+      </RequestParameters> 
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+             <VideoEncoder token="VEC1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>320</tt:Width>
+                  <tt:Height>184</tt:Height>
+                </tt:Resolution>
+               
+                <!--<tt:RateControl>
+                  <tt:FrameRateLimit>1</tt:FrameRateLimit>                 
+                  <tt:BitrateLimit>2048</tt:BitrateLimit>
+                </tt:RateControl>-->
+                       
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+            
+            
+              </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    <Step id ="3">
+      <Command>Media210.GetVideoEncoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>0</ConfigurationToken>
+        <ProfileToken>0</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfVideoEncoder2ConfigurationOptions>
+        <VideoEncoder2ConfigurationOptions ConstantBitRateSupported="false" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Encoding>JPEG</tt:Encoding> 
+<tt:QualityRange>
+<tt:Min>1.000000</tt:Min> 
+<tt:Max>10.000000</tt:Max> 
+</tt:QualityRange>
+<tt:ResolutionsAvailable>
+<tt:Width>320</tt:Width>
+<tt:Height>184</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable>
+<tt:Width>640</tt:Width>
+<tt:Height>360</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable>
+<tt:Width>1280</tt:Width>
+<tt:Height>720</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:BitrateRange>
+<tt:Min>32</tt:Min>
+<tt:Max>4096</tt:Max>
+</tt:BitrateRange> 
+
+        </VideoEncoder2ConfigurationOptions>
+        <VideoEncoder2ConfigurationOptions ProfilesSupported="Baseline" GovLengthRange="1 150" ConstantBitRateSupported="true" xmlns:tt="http://www.onvif.org/ver10/schema">
+         <tt:Encoding>H264</tt:Encoding>
+<tt:QualityRange>
+<tt:Min>1.000000</tt:Min>
+<tt:Max>10.000000</tt:Max>
+</tt:QualityRange>
+<tt:ResolutionsAvailable>
+<tt:Width>320</tt:Width>
+<tt:Height>184</tt:Height>
+</tt:ResolutionsAvailable>
+<tt:ResolutionsAvailable> 
+
+<tt:Width>640</tt:Width>
+<tt:Height>360</tt:Height>
+</tt:ResolutionsAvailable> 
+<tt:ResolutionsAvailable>
+<tt:Width>1280</tt:Width>
+<tt:Height>720</tt:Height>
+</tt:ResolutionsAvailable> 
+<tt:BitrateRange>
+<tt:Min>64</tt:Min>
+<tt:Max>16384</tt:Max>
+</tt:BitrateRange>
+        </VideoEncoder2ConfigurationOptions>
+       </ArrayOfVideoEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    
+  </Test>
+  <Test ID = "TC.MEDIA2-4-2-3.401" ONVIFTestID="MEDIA2-4-2-3" Enabled="true">
+    <TestName>PROFILES AND VIDEO ENCODER CONFIGURATION OPTIONS CONSISTENCY VALIDATION</TestName>
+    <Name>#1712: to reproduce internal error</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>VideoEncoder</Type>
+        <Type>VideoSource</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media2_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <VideoEncoder token="H26x_L2S1">
+                <tt:Name>VideoEncConf1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:Encoding>H264</tt:Encoding>
+                <tt:Resolution>
+                  <tt:Width>40</tt:Width>
+                  <tt:Height>80</tt:Height>
+                </tt:Resolution>
+
+                <!--<tt:RateControl>
+                  <tt:FrameRateLimit>1</tt:FrameRateLimit>
+                  -->
+                <!--<tt:EncodingInterval>0</tt:EncodingInterval>-->
+                <!--
+                  <tt:BitrateLimit>2048</tt:BitrateLimit>
+                </tt:RateControl>-->
+                <!--<tt:H264>
+                <tt:GovLength>32</tt:GovLength>
+                <tt:H264Profile>Baseline</tt:H264Profile>
+              </tt:H264>-->
+                <tt:Multicast>
+                  <tt:Address>
+                    <tt:Type>IPv4</tt:Type>
+                    <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+                  </tt:Address>
+                  <tt:Port>0</tt:Port>
+                  <tt:TTL>3</tt:TTL>
+                  <tt:AutoStart>false</tt:AutoStart>
+                </tt:Multicast>
+                <tt:Quality>7</tt:Quality>
+                <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+              </VideoEncoder>
+
+
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+
+
+    
+    
+    
+    <Step id ="3">
+      <Command>Media210.GetVideoEncoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>0</ConfigurationToken>
+        <ProfileToken>0</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfVideoEncoder2ConfigurationOptions>
+          <VideoEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema" GovLengthRange="1 255" FrameRatesSupported="9.00 4.50 3.00 2.25 1.80" ProfilesSupported="Main" ConstantBitRateSupported="true">
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:QualityRange>
+              <tt:Min>0.00</tt:Min>
+              <tt:Max>100.00</tt:Max>
+            </tt:QualityRange>
+            <tt:BitrateRange>
+              <tt:Min>1</tt:Min>
+              <tt:Max>50000</tt:Max>
+            </tt:BitrateRange>
+          </VideoEncoder2ConfigurationOptions>
+        </ArrayOfVideoEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media210.GetVideoEncoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>0</ConfigurationToken>
+        <ProfileToken>0</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfVideoEncoder2ConfigurationOptions>
+          <VideoEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema" GovLengthRange="1 255" FrameRatesSupported="9.00 4.50 3.00 2.25 1.80" ProfilesSupported="Main" ConstantBitRateSupported="true">
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:QualityRange>
+              <tt:Min>0.00</tt:Min>
+              <tt:Max>100.00</tt:Max>
+            </tt:QualityRange>
+            <tt:BitrateRange>
+              <tt:Min>1</tt:Min>
+              <tt:Max>50000</tt:Max>
+            </tt:BitrateRange>
+          </VideoEncoder2ConfigurationOptions>
+        </ArrayOfVideoEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+  </TestSuit>

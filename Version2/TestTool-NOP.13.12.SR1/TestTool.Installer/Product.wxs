@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Variables.wxi?>
+  <Product Id="*" Codepage="1252" Language="1033" 
+           UpgradeCode="$(var.UpgradeCode)"
+           Manufacturer="$(var.Manufacturer)"
+           Name="$(var.FullProductName)"
+           Version="!(bind.fileVersion.f_TestTool.exe)">
+		
+    <Package InstallerVersion="300" Compressed="yes" Platform="x86"/>
+    <Media Id="1" Cabinet="onvif.cab" EmbedCab="yes" CompressionLevel="high" />
+    <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
+
+    <!--.NET Framework 4.5 check-->
+    <PropertyRef Id='NETFRAMEWORK45'/>
+    <Condition Message="!(loc.NetFrameworkNotFound)">
+      <![CDATA[Installed OR (NETFRAMEWORK45 and NOT NETFRAMEWORK45 = "#0")]]>
+    </Condition>
+
+    <CustomAction Id="ca_jpeg.exe" FileKey="f_jpeg.exe" ExeCommand="-y /q /r:n" Execute="deferred" Impersonate="no" />
+    <CustomAction Id="ca_Requests.exe" FileKey="f_Requests.exe" ExeCommand="-y /q /r:n" Execute="deferred" Impersonate="no" />
+
+    <InstallExecuteSequence>
+      <Custom Action="ca_jpeg.exe" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="ca_Requests.exe" After="InstallFiles">NOT Installed</Custom>
+    </InstallExecuteSequence>
+    
+    <FeatureRef Id="ProductFeature"/>
+    
+    <WixVariable Id="WixUILicenseRtf" Value="Files\License.rtf"/>
+    <WixVariable Id="WixUIBannerBmp" Value="Resources\top_banner.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="Resources\dialog_banner.bmp"/>
+
+    <Icon Id="AppIcon.exe" SourceFile="$(var.TestTool.GUI.TargetDir)TestTool.exe"/>
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.exe" />
+    <Property Id="ARPURLINFOABOUT" Value="http://www.onvif.org/" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+    <UIRef Id="WixUI_Onvif" />
+	</Product>
+</Wix>

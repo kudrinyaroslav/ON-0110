@@ -1,0 +1,1178 @@
+		<xs:schema targetNamespace="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="16.12">
+			<xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="../../../ver10/schema/onvif.xsd"/>
+			<!--  Message Request/Responses elements  -->
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tr2:Capabilities2">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the media service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="Capabilities2">
+				<xs:sequence>
+					<xs:element name="ProfileCapabilities" type="tr2:ProfileCapabilities">
+						<xs:annotation>
+							<xs:documentation>Media profile capabilities.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="StreamingCapabilities" type="tr2:StreamingCapabilities">
+						<xs:annotation>
+							<xs:documentation>Streaming capabilities.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="SnapshotUri" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates if GetSnapshotUri is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Rotation" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates whether or not Rotation feature is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="VideoSourceMode" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates the support for changing video source mode.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="OSD" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates if OSD is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Mask" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates if Masking is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:element name="Capabilities" type="tr2:Capabilities2"/>
+			<!--===============================-->
+			<xs:complexType name="ProfileCapabilities">
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="MaximumNumberOfProfiles" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Maximum number of profiles supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ConfigurationsSupported" type="tt:StringAttrList">
+					<xs:annotation>
+						<xs:documentation>Enumerates the configurations supported by the device as defined by tr2:ConfigurationEnumeration.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!--===============================-->
+			<xs:complexType name="StreamingCapabilities">
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="RTSPStreaming" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation> Indicates support for live media streaming via RTSP.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="RTPMulticast" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates support for RTP multicast.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="RTP_RTSP_TCP" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates support for RTP/RTSP/TCP.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="NonAggregateControl" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates support for non aggregate RTSP control.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="RTSPWebSocketUri" type="xs:anyURI">
+					<xs:annotation>
+						<xs:documentation>If streaming over websocket supported, RTSP websocket URI is provided. The scheme and IP part shall match the one used in the request (e.g. the GetServices request).</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!--===============================-->
+			<xs:simpleType name="ConfigurationEnumeration">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="All"/> 			<!-- For matching all configurations -->
+					<xs:enumeration value="VideoSource"/>
+					<xs:enumeration value="VideoEncoder"/>
+					<xs:enumeration value="AudioSource"/>
+					<xs:enumeration value="AudioEncoder"/>
+					<xs:enumeration value="AudioOutput"/>
+					<xs:enumeration value="AudioDecoder"/>
+					<xs:enumeration value="Metadata"/>
+					<xs:enumeration value="Analytics"/>
+					<xs:enumeration value="PTZ"/>
+					<!-- Vendors may conceptually add items here prefixing them with there own namespace -->
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="ConfigurationEnumeration" type="tr2:ConfigurationEnumeration"/>
+			<xs:complexType name="ConfigurationRef">
+				<xs:sequence>
+					<xs:element name="Type" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Type of the configuration as defined by tr2:ConfigurationEnumeration.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Token" type="tt:ReferenceToken" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Reference token of an existing configuration. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<!--===============================-->
+			<xs:complexType name="ConfigurationSet">
+				<xs:annotation>
+					<xs:documentation>
+						A set of media configurations. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="VideoSource" type="tt:VideoSourceConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Video input.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AudioSource" type="tt:AudioSourceConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Audio input.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="VideoEncoder" type="tt:VideoEncoder2Configuration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Video encoder.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AudioEncoder" type="tt:AudioEncoder2Configuration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Audio encoder.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Analytics" type="tt:VideoAnalyticsConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the analytics module and rule engine.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PTZ" type="tt:PTZConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the pan tilt zoom unit.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Metadata" type="tt:MetadataConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the metadata stream.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AudioOutput" type="tt:AudioOutputConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Audio output.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AudioDecoder" type="tt:AudioDecoderConfiguration" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Optional configuration of the Audio decoder.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!--===============================-->
+			<xs:complexType name="MediaProfile">
+				<xs:annotation>
+					<xs:documentation>
+						A media profile consists of a set of media configurations. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="Name" type="tt:Name">
+						<xs:annotation>
+							<xs:documentation>User readable name of the profile.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Configurations" type="tr2:ConfigurationSet" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The configurations assigned to the profile.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="token" type="tt:ReferenceToken" use="required">
+					<xs:annotation>
+						<xs:documentation>Unique identifier of the profile.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="fixed" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>A value of true signals that the profile cannot be deleted. Default is false.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!--===============================-->
+			<xs:element name="CreateProfile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Name" type="tt:Name">
+							<xs:annotation>
+								<xs:documentation>friendly name of the profile to be created</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Configuration" type="tr2:ConfigurationRef" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Optional set of configurations to be assigned to the profile.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CreateProfileResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token assigned by the device for the newly created profile.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetProfiles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Optional token of the requested profile.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Type" type="xs:string" maxOccurs="unbounded" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The types shall be provided as defined by tr2:ConfigurationEnumeration.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetProfilesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Profiles" type="tr2:MediaProfile" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Lists all profiles that exist in the media service. The response provides the requested types of Configurations as far as available. 
+									If a profile doesn't contain a type no error shall be provided.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="AddConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Reference to the profile where the configuration should be added</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Name" type="tt:Name" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Optional item. If present updates the Name property of the profile.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Configuration" type="tr2:ConfigurationRef" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									List of configurations to be added. The types shall be provided in the order defined by tr2:ConfigurationEnumeration.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AddConfigurationResponse">
+				<xs:complexType>
+					<xs:sequence>
+				   </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="RemoveConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>This element contains a  reference to the media profile from which the AudioDecoderConfiguration shall be removed.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Configuration" type="tr2:ConfigurationRef" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of configurations to be removed. The types shall be provided in the order defined by tr2:ConfigurationEnumeration.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RemoveConfigurationResponse">
+				<xs:complexType>
+					<xs:sequence>
+    				</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteProfile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>This element contains a  reference to the profile that should be deleted.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DeleteProfileResponse">
+				<xs:complexType>
+					<xs:sequence>
+         			</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<!--===============================-->
+			<!--	Generic request body for all GetConfigurationXxx and GetConfigurationXxxOptions commands	-->
+			<xs:complexType name="GetConfiguration">
+				<xs:sequence>
+					<xs:element name="ConfigurationToken" type="tt:ReferenceToken" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Token of the requested configuration.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ProfileToken" type="tt:ReferenceToken" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains the token of an existing media profile the configurations shall be compatible with.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:element name="GetVideoEncoderConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetVideoEncoderConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:VideoEncoder2Configuration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of video encoder configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetVideoSourceConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetVideoSourceConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:VideoSourceConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of video source configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioEncoderConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioEncoderConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:AudioEncoder2Configuration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of audio encoder configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioSourceConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioSourceConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:AudioSourceConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of audio source configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAnalyticsConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAnalyticsConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:VideoAnalyticsConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of Analytics configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMetadataConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetMetadataConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:MetadataConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of metadata configurations</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioOutputConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioOutputConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:AudioOutputConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of audio output configurations</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioDecoderConfigurations" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioDecoderConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configurations" type="tt:AudioDecoderConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of audio decoder configurations</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetVideoEncoderConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:VideoEncoder2Configuration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified video encoder configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="SetConfigurationResponse">
+				<xs:sequence>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="SetVideoEncoderConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+						<xs:element name="SetVideoSourceConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:VideoSourceConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified video source configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetVideoSourceConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+						<xs:element name="SetAudioEncoderConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:AudioEncoder2Configuration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified audio encoder configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetAudioEncoderConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+			<xs:element name="SetAudioSourceConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:AudioSourceConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified audio source configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetAudioSourceConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+			<xs:element name="SetMetadataConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:MetadataConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified metadata configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetMetadataConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+			<xs:element name="SetAudioOutputConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:AudioOutputConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified audio output configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetAudioOutputConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+			<xs:element name="SetAudioDecoderConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Configuration" type="tt:AudioDecoderConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified audio decoder configuration. The configuration shall exist in the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetAudioDecoderConfigurationResponse" type="tr2:SetConfigurationResponse"/>
+			<!--===============================-->
+			<xs:element name="GetVideoSourceConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetVideoSourceConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:VideoSourceConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation>This message contains the video source configuration options. If a video source configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetVideoEncoderConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetVideoEncoderConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:VideoEncoder2ConfigurationOptions" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioSourceConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioSourceConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:AudioSourceConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation>This message contains the audio source configuration options. If a audio source configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioEncoderConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioEncoderConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:AudioEncoder2ConfigurationOptions" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This message contains the audio encoder configuration options. If a audio encoder configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMetadataConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetMetadataConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:MetadataConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation>This message contains the metadata configuration options. If a metadata configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioOutputConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioOutputConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:AudioOutputConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation>This message contains the audio output configuration options. If a audio output configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetAudioDecoderConfigurationOptions" type="tr2:GetConfiguration"/>
+			<xs:element name="GetAudioDecoderConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:AudioEncoder2ConfigurationOptions" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This message contains the audio decoder configuration options. If a audio decoder configuration is specified, the options shall concern that particular configuration. If a media profile is specified, the options shall be compatible with that media profile. If no tokens are specified, the options shall be considered generic for the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<!--===============================-->
+			<xs:simpleType name="TransportProtocol">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="RtspUnicast"/>		<!-- RTSP straming RTP as UDP Unicast. -->
+					<xs:enumeration value="RtspMulticast"/>		<!-- RTSP straming RTP as UDP Multicast. -->
+					<xs:enumeration value="RTSP"/>				<!-- RTSP straming RTP over TCP. -->
+					<xs:enumeration value="RtspOverHttp"/>		<!-- Tunneling both the RTSP control channel and the RTP stream over HTTP or HTTPS. -->
+				</xs:restriction>
+			</xs:simpleType>
+			<!--===============================-->
+			<xs:element name="GetVideoEncoderInstances">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of the video source configuration</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="EncoderInstance">
+				<xs:sequence>
+					<xs:element name="Encoding" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Mime name of the video format. For name definitions see tt:VideoEncodingMimeNames and <a href='http://www.iana.org/assignments/media-types/media-types.xhtml'>IANA Media Types</a>.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Number" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>The minimum guaranteed number of encoder instances (applications) for the VideoSourceConfiguration.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+						<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:complexType name="EncoderInstanceInfo">
+				<xs:sequence>
+					<xs:element name="Codec" type="tr2:EncoderInstance" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>If a device limits the number of instances for respective Video Codecs the response contains the information how many streams can be set up at the same time per VideoSource.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Total" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>The minimum guaranteed total number of encoder instances (applications) per VideoSourceConfiguration. The device is able to deliver the Total number of streams</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:element name="GetVideoEncoderInstancesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Info" type="tr2:EncoderInstanceInfo">
+							<xs:annotation>
+								<xs:documentation>The minimum guaranteed total number of encoder instances (applications) per VideoSourceConfiguration.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetStreamUri">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Protocol" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Defines the network protocol for streaming as defined by tr2:TransportProtocol</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>The ProfileToken element indicates the media profile to use and will define the configuration of the content of the stream.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetStreamUriResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Uri" type="xs:anyURI">
+							<xs:annotation>
+								<xs:documentation>Stable Uri to be used for requesting the media stream</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetSynchronizationPoint">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Contains a Profile reference for which a Synchronization Point is requested.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetSynchronizationPointResponse">
+				<xs:complexType>
+					<xs:sequence>
+          </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSnapshotUri">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>The ProfileToken element indicates the media profile to use and will define the source and dimensions of the snapshot.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetSnapshotUriResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Uri" type="xs:anyURI">
+							<xs:annotation>
+								<xs:documentation>Stable Uri to be used for requesting snapshot images.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="StartStopMulticastStreaming">
+				<xs:sequence>
+					<xs:element name="ProfileToken" type="tt:ReferenceToken">
+						<xs:annotation>
+							<xs:documentation>Contains the token of the Profile that is used to define the multicast stream.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="StartMulticastStreaming" type="tr2:StartStopMulticastStreaming"/>
+			<xs:element name="StartMulticastStreamingResponse" type="tr2:SetConfigurationResponse"/>
+			<xs:element name="StopMulticastStreaming" type="tr2:StartStopMulticastStreaming"/>
+			<xs:element name="StopMulticastStreamingResponse" type="tr2:SetConfigurationResponse"/>
+			<!--================ Video Source Mode ===============-->
+			<xs:element name="GetVideoSourceModes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="VideoSourceToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Contains a video source reference for which a video source mode is requested.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetVideoSourceModesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="VideoSourceModes" type="tr2:VideoSourceMode" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Return the information for specified video source mode.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetVideoSourceMode">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="VideoSourceToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Contains a video source reference for which a video source mode is requested.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="VideoSourceModeToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Indicate video source mode.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetVideoSourceModeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Reboot" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>The response contains information about rebooting after returning response. When Reboot is set true, a device will reboot automatically after setting mode.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:simpleType name="EncodingTypes">
+				<xs:annotation>
+					<xs:documentation>Indication which encodings are supported for this video source. The list may contain one or more enumeration values of tt:VideoEncoding.</xs:documentation>
+				</xs:annotation>
+				<xs:list itemType="xs:string"/>
+			</xs:simpleType>
+			<!--===============================-->
+			<xs:complexType name="VideoSourceMode"> 
+				<xs:sequence>
+					<xs:element name="MaxFramerate" type="xs:float">
+						<xs:annotation>
+							<xs:documentation>Max frame rate in frames per second for this video source mode.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="MaxResolution" type="tt:VideoResolution">
+						<xs:annotation>
+							<xs:documentation>Max horizontal and vertical resolution for this video source mode.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Encodings" type="tr2:EncodingTypes">
+						<xs:annotation>
+							<xs:documentation>Indication which encodings are supported for this video source. The list may contain one or more enumeration values of tt:VideoEncoding.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Reboot" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>After setting the mode if a device starts to reboot this value is true. If a device change the mode without rebooting this value is false. If true, configured parameters may not be guaranteed by the device after rebooting.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Description" type="tt:Description" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Informative description of this video source mode. This field should be described in English.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="token" type="tt:ReferenceToken" use="required">
+					<xs:annotation>
+						<xs:documentation>Indicate token for video source mode.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Enabled" type="xs:boolean"> 
+					<xs:annotation>
+						<xs:documentation>Indication of whether this mode is active. If active this value is true. In case of non-indication, it means as false. The value of true shall be had by only one video source mode.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!--============OSD Schema Begin================-->
+			<xs:element name="GetOSDs">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSDToken" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The GetOSDs command fetches the OSD configuration if the OSD token is known.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Token of the Video Source Configuration, which has OSDs associated with are requested. If token not exist, request all available OSDs.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetOSDsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSDs" type="tt:OSDConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>This element contains a list of requested OSDs.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetOSD">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSD" type="tt:OSDConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contains the modified OSD configuration.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetOSDResponse" type="tr2:SetConfigurationResponse"/>
+			<!--===============================-->
+			<xs:element name="GetOSDOptions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Video Source Configuration Token that specifies an existing video source configuration that the options shall be compatible with.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetOSDOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSDOptions" type="tt:OSDConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation/>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="CreateOSD">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSD" type="tt:OSDConfiguration">
+							<xs:annotation>
+								<xs:documentation>Contain the initial OSD configuration for create.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CreateOSDResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSDToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Returns Token of the newly created OSD</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteOSD">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OSDToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>This element contains a reference to the OSD configuration that should be deleted.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DeleteOSDResponse" type="tr2:SetConfigurationResponse"/>
+			<!--============OSD Schema End================-->
+			<!--============Masking Schema Begin================-->
+			<xs:simpleType name="MaskType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Color"/>
+					<xs:enumeration value="Pixelated"/>
+					<xs:enumeration value="Blurred"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name="Mask">
+				<xs:sequence>
+					<xs:element name="ConfigurationToken" type="tt:ReferenceToken">
+						<xs:annotation>
+							<xs:documentation>Unique identifier of this mask configuration.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Polygon" type="tt:Polygon">
+						<xs:annotation><xs:documentation>Geometric representation of the mask area.</xs:documentation></xs:annotation>
+					</xs:element>
+					<xs:element name="Type" type="xs:string">
+						<xs:annotation><xs:documentation>Type of masking as defined by tr2:MaskType:
+							<ul>
+								<li>Color - The masked area is colored with color defined by the Color field.</li>
+								<li>Pixelated - The masked area is filled in mosaic style to hide details.</li>
+								<li>Blurred - The masked area is low pass filtered to hide details.</li>
+							</ul></xs:documentation></xs:annotation>
+					</xs:element>
+					<xs:element name="Color" type="tt:Color" minOccurs="0">
+						<xs:annotation><xs:documentation>Color of the masked area.</xs:documentation></xs:annotation>
+					</xs:element>
+					<xs:element name="Enabled" type="xs:boolean">
+						<xs:annotation><xs:documentation>If set the mask will cover the image, otherwise it will be fully transparent.</xs:documentation></xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="token" type="tt:ReferenceToken">
+					<xs:annotation>
+						<xs:documentation>Token of the mask.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="VideoSourceConfiguration" type="tt:ReferenceToken">
+					<xs:annotation>
+						<xs:documentation>Token of the VideoSourceConfiguration the Mask is associated with.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute/>
+			</xs:complexType>
+			<xs:element name="GetMasks">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Optional mask token of an existing mask.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Optional token of a Video Source Configuration.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMasksResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Masks" type="tr2:Mask" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of Mask configurations.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetMask">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Mask" type="tr2:Mask">
+							<xs:annotation>
+								<xs:documentation>Mask to be updated.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetMaskResponse" type="tr2:SetConfigurationResponse"/>
+			<!--===============================-->
+			<xs:element name="GetMaskOptions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Video Source Configuration Token that specifies an existing video source configuration that the options shall be compatible with.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:complexType name="MaskOptions">
+				<xs:sequence>
+					<xs:element name="MaxMasks" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>Maximum supported number of masks per VideoSourceConfiguration.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="MaxPoints" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>Maximum supported number of points per mask.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Types" type="xs:string" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>Information which types of tr2:MaskType are supported. Valid values are 'Color', 'Pixelated' and 'Blurred'.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Color" type="tt:ColorOptions">
+						<xs:annotation>
+							<xs:documentation>Colors supported.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first ONVIF then Vendor -->
+				</xs:sequence>
+				<xs:attribute name="RectangleOnly" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Information whether the polygon must have four points and a rectangular shape.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="SingleColorOnly" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates the device capability of change in color of privacy mask for one video source configuration will automatically be applied to all the privacy masks associated with the same video source configuration.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			
+			<xs:element name="GetMaskOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tr2:MaskOptions">
+							<xs:annotation>
+								<xs:documentation/>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="CreateMask">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Mask" type="tr2:Mask">
+							<xs:annotation>
+								<xs:documentation>Contain the initial mask configuration for create.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CreateMaskResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Returns Token of the newly created Mask</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteMask">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>This element contains a reference to the Mask configuration that should be deleted.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DeleteMaskResponse" type="tr2:SetConfigurationResponse"/>
+			<!--============Mask Schema End================-->
+			<!--============ Schema End================-->
+		</xs:schema>

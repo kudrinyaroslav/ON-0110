@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.onvif.org/ver10/receiver/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:trv="http://www.onvif.org/ver10/receiver/wsdl"  elementFormDefault="qualified" version="2.1.1">
+  <xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="../ver10/schema/onvif.xsd"/>
+  <!--  Message Request/Responses elements  -->
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilities">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServiceCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="trv:Capabilities">
+          <xs:annotation>
+            <xs:documentation>The capabilities for the receiver service is returned in the Capabilities element.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:complexType name="Capabilities">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="RTP_Multicast" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the device can receive RTP multicast streams.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RTP_TCP" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the device can receive RTP/TCP streams</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RTP_RTSP_TCP" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the device can receive RTP/RTSP/TCP streams.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SupportedReceivers" type="xs:int" use="required">
+      <xs:annotation>
+        <xs:documentation>The maximum number of receivers supported by the device.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="MaximumRTSPURILength" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>The maximum allowed length for RTSP URIs (Minimum and default value is 128 octet).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <xs:element name="Capabilities" type="trv:Capabilities"/>
+  <!--===============================-->
+  <xs:element name="GetReceivers">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReceiversResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Receivers" type="tt:Receiver" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>A list of all receivers that currently exist on the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReceiver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The token of the receiver to be retrieved.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReceiverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Receiver" type="tt:Receiver">
+          <xs:annotation>
+            <xs:documentation>The details of the receiver.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateReceiver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Configuration" type="tt:ReceiverConfiguration">
+          <xs:annotation>
+            <xs:documentation>The initial configuration for the new receiver.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateReceiverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Receiver" type="tt:Receiver">
+          <xs:annotation>
+            <xs:documentation>The details of the receiver that was created.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteReceiver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The token of the receiver to be deleted.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteReceiverResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConfigureReceiver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The token of the receiver to be configured.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Configuration" type="tt:ReceiverConfiguration">
+          <xs:annotation>
+            <xs:documentation>The new configuration for the receiver.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConfigureReceiverResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReceiverMode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The token of the receiver to be changed.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Mode" type="tt:ReceiverMode">
+          <xs:annotation>
+            <xs:documentation>The new receiver mode. Options available are:</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReceiverModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReceiverState">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The token of the receiver to be queried.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReceiverStateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReceiverState" type="tt:ReceiverStateInformation">
+          <xs:annotation>
+            <xs:documentation>Description of the current receiver state.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

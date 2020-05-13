@@ -1,0 +1,593 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSuit Name="Receiver general" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>RECEIVER-2-1-10 DELETE RECEIVER WITH INVALID TOKEN</Name>
+    <Description>
+
+    </Description>
+  </Parameters>
+  <Test ID = "TC.RECEIVER-2-1-10.01" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Correct response</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Receiver>
+            <Token xmlns="http://www.onvif.org/ver10/schema">receiver1</Token>
+            <Configuration xmlns="http://www.onvif.org/ver10/schema">
+              <Mode>AutoConnect</Mode>
+              <MediaUri>validUri</MediaUri>
+              <StreamSetup>
+                <Stream>RTP-Unicast</Stream>
+                <Transport>
+                  <Protocol>UDP</Protocol>
+                </Transport>
+              </StreamSetup>
+            </Configuration>
+          </Receiver>
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>UnknownToken</Subcode>
+      <RequestParameters>
+        <ReceiverToken>receiver3</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.02" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Correct response (with no receivers)</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+         
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.CreateReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Mode>NeverConnect</tt:Mode>
+          <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+          <tt:StreamSetup>
+            <tt:Stream>RTP-Unicast</tt:Stream>
+            <tt:Transport>
+              <tt:Protocol>UDP</tt:Protocol>
+            </tt:Transport>
+          </tt:StreamSetup>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <Receiver xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Token>receiver2</tt:Token>
+          <tt:Configuration>
+            <tt:Mode>NeverConnect</tt:Mode>
+            <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+            <tt:StreamSetup>
+              <tt:Stream>RTP-Unicast</tt:Stream>
+              <tt:Transport>
+                <tt:Protocol>UDP</tt:Protocol>
+              </tt:Transport>
+            </tt:StreamSetup>
+          </tt:Configuration>
+        </Receiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>UnknownToken</Subcode>
+      <RequestParameters>
+        <ReceiverToken>receiver3</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ReceiverToken>receiver2</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.03" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Incorrect SOAP 1.2 fault message</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.CreateReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Mode>NeverConnect</tt:Mode>
+          <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+          <tt:StreamSetup>
+            <tt:Stream>RTP-Unicast</tt:Stream>
+            <tt:Transport>
+              <tt:Protocol>UDP</tt:Protocol>
+            </tt:Transport>
+          </tt:StreamSetup>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <Receiver xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Token>receiver2</tt:Token>
+          <tt:Configuration>
+            <tt:Mode>NeverConnect</tt:Mode>
+            <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+            <tt:StreamSetup>
+              <tt:Stream>RTP-Unicast</tt:Stream>
+              <tt:Transport>
+                <tt:Protocol>UDP</tt:Protocol>
+              </tt:Transport>
+            </tt:StreamSetup>
+          </tt:Configuration>
+        </Receiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>receiver3</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ReceiverToken>receiver2</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.04" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Correct response (not specified SOAP 1.2 fault message)</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.CreateReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Mode>NeverConnect</tt:Mode>
+          <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+          <tt:StreamSetup>
+            <tt:Stream>RTP-Unicast</tt:Stream>
+            <tt:Transport>
+              <tt:Protocol>UDP</tt:Protocol>
+            </tt:Transport>
+          </tt:StreamSetup>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <Receiver xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Token>receiver2</tt:Token>
+          <tt:Configuration>
+            <tt:Mode>NeverConnect</tt:Mode>
+            <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+            <tt:StreamSetup>
+              <tt:Stream>RTP-Unicast</tt:Stream>
+              <tt:Transport>
+                <tt:Protocol>UDP</tt:Protocol>
+              </tt:Transport>
+            </tt:StreamSetup>
+          </tt:Configuration>
+        </Receiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>CannotDeleteReceiver</Subcode>
+      <RequestParameters>
+        <ReceiverToken>receiver3</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ReceiverToken>receiver2</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.05" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Incorrect response (no SOAP 1.2 fault message)</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.CreateReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Mode>NeverConnect</tt:Mode>
+          <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+          <tt:StreamSetup>
+            <tt:Stream>RTP-Unicast</tt:Stream>
+            <tt:Transport>
+              <tt:Protocol>UDP</tt:Protocol>
+            </tt:Transport>
+          </tt:StreamSetup>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <Receiver xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Token>receiver2</tt:Token>
+          <tt:Configuration>
+            <tt:Mode>NeverConnect</tt:Mode>
+            <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+            <tt:StreamSetup>
+              <tt:Stream>RTP-Unicast</tt:Stream>
+              <tt:Transport>
+                <tt:Protocol>UDP</tt:Protocol>
+              </tt:Transport>
+            </tt:StreamSetup>
+          </tt:Configuration>
+        </Receiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ReceiverToken>receiver3</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Receiver10.DeleteReceiver</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ReceiverToken>receiver2</ReceiverToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.06" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Fault on CreateReceiver</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfReceiver xmlns:tt="http://www.onvif.org/ver10/schema">
+
+        </ArrayOfReceiver>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Receiver10.CreateReceiver</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>UnknownToken</Subcode>
+      <RequestParameters>
+        <Configuration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Mode>NeverConnect</tt:Mode>
+          <tt:MediaUri>http://localhost/Valid/URI</tt:MediaUri>
+          <tt:StreamSetup>
+            <tt:Stream>RTP-Unicast</tt:Stream>
+            <tt:Transport>
+              <tt:Protocol>UDP</tt:Protocol>
+            </tt:Transport>
+          </tt:StreamSetup>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECEIVER-2-1-10.07" ONVIFTestID="RECEIVER-2-1-10" Enabled="true">
+    <TestName>DELETE RECEIVER WITH INVALID TOKEN</TestName>
+    <Name>Fault on GetReceivers</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceReceiver10/receiverService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Receiver10.GetReceivers</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>UnknownToken</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

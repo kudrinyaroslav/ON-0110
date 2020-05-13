@@ -1,0 +1,1677 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Management" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>ADVANCED_SCURITY-2-1-6 Get Certificate - Self-Signed</Name>
+    <Description>
+      TODO:
+      - empty
+      - no
+    </Description>
+  </Parameters>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.01" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Correct response (for IP 192.168.44.46)</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject.CommonName>127.0.0.1</Subject.CommonName>
+        <Subject.Country>US</Subject.Country>
+        <KeyID>keyID1</KeyID>
+        <SignatureAlgorithm.algorithm>1.2.840.113549.1.1.5</SignatureAlgorithm.algorithm>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIICvjCCAaagAwIBAgICA64wDQYJKoZIhvcNAQELBQAwITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzAgFw0xMzA5MTIxNDIxMTBaGA8zMDEzMDkxMzE0MjExMFowITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKt1aK/wnJuQEYRfn53ji+F1DQpcX6rgZefGI2DeYdDw1YvyuVEnhk9lXESXYf2c1Kj9hYooMTNd0dwXdeBRWkbVop6+ojY03vfcRV3VlWRZ34mTmdyzuqRC0V3UrNko6CdHMhJ64UxpzzdsAsluszmasZBTxK0eP57qiFwXMPW+rREF++V1WfQ6BmrJBphzTHjAF4dZAuJ9SXv90PSFyuvg0UKI6S7WpW4LU8DixlOb4f/Keb4CYIAe73rO5hbLLgT5TrNvqhmMoZll1mu5HmWRDD/N76AWr6j+AjTrIRQnUwHaCi4C1HhLIBesvfRqiXUjFbgmRtjQgW5txKYSencCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAb7JeA7H4ZgV208ElhklbopvrAf2Z5dRptJS0/DAub4yoL+b3Asx1tR2/169YTaYiI1hzZ4yY+eeda67Z0rcdJ7/dSUOyk5c7dMZCKEzcX6HP0zXAHy8huQB5y6FBznCmcUTTbJgOiOFNjkLzsKBXVCJ8P1cqJiXcnX4kxDg+RPATHQogdjXLt4VclZJ2Sd8oUlAqbVv3WxjDg5c88PjR05qWo12+7x4dVmhx3MlVQjprsvi0GzO1V20HnzHNJA77+UqP9ENe+IIRWebrIs6xpGRmdpz7oQAWW6KT85P8GuwnPeWXglNPXoPvlFIyRkCbkxZxfb63Ayjgopwc0uueqQ==</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.02" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Invalid Certificate's subject </Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIIC9jCCAl+gAwIBAgIJAParOnPwEkKlMA0GCSqGSIb3DQEBBQUAMIGKMQswCQYDVQQGEwJMSzEQMA4GA1UECBMHV2VzdGVybjEQMA4GA1UEBxMHQ29sb21ibzEWMBQGA1UEChMNU29mdHdhcmUgVmlldzERMA8GA1UECxMIVHJhaW5pbmcxLDAqBgNVBAMTI1NvZnR3YXJlIFZpZXcgQ2VydGlmaWNhdGUgQXV0aG9yaXR5MB4XDTEwMDcxMDA2MzMxOFoXDTI0MDMxODA2MzMxOFowcjELMAkGA1UEBhMCTEsxEDAOBgNVBAgTB1dlc3Rlcm4xEDAOBgNVBAcTB0NvbG9tYm8xFjAUBgNVBAoTDVNvZnR3YXJlIFZpZXcxETAPBgNVBAsTCFRyYWluaW5nMRQwEgYDVQQDEwtKYWNrIERhbmllbDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAqAIsXru2kWzNXidrgyapDb7GdmhUwNFx1rOimDyu2RrJN9sIv0Zi2B0Kp1xSQiBPWabXbtt3wB1LzS2P19tMC+MW7BTYz0mRg4n9vSoa+mTJ3Ea6/v4W97a701BSEOlTxysVltqgO+D3gD9uNVpjiCNjXP3FlXrw44aDnXwme3sCAwEAAaN7MHkwCQYDVR0TBAIwADAdBgNVHQ4EFgQUDp+pbeXQHmYiubDctF8b+C4g6V0wHwYDVR0jBBgwFoAU1rdiaEM7sE7BtSqZhTWT9Tqn9RQwLAYJYIZIAYb4QgENBB8WHU9wZW5TU0wgR2VuZXJhdGVkIENlcnRpZmljYXRlMA0GCSqGSIb3DQEBBQUAA4GBACcLqPwC9cATSqe+Kes5r6kcgo8eN3QME+HVSQocFSaRVrZ8iOrl0NAXway2JOGdjIFCn2gU4NAkrDAzjJ1AlwrfCT/1FDL5hu4BTdY13ZpwBf5MU6LB6x2tc+Jbo4bQrskEEIfGpOcyuB/wBJtJQeONjLuY2ouX9pvaaHj2cpzS</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.03" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Wrongly DER encoded X509Cert</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>AEIMQUYcgkosw048</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.04" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Annex A.10: DUT did not send CreateSelfSignedCertificateResponse message</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>CertID2</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.05" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>DUT did not send DeleteCertifciateResponse message</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIICvjCCAaagAwIBAgICA64wDQYJKoZIhvcNAQELBQAwITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzAgFw0xMzA5MTIxNDIxMTBaGA8zMDEzMDkxMzE0MjExMFowITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKt1aK/wnJuQEYRfn53ji+F1DQpcX6rgZefGI2DeYdDw1YvyuVEnhk9lXESXYf2c1Kj9hYooMTNd0dwXdeBRWkbVop6+ojY03vfcRV3VlWRZ34mTmdyzuqRC0V3UrNko6CdHMhJ64UxpzzdsAsluszmasZBTxK0eP57qiFwXMPW+rREF++V1WfQ6BmrJBphzTHjAF4dZAuJ9SXv90PSFyuvg0UKI6S7WpW4LU8DixlOb4f/Keb4CYIAe73rO5hbLLgT5TrNvqhmMoZll1mu5HmWRDD/N76AWr6j+AjTrIRQnUwHaCi4C1HhLIBesvfRqiXUjFbgmRtjQgW5txKYSencCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAb7JeA7H4ZgV208ElhklbopvrAf2Z5dRptJS0/DAub4yoL+b3Asx1tR2/169YTaYiI1hzZ4yY+eeda67Z0rcdJ7/dSUOyk5c7dMZCKEzcX6HP0zXAHy8huQB5y6FBznCmcUTTbJgOiOFNjkLzsKBXVCJ8P1cqJiXcnX4kxDg+RPATHQogdjXLt4VclZJ2Sd8oUlAqbVv3WxjDg5c88PjR05qWo12+7x4dVmhx3MlVQjprsvi0GzO1V20HnzHNJA77+UqP9ENe+IIRWebrIs6xpGRmdpz7oQAWW6KT85P8GuwnPeWXglNPXoPvlFIyRkCbkxZxfb63Ayjgopwc0uueqQ==</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.06" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Fault on DeleteCertifciate message</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIICvjCCAaagAwIBAgICA64wDQYJKoZIhvcNAQELBQAwITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzAgFw0xMzA5MTIxNDIxMTBaGA8zMDEzMDkxMzE0MjExMFowITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKt1aK/wnJuQEYRfn53ji+F1DQpcX6rgZefGI2DeYdDw1YvyuVEnhk9lXESXYf2c1Kj9hYooMTNd0dwXdeBRWkbVop6+ojY03vfcRV3VlWRZ34mTmdyzuqRC0V3UrNko6CdHMhJ64UxpzzdsAsluszmasZBTxK0eP57qiFwXMPW+rREF++V1WfQ6BmrJBphzTHjAF4dZAuJ9SXv90PSFyuvg0UKI6S7WpW4LU8DixlOb4f/Keb4CYIAe73rO5hbLLgT5TrNvqhmMoZll1mu5HmWRDD/N76AWr6j+AjTrIRQnUwHaCi4C1HhLIBesvfRqiXUjFbgmRtjQgW5txKYSencCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAb7JeA7H4ZgV208ElhklbopvrAf2Z5dRptJS0/DAub4yoL+b3Asx1tR2/169YTaYiI1hzZ4yY+eeda67Z0rcdJ7/dSUOyk5c7dMZCKEzcX6HP0zXAHy8huQB5y6FBznCmcUTTbJgOiOFNjkLzsKBXVCJ8P1cqJiXcnX4kxDg+RPATHQogdjXLt4VclZJ2Sd8oUlAqbVv3WxjDg5c88PjR05qWo12+7x4dVmhx3MlVQjprsvi0GzO1V20HnzHNJA77+UqP9ENe+IIRWebrIs6xpGRmdpz7oQAWW6KT85P8GuwnPeWXglNPXoPvlFIyRkCbkxZxfb63Ayjgopwc0uueqQ==</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Fault</Response>
+      <Code>Rerceiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>CertificateDeletionFailed</Subcode>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.07" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Failed pre-condition: env:Receiver/ter:Action/ter:MaximumNumberOfCertificatesReached fault was received</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>MaximumNumberOfCertificatesReached</Subcode>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>CertID2</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.08" ONVIFTestID="ADVANCED_SECURITY-5-3-17" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Failed pre-condition: env:Receiver/ter:Action/ter:MaximumNumberOfKeysReached fault was received</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="1" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              Optional:
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              Optional:
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>Action</Subcode>
+      <Subcode>MaximumNumberOfKeysReached</Subcode>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>RSAKeyPairID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M5S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.09" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>DUT did not send GetCertificateResponse message</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIICvjCCAaagAwIBAgICA64wDQYJKoZIhvcNAQELBQAwITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzAgFw0xMzA5MTIxNDIxMTBaGA8zMDEzMDkxMzE0MjExMFowITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKt1aK/wnJuQEYRfn53ji+F1DQpcX6rgZefGI2DeYdDw1YvyuVEnhk9lXESXYf2c1Kj9hYooMTNd0dwXdeBRWkbVop6+ojY03vfcRV3VlWRZ34mTmdyzuqRC0V3UrNko6CdHMhJ64UxpzzdsAsluszmasZBTxK0eP57qiFwXMPW+rREF++V1WfQ6BmrJBphzTHjAF4dZAuJ9SXv90PSFyuvg0UKI6S7WpW4LU8DixlOb4f/Keb4CYIAe73rO5hbLLgT5TrNvqhmMoZll1mu5HmWRDD/N76AWr6j+AjTrIRQnUwHaCi4C1HhLIBesvfRqiXUjFbgmRtjQgW5txKYSencCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAb7JeA7H4ZgV208ElhklbopvrAf2Z5dRptJS0/DAub4yoL+b3Asx1tR2/169YTaYiI1hzZ4yY+eeda67Z0rcdJ7/dSUOyk5c7dMZCKEzcX6HP0zXAHy8huQB5y6FBznCmcUTTbJgOiOFNjkLzsKBXVCJ8P1cqJiXcnX4kxDg+RPATHQogdjXLt4VclZJ2Sd8oUlAqbVv3WxjDg5c88PjR05qWo12+7x4dVmhx3MlVQjprsvi0GzO1V20HnzHNJA77+UqP9ENe+IIRWebrIs6xpGRmdpz7oQAWW6KT85P8GuwnPeWXglNPXoPvlFIyRkCbkxZxfb63Ayjgopwc0uueqQ==</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-2-1-6.10" ONVIFTestID="ADVANCED_SECURITY-2-1-6" Enabled="true">
+    <TestName>Get Certificate - Self-Signed</TestName>
+    <Name>Fault on GetCertificate message</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+   
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <!--test steps-->
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:KeystoreCapabilities MaximumNumberOfKeys="2" MaximumNumberOfCertificates="2" MaximumNumberOfCertificationPaths="2" RSAKeyPairGeneration="true" RSAKeyLengths="1 2" PKCS10ExternalCertificationWithRSA="true" SelfSignedCertificateCreationWithRSA="true" X509Versions="3 4 5">
+            <tas:SignatureAlgorithms>
+              <tas:algorithm>9</tas:algorithm>
+              <!--Optional:-->
+              <tas:parameters>AEIMQUYcgkosw048</tas:parameters>
+              <!--Optional:-->
+            </tas:SignatureAlgorithms>
+          </tas:KeystoreCapabilities>
+          <tas:TLSServerCapabilities TLSServerSupported="true" MaximumNumberOfTLSCertificationPaths="2"/>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.CreateRSAKeyPair</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyLength>1</KeyLength>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>keyID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <EstimatedCreationTime>P0Y0M0DT0H0M1S</EstimatedCreationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetKeyStatus</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>ok</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.CreateSelfSignedCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Subject xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:Countrys>US</tas:Countrys>
+          <tas:CommonNames>http://localhost:17934/ServiceAdvancedSecurity10/AdvancedSecurityService.asmx</tas:CommonNames>
+        </Subject>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certificateID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.GetCertificate</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>CertificateID</Subcode>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+        <X509Certificate xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:KeyID>keyID1</tas:KeyID>
+          <tas:Alias>Alias</tas:Alias>
+          <tas:CertificateContent>MIICvjCCAaagAwIBAgICA64wDQYJKoZIhvcNAQELBQAwITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzAgFw0xMzA5MTIxNDIxMTBaGA8zMDEzMDkxMzE0MjExMFowITESMBAGA1UEAwwJMTI3LjAuMC4xMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKt1aK/wnJuQEYRfn53ji+F1DQpcX6rgZefGI2DeYdDw1YvyuVEnhk9lXESXYf2c1Kj9hYooMTNd0dwXdeBRWkbVop6+ojY03vfcRV3VlWRZ34mTmdyzuqRC0V3UrNko6CdHMhJ64UxpzzdsAsluszmasZBTxK0eP57qiFwXMPW+rREF++V1WfQ6BmrJBphzTHjAF4dZAuJ9SXv90PSFyuvg0UKI6S7WpW4LU8DixlOb4f/Keb4CYIAe73rO5hbLLgT5TrNvqhmMoZll1mu5HmWRDD/N76AWr6j+AjTrIRQnUwHaCi4C1HhLIBesvfRqiXUjFbgmRtjQgW5txKYSencCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAb7JeA7H4ZgV208ElhklbopvrAf2Z5dRptJS0/DAub4yoL+b3Asx1tR2/169YTaYiI1hzZ4yY+eeda67Z0rcdJ7/dSUOyk5c7dMZCKEzcX6HP0zXAHy8huQB5y6FBznCmcUTTbJgOiOFNjkLzsKBXVCJ8P1cqJiXcnX4kxDg+RPATHQogdjXLt4VclZJ2Sd8oUlAqbVv3WxjDg5c88PjR05qWo12+7x4dVmhx3MlVQjprsvi0GzO1V20HnzHNJA77+UqP9ENe+IIRWebrIs6xpGRmdpz7oQAWW6KT85P8GuwnPeWXglNPXoPvlFIyRkCbkxZxfb63Ayjgopwc0uueqQ==</tas:CertificateContent>
+        </X509Certificate>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>
+

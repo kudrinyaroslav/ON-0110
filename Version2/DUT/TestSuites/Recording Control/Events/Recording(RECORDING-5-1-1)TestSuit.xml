@@ -1,0 +1,869 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Recording service" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</Name>
+    <Description>
+
+    </Description>
+  </Parameters>
+  <Test ID = "TC.RECORDING-5-1-1.01" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>Correct response: one recording job</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT senrs correct response with one recording job
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token1</tt:Token>
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken1</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+        </ArrayOfGetRecordingJobsResponseItem>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          <!--tns1:RecordingConfig/JobState-->
+          <tns1:RecordingConfig>
+            <JobState wstop:topic="true">
+              <tt:MessageDescription IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItemDescription Name="RecordingJobToken" Type="tt:RecordingJobReference" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItemDescription Name="State" Type="xs:string" />
+                  <tt:ElementItemDescription Name="Information" Type="tt:RecordingJobStateInformation" />
+                </tt:Data>
+              </tt:MessageDescription>
+            </JobState>
+          </tns1:RecordingConfig>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:RecordingConfig/JobState</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">600</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="6">
+      <Command>PMSPullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>2</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">40</TerminationTime>
+      </ResponseParametersAdditional>
+      <ResponseParameters>
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/JobState</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingJobToken" Value="JobToken1" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Idle" />
+                  <tt:ElementItem Name="Information">
+                    <RecordingJobStateInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+                      <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+                      <tt:State>Idle</tt:State>
+                      <tt:Sources>
+                        <tt:SourceToken Type="http://www.onvif.org/ver10/schema/Profile">
+                          <tt:Token>Token1</tt:Token>
+                        </tt:SourceToken>
+                        <tt:State>Idle</tt:State>
+                        <tt:Tracks>
+                          <tt:Track>
+                            <tt:SourceTag>SourceTag1</tt:SourceTag>
+                            <tt:Destination>TrakToken1</tt:Destination>
+                            <tt:Error></tt:Error>
+                            <tt:State>Idle</tt:State>
+                          </tt:Track>
+                        </tt:Tracks>
+                      </tt:Sources>
+                    </RecordingJobStateInformation>
+                  </tt:ElementItem>
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics" >
+            <wsnt:Topic xmlns:tns1="http://www.onvif.org/ver10/topics" Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:RecordingConfig/JobState</wsnt:Topic>
+            <wsnt:ProducerReference>
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://localhost:3246/Events/PullPointServiceFake.asmx?param=value</Address>
+            </wsnt:ProducerReference>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema" PropertyOperation="Initialized">
+                <tt:Source>
+                  <tt:SimpleItem Name="RecordingJobToken" Value="JobToken2" />
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="State" Value="Idle" />
+                  <tt:ElementItem Name="Information">
+                    <RecordingJobStateInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+                      <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+                      <tt:State>Idle</tt:State>
+                      <tt:Sources>
+                        <tt:SourceToken Type="http://www.onvif.org/ver10/schema/Profile">
+                          <tt:Token>Token1</tt:Token>
+                        </tt:SourceToken>
+                        <tt:State>Idle</tt:State>
+                        <tt:Tracks>
+                          <tt:Track>
+                            <tt:SourceTag>SourceTag1</tt:SourceTag>
+                            <tt:Destination>TrakToken1</tt:Destination>
+                            <tt:Error></tt:Error>
+                            <tt:State>Idle</tt:State>
+                          </tt:Track>
+                        </tt:Tracks>
+                      </tt:Sources>
+                    </RecordingJobStateInformation>
+                  </tt:ElementItem>
+                </tt:Data>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Recording10.GetRecordingJobState</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <JobToken>JobToken1</JobToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingJobStateInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+          <tt:State>Idle</tt:State>
+          <tt:Sources>
+            <tt:SourceToken Type="http://www.onvif.org/ver10/schema/Profile">
+              <tt:Token>Token1</tt:Token>
+            </tt:SourceToken>
+            <tt:State>Idle</tt:State>
+            <tt:Tracks>
+              <tt:Track>
+                <tt:SourceTag>SourceTag1</tt:SourceTag>
+                <tt:Destination>TrakToken1</tt:Destination>
+                <tt:Error></tt:Error>
+                <tt:State>Idle</tt:State>
+              </tt:Track>
+            </tt:Tracks>
+          </tt:Sources>
+        </RecordingJobStateInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT60S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime type="now">2013-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.RECORDING-5-1-1.02" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>Correct response: no recording jobs</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT senrs correct response with no recording jobs
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+
+        </ArrayOfGetRecordingJobsResponseItem>
+
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+  <Test ID = "TC.RECORDING-5-1-1.03" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>Correct response: several recording jobs</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT senrs correct response with several recording jobs
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+        RECORDING-5-1-1 RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT
+
+        STEP 1 - Get Recording Service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Recording service
+        Recording service address: http://localhost:3246/onvif/ServiceRecording10/RecordingService.asmx
+        STEP PASSED
+
+        STEP 3 - RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that tokens are unique
+        STEP PASSED
+
+        TEST PASSED
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token1</tt:Token>
+
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken1</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken2</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken2</tt:RecordingToken>
+
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>2</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token2</tt:Token>
+
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken2</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+        </ArrayOfGetRecordingJobsResponseItem>
+
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+  <Test ID = "TC.RECORDING-5-1-1.04" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>Incorrect response: not unique recording job tokens</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT senrs incorrect response with equal recording jobs tokens
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        RECORDING-5-1-1 RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT
+
+        STEP 1 - Get Recording Service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Recording service
+        Recording service address: http://localhost:3246/onvif/ServiceRecording10/RecordingService.asmx
+        STEP PASSED
+
+        STEP 3 - RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that tokens are unique
+        Token 'JobToken1' is not unique
+        STEP FAILED
+
+        TEST FAILED
+
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token1</tt:Token>
+
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken1</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken2</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken2</tt:RecordingToken>
+
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>2</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token2</tt:Token>
+
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken2</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+              <tt:Source>
+                <tt:SourceToken>
+                  <tt:Token Type="http://www.onvif.org/ver10/schema/Profile">Token1</tt:Token>
+
+                </tt:SourceToken>
+                <tt:Tracks>
+                  <tt:SourceTag></tt:SourceTag>
+                  <tt:Destination>TrakToken1</tt:Destination>
+                </tt:Tracks>
+              </tt:Source>
+
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+
+        </ArrayOfGetRecordingJobsResponseItem>
+
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+  <Test ID = "TC.RECORDING-5-1-1.05" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>No response</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT senrs no response
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+              <tt:SourceId>http://any</tt:SourceId>
+              <tt:Name>Camera1</tt:Name>
+              <tt:Location>Location1</tt:Location>
+              <tt:Description>Description1</tt:Description>
+              <tt:Address>http://Address</tt:Address>
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+        </ArrayOfGetRecordingJobsResponseItem>
+
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+  <Test ID = "TC.RECORDING-5-1-1.06" ONVIFTestID="RECORDING-5-1-1" Enabled="true">
+    <TestName>RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT</TestName>
+    <Name>Fault</Name>
+    <Description>
+      Check RECORDING-5-1-1 RECORDING CONTROL – JOB STATE EVENT test when
+      DUT sends fault
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/recording/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/receiver/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Recording10.GetRecordingJobs</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <Subcode>NoSuchService</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfGetRecordingJobsResponseItem xmlns:tt="http://www.onvif.org/ver10/schema">
+          <GetRecordingJobsResponseItem>
+            <tt:JobToken>JobToken1</tt:JobToken>
+            <tt:JobConfiguration>
+              <tt:RecordingToken>RecordingToken1</tt:RecordingToken>
+              <tt:SourceId>http://any</tt:SourceId>
+              <tt:Name>Camera1</tt:Name>
+              <tt:Location>Location1</tt:Location>
+              <tt:Description>Description1</tt:Description>
+              <tt:Address>http://Address</tt:Address>
+              <tt:Mode>Idle</tt:Mode>
+              <tt:Priority>1</tt:Priority>
+            </tt:JobConfiguration>
+          </GetRecordingJobsResponseItem>
+        </ArrayOfGetRecordingJobsResponseItem>
+
+      </ResponseParameters>
+    </Step>
+
+  </Test>
+</TestSuit>
+

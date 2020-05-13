@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Draft Capabilities" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>DOORCONTROL-2-1-8 GET DOOR INFO LIST – NO LIMIT</Name>
+    <Description>
+      TODO:
+      
+    </Description>
+  </Parameters>
+  <Test ID="TC.DOORCONTROL-2-1-8.F00" ONVIFTestID="Features" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 Features detection</TestName>
+    <Name>GetServices and Digest suported</Name>
+    <Description>
+      GetServices - supported.
+      Digest - supported.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="0" />
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3" />
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.01" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>Correct response with one token</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.02" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>Correct response with 5 tokens</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="5">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor2">
+            <tdc:Name>Door2 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor3">
+            <tdc:Name>Door3 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor4">
+            <tdc:Name>Door4 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor5">
+            <tdc:Name>Door5 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.03" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>More tokens than MaxLimit</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="4">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor2">
+            <tdc:Name>Door2 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor3">
+            <tdc:Name>Door3 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor4">
+            <tdc:Name>Door4 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor5">
+            <tdc:Name>Door5 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.04" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>No DoorInfos</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.05" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>Fault on GetDoorInfoList</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>InvalidStartReference</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.06" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>Correct response. MaxLimit=0</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="0">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.DOORCONTROL-2-1-8.07" ONVIFTestID="DOORCONTROL-2-1-8" Enabled="true">
+    <TestName>DOORCONTROL-2-1-8 GET DOOR INFO LIST - NO LIMIT</TestName>
+    <Name>The same tokens for DoorInfo item all over the messages</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDoor12/DoorService.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Door12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="5">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Door12.GetDoorInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfDoorInfo xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+          <DoorInfo token="tokenDoor1">
+            <tdc:Name>Door1 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor2">
+            <tdc:Name>Door2 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor3">
+            <tdc:Name>Door3 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor4">
+            <tdc:Name>Door4 Name</tdc:Name>
+            <tdc:Description>Door1 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+          <DoorInfo token="tokenDoor4">
+            <tdc:Name>Door4 Name</tdc:Name>
+            <tdc:Description>Door4 Description</tdc:Description>
+            <tdc:Capabilities Access="true" AccessTimingOverride="true" Lock="true" Unlock="true" Block="true" DoubleLock="true" LockDown="true" LockOpen="true" DoorMonitor="true" LockMonitor="true" DoubleLockMonitor="true" Tamper="true" Alarm="true" />
+          </DoorInfo>
+        </ArrayOfDoorInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+</TestSuit>

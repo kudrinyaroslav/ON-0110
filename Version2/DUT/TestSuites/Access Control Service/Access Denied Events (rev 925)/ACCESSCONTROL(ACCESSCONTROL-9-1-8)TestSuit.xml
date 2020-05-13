@@ -1,0 +1,3272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Draft Capabilities" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</Name>
+    <Description>
+      TODO:
+
+    </Description>
+  </Parameters>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.01" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Correct response with one token</Name>
+    <Description>
+      DUT returns GetAccessPointInfoList with one token
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+       
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+          </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.02" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Correct response with 3 tokens</Name>
+    <Description>
+      DUT returns GetAccessPointInfoList with 3 tokens
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.03" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>No event with correct Topic</Name>
+    <Description>
+      No event with Topic tns1:AccessControl/Denied/Credential/InvalidPIN
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:Receiver xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:Receiver>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.04" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Incorrect response. Property event</Name>
+    <Description>
+      MessageDescription.IsProperty="true"
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="true">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.05" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Event without Source.SimpleItem</Name>
+    <Description>
+     
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.06" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Event without Data.SimpleItem Name="CredentialToken"</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                     
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.07" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Event without Data.SimpleItem Name="CredentialHolderName"</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.08" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>No notification message</Name>
+    <Description>
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.09" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Notification message with incorrect UTC time</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008.10.10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.10" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Notification message with incorrect Topic</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.11" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Notification doesn't contain Source.SimpleItem</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.12" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Incorrect AccessPointToken</Name>
+    <Description>
+     
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint4"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.13" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Data.SimpleItem item with Name="CredentialToken" is missed</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.14" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Data.SimpleItem item with Name="CredentialHolderName" is missed</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/InvalidPIN</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.15" ONVIFTestID="ACCESSCONTROL-9-1-8" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-8 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>No AccessPoints</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+  </Test>
+  <Test ID = "TC.ACCESSCONTROL-9-1-8.16" ONVIFTestID="ACCESSCONTROL-9-1-6" Enabled="true">
+    <TestName>ACCESSCONTROL-9-1-9 ACCESS CONTROL – ACCESS DENIED WITH CREDENTIAL EVENT (INVALID PIN)</TestName>
+    <Name>Data.SimpleItem CredentialHolderName contains no Value</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/ver20/analytics/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accesscontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/doorcontrol/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>PACS12.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="10">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>PACS12.GetAccessPointInfoList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <Offset>0</Offset>
+      </RequestParameters>
+      <ResponseParameters>
+        <string></string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <ArrayOfAccessPointInfo xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl">
+          <AccessPointInfo token="tokenAccessPoint1">
+            <tac:Name>AccessPoint1 Name</tac:Name>
+            <tac:Description>AccessPoint1 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint2">
+            <tac:Name>AccessPoint2 Name</tac:Name>
+            <tac:Description>AccessPoint2 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+          <AccessPointInfo token="tokenAccessPoint3">
+            <tac:Name>AccessPoint3 Name</tac:Name>
+            <tac:Description>AccessPoint3 Description</tac:Description>
+            <tac:Enabled>true</tac:Enabled>
+            <tac:Type>tdc:Door</tac:Type>
+            <tac:Entity>tdc:Door</tac:Entity>
+            <tac:Capabilities DisableAccessPoint="true" AnonymousAccess="true">
+            </tac:Capabilities>
+          </AccessPointInfo>
+        </ArrayOfAccessPointInfo>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>true</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+                      xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:pt="http://www.onvif.org/ver10/pacs">
+          <tns1:AccessControl xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">
+            <Denied>
+              <Credential>
+                <InvalidPIN wstop:topic="true">
+                  <tt:MessageDescription IsProperty="false">
+                    <tt:Source>
+                      <tt:SimpleItemDescription Name="AccessPointToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                    </tt:Source>
+                    <tt:Data>
+                      <tt:SimpleItemDescription Name="CredentialToken" Type="pt:ReferenceToken" xmlns:pt="http://www.onvif.org/ver10/pacs"/>
+                      <tt:SimpleItemDescription Name="CredentialHolderName" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                      <tt:SimpleItemDescription Name="Reason" Type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </tt:Data>
+                  </tt:MessageDescription>
+                </InvalidPIN>
+              </Credential>
+            </Denied>
+          </tns1:AccessControl>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+          <Address>http://192.168.44.147:8080/onvif_notify_server/</Address>
+        
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:AccessControl/Denied/Credential/InvalidPIN</wsnt:TopicExpression>]]>
+        </Filter>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>
+              http://localhost/Web_Service?Idx=0
+              <!--http://192.168.10.211/Web_Service?Idx=0-->
+            </wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2011-11-23T05:42:18</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2011-11-23T05:43:18</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2"
+      xmlns:tns1="http://www.onvif.org/ver10/topics">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.179</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:tdc="http://www.onvif.org/ver10/doorcontrol/wsdl">tns1:AccessControl/Denied/Credential/Credential</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="AccessPointToken" Value="tokenAccessPoint1"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialToken" Value="Closed" />
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="CredentialHolderName" />
+            </Data>
+          </Message>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="6">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

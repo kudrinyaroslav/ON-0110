@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.onvif.org/ver10/search/wsdl" 
+           xmlns:tse="http://www.onvif.org/ver10/search/wsdl" 
+           xmlns:tt="http://www.onvif.org/ver10/schema" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="http://www.onvif.org/onvif/ver10/schema/onvif.xsd"/>
+			<!--  Message Request/Responses elements  -->
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tse:Capabilities">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the search service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="Capabilities">
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="MetadataSearch" type="xs:boolean"/>
+				<xs:attribute name="GeneralStartEvents" type="xs:boolean"><xs:annotation><xs:documentation> Indicates support for general virtual property events in the FindEvents method.</xs:documentation></xs:annotation></xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:element name="Capabilities" type="tse:Capabilities"/>
+			<!--===============================-->
+			<xs:element name="GetRecordingSummary">
+				<xs:complexType>
+					<xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetRecordingSummaryResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Summary" type="tt:RecordingSummary"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetRecordingInformation">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RecordingToken" type="tt:RecordingReference"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetRecordingInformationResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RecordingInformation" type="tt:RecordingInformation"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetMediaAttributes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RecordingTokens" type="tt:RecordingReference" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="Time" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMediaAttributesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MediaAttributes" type="tt:MediaAttributes" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="FindRecordings">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Scope" type="tt:SearchScope">
+							<xs:annotation>
+								<xs:documentation>Scope defines the dataset to consider for this search.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxMatches" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The search will be completed after this many matches. If not specified, the search will continue until reaching the endpoint or until the session expires.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="KeepAliveTime" type="xs:duration">
+							<xs:annotation>
+								<xs:documentation>The time the search session will be kept alive after responding to this and subsequent requests. A device shall support at least values up to ten seconds.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FindRecordingsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetRecordingSearchResults">
+				<xs:annotation>
+					<xs:documentation>Gets results from a particular recording listingession.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to get results from.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MinResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The minimum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WaitTime" type="xs:duration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum time before responding to the request, even if the MinResults parameter is not fulfilled.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetRecordingSearchResultsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ResultList" type="tt:FindRecordingResultList"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="FindEvents">
+				<xs:annotation>
+					<xs:documentation>Starts a search session and specifies the search parameters.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StartPoint" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will start.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EndPoint" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will stop. This can be a time before the StartPoint, in which case the search is performed backwards in time.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Scope" type="tt:SearchScope"/>
+						<xs:element name="SearchFilter" type="tt:EventFilter"/>
+						<xs:element name="IncludeStartState" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Setting IncludeStartState to true means that the server should return virtual events representing the start state for any recording included in the scope. Start state events are limited to the topics defined in the SearchFilter that have the IsProperty flag set to true.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxMatches" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The search will be completed after this many matches. If not specified, the search will continue until reaching the endpoint or until the session expires.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="KeepAliveTime" type="xs:duration">
+							<xs:annotation>
+								<xs:documentation>The time the search session will be kept alive after responding to this and subsequent requests. A device shall support at least values up to ten seconds.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FindEventsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>A unique reference to the search session created by this request.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetEventSearchResults">
+				<xs:annotation>
+					<xs:documentation>Gets results from a particular search session.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to get results from.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MinResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The minimum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WaitTime" type="xs:duration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum time before responding to the request, even if the MinResults parameter is not fulfilled.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetEventSearchResultsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ResultList" type="tt:FindEventResultList"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="FindPTZPosition">
+				<xs:annotation>
+					<xs:documentation>Starts a search session and specifies the search parameters.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StartPoint" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will start.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EndPoint" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will stop. This can be a time before the StartPoint, in which case the search is performed backwards in time.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Scope" type="tt:SearchScope"/>
+						<xs:element name="SearchFilter" type="tt:PTZPositionFilter"/>
+						<xs:element name="MaxMatches" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The search will be completed after this many matches. If not specified, the search will continue until reaching the endpoint or until the session expires.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="KeepAliveTime" type="xs:duration">
+							<xs:annotation>
+								<xs:documentation>The time the search session will be kept alive after responding to this and subsequent requests. A device shall support at least values up to ten seconds.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FindPTZPositionResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>A unique reference to the search session created by this request.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetPTZPositionSearchResults">
+				<xs:annotation>
+					<xs:documentation>Gets results from a particular search session.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to get results from.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MinResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The minimum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WaitTime" type="xs:duration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum time before responding to the request, even if the MinResults parameter is not fulfilled.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetPTZPositionSearchResultsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ResultList" type="tt:FindPTZPositionResultList"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="FindMetadata">
+				<xs:annotation>
+					<xs:documentation>Starts a search session and specifies the search parameters.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StartPoint" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will start.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EndPoint" type="xs:dateTime" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The point of time where the search will stop. This can be a time before the StartPoint, in which case the search is performed backwards in time.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Scope" type="tt:SearchScope"/>
+						<xs:element name="MetadataFilter" type="tt:MetadataFilter"/>
+						<xs:element name="MaxMatches" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The search will be completed after this many matches. If not specified, the search will continue until reaching the endpoint or until the session expires.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="KeepAliveTime" type="xs:duration">
+							<xs:annotation>
+								<xs:documentation>The time the search session will be kept alive after responding to this and subsequent requests. A device shall support at least values up to ten seconds.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FindMetadataResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>A unique reference to the search session created by this request.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetMetadataSearchResults">
+				<xs:annotation>
+					<xs:documentation>Gets results from a particular search session.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to get results from.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MinResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The minimum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxResults" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum number of results to return in one response.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WaitTime" type="xs:duration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The maximum time before responding to the request, even if the MinResults parameter is not fulfilled.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMetadataSearchResultsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ResultList" type="tt:FindMetadataResultList"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSearchState">
+				<xs:annotation>
+					<xs:documentation>Returns the state of an ongoing search session.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to get the state from.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetSearchStateResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="State" type="tt:SearchState"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="EndSearch">
+				<xs:annotation>
+					<xs:documentation>Ends an ongoing search session, freeing any resources.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SearchToken" type="tt:JobToken">
+							<xs:annotation>
+								<xs:documentation>The search session to end.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EndSearchResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Endpoint" type="xs:dateTime">
+							<xs:annotation>
+								<xs:documentation>The point of time the search had reached when it was ended. It is equal to the EndPoint specified in Find-operation if the search was completed.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<!--===============================-->
+		</xs:schema>

@@ -1,0 +1,527 @@
+﻿<xs:schema targetNamespace="http://www.onvif.org/ver10/accesscontrol/wsdl"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:pt="http://www.onvif.org/ver10/pacs"
+ xmlns:tac="http://www.onvif.org/ver10/accesscontrol/wsdl"
+ elementFormDefault="qualified">
+  <xs:import namespace="http://www.onvif.org/ver10/pacs" schemaLocation="pacstypes.xsd"/>
+  <!--====== types ======-->
+  <xs:complexType name="ServiceCapabilities">
+    <xs:annotation>
+      <xs:documentation>
+        The capabilities for the Access Control service.
+        These are returned by the GetServiceCapabilities method and also
+        by the Device Management service GetServices method when IncludeCapability is true.
+        For features of a specific access point within teh service,
+        check the AccessPointCapabilities returned in the AccessPointInfo using the
+        GetAccessPointInfoList method.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xs:sequence>
+    <xs:attribute name="MaxLimit" type="xs:unsignedInt" use="required">
+      <xs:annotation>
+        <xs:documentation>Indicates max number of entries returned per page in GetList operations. Must be greater than zero.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AccessPointInfoBase">
+    <xs:annotation>
+      <xs:documentation>
+        Used as extension base for AccessPointInfo.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="pt:DataEntity">
+        <xs:sequence>
+          <xs:element name="Name" type="pt:Name">
+            <xs:annotation>
+              <xs:documentation>User readable name. Length up to 64 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Description" type="pt:Description" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Optional user readable description for the AccessPoint. Length up to 1024 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="AreaFrom" type="pt:ReferenceToken" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Optional reference to the Area from which access is requested. Length up to 64 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="AreaTo" type="pt:ReferenceToken" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Optional reference to the Area to which access is requested. Length up to 64 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EntityType" type="xs:QName" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Optional Type of Entity, if missing, tdc:Door which means a door as defined by the ONVIF DoorControl service should be assumed. Profile C client can only be expected to support tdc:Door.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Entity" type="pt:ReferenceToken">
+            <xs:annotation>
+              <xs:documentation>Reference to the entity used to control access, the type may be specified by the EntityType field but is typically a tdc:Door.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AccessPointInfo">
+    <xs:annotation>
+      <xs:documentation>
+        Basic information about an AccessPoint. An AccessPoint defines an
+        entity a Credential can be granted or denied access to.  The
+        AccessPointInfo provides basic information on how access is
+        controlled in one direction for a door (from which area to which
+        area). A door is the typical device involved, but other type of
+        devices may be supported as well.
+        Multiple AccessPoints covering the same Door may exist.
+        One typical case is one AccessPoint for entry and another for exit, both referencing
+        the same Door.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="tac:AccessPointInfoBase">
+        <xs:sequence>
+          <xs:element name="Capabilities" type="tac:AccessPointCapabilities">
+            <xs:annotation>
+              <xs:documentation>The capabilities for this AccessPoint.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+        <xs:anyAttribute processContents="lax"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AccessPointCapabilities">
+    <xs:annotation>
+      <xs:documentation>
+        Capabilities for a specific AccessPoint instance. The structure may
+        be extended with optional attributes in the future.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xs:sequence>
+    <xs:attribute name="DisableAccessPoint" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this AccessPoint instance supports the EnableAccessPoint and DisableAccessPoint operations.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Duress" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this Access Point instance supports generation of duress events.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="AccessTaken" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this Access Point instance supports generation of AccessTaken and AccessNotTaken events. If AnonymousAccess and AccessTaken are both true, this indicates that the Anonymous versions of AccessTaken and AccessNotTaken are supported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ExternalAuthorization" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this AccessPoint instance supports the ExternalAuthorization operation and the generation of Request events (tns1:AccessControl/Request/Credential). If AnonymousAccess and ExternalAuthorization are both true, this indicates that the Anonymous version (tns1:AccessControl/Request/Anonymous) is supported as well.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Tamper" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this AccessPoint instance supports the generation of tamper events.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="AnonymousAccess" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates whether or not this AccessPoint has a REX switch or other input that allows anonymous access. If true, the tns1:AccessControl/Granted/AccessGranted/Anonymous event shall be supported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AccessPointState">
+    <xs:annotation>
+      <xs:documentation>
+        The state of an AccessPoint.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Indicates that the AccessPoint is enabled.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xs:sequence>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="Decision">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Granted">
+        <xs:annotation>
+          <xs:documentation>The decision is to grant access</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Denied">
+        <xs:annotation>
+          <xs:documentation>The decision is to deny access</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="AreaInfoBase">
+    <xs:annotation>
+      <xs:documentation>
+        Basic information about an Area. Used as extension base.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="pt:DataEntity">
+        <xs:sequence>
+          <xs:element name="Name" type="pt:Name">
+            <xs:annotation>
+              <xs:documentation>User readable name. Length up to 64 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Description" type="pt:Description">
+            <xs:annotation>
+              <xs:documentation>User readable description for the Area. Length up to 1024 characters.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AreaInfo">
+    <xs:annotation>
+      <xs:documentation>
+        Basic information about an Area.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="tac:AreaInfoBase">
+        <xs:sequence>
+          <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+        <xs:anyAttribute processContents="lax"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="DenyReason">
+    <xs:annotation>
+      <xs:documentation>
+        Non-normative enum that describes the various reasons for denying access.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Other">
+        <xs:annotation>
+          <xs:documentation>Indicates some other not yet standardized reason.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="InvalidCredential">
+        <xs:annotation>
+          <xs:documentation>Indicates that there is no matching credential stored in the device.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="InvalidBiometricAuthentication">
+        <xs:annotation>
+          <xs:documentation>Indicates that there is a mismatch or wrong biometric is presented on a biometric reader for a valid card holder.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="InvalidDigitalCertificates">
+        <xs:annotation>
+          <xs:documentation>Indicates that the digital certificate written in credential doesn't match with the actual certificate stored externally.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CredentialNotActive">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is presented on the AccessPoint before the credential becomes active.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CredentialExpired">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is presented on the AccessPoint after the credential expiry date.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CredentialNotEnabled">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is manually made void (due to lost credential etc) to prevent unauthorised entry.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="InvalidAccessProfile">
+        <xs:annotation>
+          <xs:documentation>Indicates that there is an access profile mismatch for a valid credential, presented on the AccessPoint.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UnauthorizedResource">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is not allowed on the AccessPoint/door/area.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WrongCredentialSchedule">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is denied access on the AccessPoint/door/area because of credential schedule mismatch.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WrongAccessProfileSchedule">
+        <xs:annotation>
+          <xs:documentation></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WrongDoorTimeschedule">
+        <xs:annotation>
+          <xs:documentation>Indicates that a valid credential is denied access on the AccessPoint/door/area because of access profile schedule mismatch.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <!--  Message Request / Response elements  -->
+  <xs:element name="GetServiceCapabilities">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="tac:ServiceCapabilities">
+          <xs:annotation>
+            <xs:documentation>The capability response message contains the requested Access Control service capabilities using a hierarchical XML capability structure.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointInfoList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Limit" type="xs:int" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Maximum number of entries to return. If not specified, or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="StartReference" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Start returning entries from this start reference. If not specified, entries will start from the beginning of the dataset.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointInfoListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="AccessPointInfo" type="tac:AccessPointInfo" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of AccessPointInfo items.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Token" type="pt:ReferenceToken" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Tokens of AccessPointInfo items to get.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AccessPointInfo" type="tac:AccessPointInfo" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of AccessPointInfo items.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointState">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Token" type="pt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>Token of AccessPoint instance to get AccessPointState for.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPointStateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AccessPointState" type="tac:AccessPointState">
+          <xs:annotation>
+            <xs:documentation>AccessPointState item.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="EnableAccessPoint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Token" type="pt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>Token of the AccessPoint instance to enable.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="EnableAccessPointResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="DisableAccessPoint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Token" type="pt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>Token of the AccessPoint instance to disable.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="DisableAccessPointResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="ExternalAuthorization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AccessPointToken" type="pt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>Token of the Access Point instance.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="CredentialToken" type="pt:ReferenceToken" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Optional token of the Credential involved.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Reason" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Optional reason for decision.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Decision" type="tac:Decision">
+          <xs:annotation>
+            <xs:documentation>Decision - Granted or Denied.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="ExternalAuthorizationResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAreaInfoList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Limit" type="xs:int" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Maximum number of entries to return. If not specified, or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="StartReference" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Start returning entries from this start reference. If not specified, entries will start from the beginning of the dataset.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAreaInfoListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="AreaInfo" type="tac:AreaInfo" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of AreaInfo items.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAreaInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Token" type="pt:ReferenceToken" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Tokens of AreaInfo items to get.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAreaInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AreaInfo" type="tac:AreaInfo" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of AreaInfo items.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+<!-- addition to parse "Capabilities" element in GetServides response -->
+  <xs:element name="Capabilities" type="tac:ServiceCapabilities">
+  </xs:element>
+</xs:schema>

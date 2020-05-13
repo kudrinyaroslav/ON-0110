@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.onvif.org/v3/User/wsdl"
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:udb="http://www.onvif.org/v3/User/wsdl"
+ xmlns:tac="http://www.onvif.org/v3/AccessControl/wsdl"
+ xmlns="http://www.onvif.org/v3/User/wsdl"
+ elementFormDefault="qualified">
+  <!--<xs:import namespace="http://www.onvif.org/v3/AccessControl/wsdl" schemaLocation="pacs.xsd"/>-->
+  <!--====== types ======-->
+  <xs:simpleType name="ReferenceToken">
+    <xs:annotation>
+      <xs:documentation>Type used to reference logical and physical entities.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="64"/>
+      <xs:minLength value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="DataEntity">
+    <xs:annotation>
+      <xs:documentation>
+        General datastructure referenced by a token.
+        Should be used as extension base.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="token" type="udb:ReferenceToken" use="required">
+      <xs:annotation>
+        <xs:documentation>Id to use to reference the structure</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="DescriptionType">
+    <xs:annotation>
+      <xs:documentation>
+        Description is optional and the maximum length is device specific.
+        If the length is more than maximum length, it is silently chopped to
+        the maximum length supported by the device/service (which may be 0).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="128"/>
+      <xs:minLength value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="UserInfo">
+    <xs:annotation>
+      <xs:documentation>Information about a User</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DataEntity">
+        <xs:sequence>
+          <xs:element name="Name" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Name of user</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Description" type="udb:DescriptionType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Description for the User</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="UserInfoList">
+    <xs:annotation>
+      <xs:documentation>List of UserInfo items.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="UserInfo" type="udb:UserInfo" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>List of UserInfo items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="UserTokenList">
+    <xs:annotation>
+      <xs:documentation>List of User tokens.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Token" type="udb:ReferenceToken" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>List of User tokens.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ServiceCapabilities">
+    <xs:annotation>
+      <xs:documentation>The capabilities of the User service.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xs:sequence>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--  Message Request / Response elements  -->
+  <xs:element name="GetUserInfoList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TokenList" type="udb:UserTokenList" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Tokens of Users to get. If null or empty, return all.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetUserInfoListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="UserInfoList" type="udb:UserInfoList">
+          <xs:annotation>
+            <xs:documentation>List of UserInfo items.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetUserInfoByCredentialToken">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CredentialToken" type="tac:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>The Credential to look up the users for.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetUserInfoByCredentialTokenResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="UserInfoList" type="udb:UserInfoList">
+          <xs:annotation>
+            <xs:documentation>List of UserInfo items having the provided credential.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilities">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="udb:ServiceCapabilities">
+          <xs:annotation>
+            <xs:documentation>The capabilities</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+</xs:schema>
+

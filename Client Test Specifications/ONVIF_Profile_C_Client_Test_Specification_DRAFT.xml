@@ -1,0 +1,2562 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+For online publishing use:
+<?xml-stylesheet type="text/xsl" 
+href="http://docs.oasis-open.org/templates/DocBook/spec-0.5/stylesheets/oasis-specification-html.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" 
+
+For offline publishing use:-->
+<?xml-stylesheet type="text/xsl" 
+href="file:///c:/oasis/spec-0.5/stylesheets/oasis-specification-html-offline.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"file:///c:/oasis/spec-0.5/docbook/docbookx.dtd"> 
+
+<!--
+<?xml-stylesheet type="text/xsl" 
+    href="http://docs.oasis-open.org/templates/DocBook/spec-0.5/stylesheets/oasis-specification-html.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+-->
+
+<article>
+<articleinfo>
+        <title>ONVIF Profile C Client Test Specification</title>
+        <subtitle>Version 15.06 June, 2015</subtitle>
+        <productname>ONVIF Profile C Client Test Specification</productname>
+        <productnumber>Version 15.06 June, 2015</productnumber>
+        <copyright>
+            <year>2015</year>
+            <holder>ONVIF, Inc. All rights reserved. www.onvif.org</holder>
+        </copyright>
+        <legalnotice role="notices">
+            <para>Recipients of this document may copy, distribute, publish, or display this
+                document so long as this copyright notice, license and disclaimer are retained with
+                all copies of the document. No license is granted to modify this document.</para>
+            <para>THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR
+                AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT
+                NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+                NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY
+                PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+                COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</para>
+            <para>IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR
+                ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES,
+                ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR
+                NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE
+                POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND
+                ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT. THE
+                FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR
+                LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE
+                AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE
+                CORPORATION.</para>
+        </legalnotice>
+    </articleinfo>
+
+<section id="s.intro">
+<title>Introduction</title>
+
+    <para>The goal of the ONVIF Test Specification set is to make it possible to realize fully
+            interoperable IP physical security implementations from different vendors. This
+            specification also acts as an input document to the development of a test tool which
+            will be used to test the ONVIF Client implementation conformance towards ONVIF standard.
+            This Client Test Tool analyzes network communications between ONVIF Devices and Clients
+            being tested and determines whether a specific Client is ONVIF conformant (see ONVIF
+            Conformance Process Specification).</para>
+    <para>This particular document defines test cases required for testing Profile C features of a
+            Client application e.g. System Component Information, System Component State, Door
+            Control and Access Point Control. It also describes the test framework, test setup,
+            prerequisites, test policies needed for the execution of the described test
+            cases.</para>
+
+<section id="s.scope">
+<title>Scope</title>
+    
+    <para>This ONVIF Profile C Client Test Specification defines and regulates the conformance
+                testing procedure for the ONVIF conformant Clients in the scope of Profile C
+                features. Conformance testing is meant to be black-box network traces analysis and
+                verification. The objective of this specification is to provide the test cases to
+                test individual requirements of ONVIF Clients in the scope of Profile C features
+                according to ONVIF Profile Specifications.</para>
+    <para>The principal intended purposes are:<itemizedlist>
+                    <listitem>
+                        <para>Provide self-assessment tool for implementations.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Provide comprehensive test suite coverage for Profile C
+                            features.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para>This specification <emphasis role="bold">does not</emphasis> address the following:<itemizedlist>
+                    <listitem>
+                        <para>3rd parties Client use cases</para>
+                    </listitem>
+                    <listitem>
+                        <para>Non-functional (performance and regression) testing and
+                            analysis.</para>
+                    </listitem>
+                    <listitem>
+                        <para>SOAP Implementation Interoperability test i.e. Web Services
+                            Interoperability Basic Profile version 2.0 (WS-I BP2.0).</para>
+                    </listitem>
+                    <listitem>
+                        <para>Network protocol implementation Conformance test for HTTPS and HTTP
+                            protocols.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para>The following sections cover test cases needed for the verification of relevant
+                features as mentioned in the ONVIF Profile Specifications.</para>
+</section>
+
+<section>
+  <title>System Component Information</title>
+    <para>System Component Information section specifies Client ability to request lists of Access
+                Points, Doors and Areas from Device.</para>
+</section>
+<section>
+            <title>System Component State</title>            
+            <para>System Component State section specifies Client ability to request information
+                about the state of Access Points (enabled/disabled) and Doors (locked, unlocked,
+                etc.).</para>
+</section>    
+<section>
+            <title>Door Control</title>
+            <para>Door Control section specifies Client ability to to control Doors (access door,
+                lock door, unlock door, etc.).</para>
+</section>
+        <section>
+            <title>Access Point Control</title>
+            <para>Access Point Control section specifies Client ability to control Access Points
+                (enabled/disabled).</para>
+        </section>
+        <section>
+            <title>External Authorization</title>
+            <para>External Authorization section specifies Client ability to receive authorization
+                request from Device and then make decisions about granting access and send it to
+                Device. This section also specifies Client ability to retrieve and receive
+                notifications about access decisions related to External Authorization.</para>
+        </section>
+</section>
+    <section id="s.docbook">
+        <title>Normative references</title>
+        <para>ONVIF Conformance Process Specification:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile Policy:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Core Specifications:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Core Client Test Specification:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile C Specification version 1.0, Dec 2013:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Access Control Specification:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Door Control Specification:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ISO/IEC Directives, Part 2:</para>
+        <para><ulink url="www.iso.org/directives"/></para>
+        <para>Rules for the structure and drafting of International Standards, Annex H: Verbal forms
+            for the expression of provisions.</para>
+    </section>
+    <section id="additions">
+        <title>Terms and Definitions</title>
+        <section>
+            <title>Conventions</title>
+            <para>The key words "shall", "shall not", "should", "should not", "may", "need not",
+                "can", "cannot" in this specification are to be interpreted as described in [ISO/IEC
+                Directives Part 2].</para>
+        </section>
+        <section>
+            <title>Definitions</title>
+            <para>This section describes terms and definitions used in this document.</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Profile</term>
+                    <listitem>
+                        <para>See ONVIF Profile Policy.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <variablelist>
+                <varlistentry>
+                    <term>Profile C</term>
+                    <listitem>
+                        <para>The Profile C Specification.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <variablelist>
+                <varlistentry>
+                    <term>ONVIF Device</term>
+                    <listitem>
+                        <para>Computer appliance or software program that exposes one or multiple
+                            ONVIF Web Services.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>ONVIF Client</term>
+                    <listitem>
+                        <para>Computer appliance or software program that uses ONVIF Web
+                            Services.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Conversation</term>
+                    <listitem>
+                        <para>A Conversation is all exchanges between two MAC addresses that
+                            contains SOAP request and response.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Network</term>
+                    <listitem>
+                        <para>A network is an interconnected group of devices communicating using
+                            the Internet protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Network Trace Capture file</term>
+                    <listitem>
+                        <para>Data file created by a network protocol analyzer software (such as
+                            Wireshark). Contains network packets data recorded during a live network
+                            communications.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>SOAP</term>
+                    <listitem>
+                        <para>SOAP is a lightweight protocol intended for exchanging structured
+                            information in a decentralized, distributed environment. It uses XML
+                            technologies to define an extensible messaging framework providing a
+                            message construct that can be exchanged over a variety of underlying
+                            protocols.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Client Test Tool</term>
+                    <listitem>
+                        <para>ONVIF Client Test Tool that tests ONVIF Client implementation towards
+                            the ONVIF Test Specification set.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Door</term>
+                    <listitem>
+                        <para>A physical door, barrier, turnstile, etc which can be controlled
+                            remotely and restricts access between two areas. A door is usually
+                            equipped with an electronic lock and a sensor.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Door Alarm</term>
+                    <listitem>
+                        <para>An abnormal state of the door where door is forced open or held open
+                            beyond the permitted time duration.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Door Mode</term>
+                    <listitem>
+                        <para>Logical state of the door indicating whether the door is locked,
+                            unlocked, blocked, locked down or locked open etc.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Lock</term>
+                    <listitem>
+                        <para>An operation after which a door is locked and alarm is
+                            unmasked.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Unlock</term>
+                    <listitem>
+                        <para>An operation to allow a door to be freely used for passage without any
+                            door alarms being triggered.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Access Point</term>
+                    <listitem>
+                        <para>A logical composition of a physical door and ID point(s) controlling
+                            access in one direction.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Disable Access Point </term>
+                    <listitem>
+                        <para>If an Access Point is disabled, it will not be considered in the
+                            decision making process and no commands will be issued from that Access
+                            Point to the Door configured for that Access Point. When an Access Point
+                            is disabled, the associated ID Point may or may not be disabled or shut
+                            down. Clients may still be able to command the Door Controller to
+                            control associated door even though that door is also referenced by a
+                            disabled access point.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>ID Point</term>
+                    <listitem>
+                        <para>A device that converts reader signals to protocols recognized by an
+                            authorization engine. It can be card reader, REX, biometric reader
+                            etc.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Valid Device Response</term>
+                    <listitem>
+                        <para>Device has responded to specific request with code HTTP or RTSP 200 OK
+                            and SOAP fault message has not appeared.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section>
+            <title>Abbreviations</title>
+            <para>This section describes abbreviations used in this document.</para>
+            <variablelist>
+                <varlistentry>
+                    <term>PACS</term>
+                    <listitem>
+                        <para>Physical Access Control System.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>tns1:</term>
+                    <listitem>
+                        <para>A prefix for the ONVIF topic namespace
+                            "http://www.onvif.org/ver10/topics". This prefix is not part of the
+                            standard and an implementation can use any prefix. See Core
+                            Specification description of Namespaces for details.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>HTTP</term>
+                    <listitem>
+                        <para>Hyper Text Transport Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>HTTPS</term>
+                    <listitem>
+                        <para>Hyper Text Transport Protocol over Secure Socket Layer.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>URI</term>
+                    <listitem>
+                        <para>Uniform Resource Identifier.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>WSDL</term>
+                    <listitem>
+                        <para>Web Services Description Language.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>XML</term>
+                    <listitem>
+                        <para>eXtensible Markup Language.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+    </section>
+    <section>
+        <title>Test Overview</title>
+        <para>This section provides information for the test setup procedure and required
+            prerequisites that should be followed during test case execution.</para>
+        <para>An ONVIF Client conformant to Profile C is an ONVIF Client that can request
+            information regarding the Physical Access Control System (PACS) related entities from an
+            ONVIF Device conformant to Profile C and do basic control of Doors and Access Points
+            over an IP network. ONVIF Client can also retrieve and receive standardized PACS related
+            events.</para>
+        <para>An ONVIF Profile is described by a fixed set of functionalities through a number of
+            services that are provided by the ONVIF standard. A number of services and
+            functionalities are mandatory for each type of ONVIF Profile. An ONVIF Device and ONVIF
+            Client may support any combination of Profiles and other optional services and
+            functionalities.</para>
+        <section>
+            <title>Test Setup</title>
+            <para>Collect Network Traces files required by the test cases.</para>
+            <para>Collect Feature List XML files for Devices detected in the Network Trace
+                files.</para>
+            <para>Client shall support all mandatory and conditional features listed in the Device
+                Feature List XML file supplied for the Profiles supported by the Client.</para>
+            <para>For compatibility with the Profile C, the ONVIF Client shall follow the
+                requirements of the conformance process. For details please see the latest ONVIF
+                Conformance Process Specification.</para>
+        </section>
+        <section>
+            <title>Prerequisites</title>
+            <para>The pre-requisites for executing the test cases described in this Test
+                Specification include:</para>
+            <para>The Device shall be configured with an IPv4 address.</para>
+            <para>The Device shall be able to be discovered by the Client.</para>
+        </section>
+    </section>
+    <section>
+        <title>System Component Information Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>            
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to retrieve a lists of
+                            Access Points, Doors and Areas. </para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting System Component Information if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to list available Access Points using
+                                        GetAccessPointInfoList operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to list available Doors using
+                                        GetDoorInfoList operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to list available Areas using
+                                        GetAreaInfoList operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting System Component Information if
+                            ANY of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No valid responses for GetAccessPointInfoList OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No valid responses for GetDoorInfoList OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No valid responses for GetAreaInfoList.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LISTING OF ACCESS POINTS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System Component Information -
+                Listing of Access Points</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEMCOMPONENTINFORMATION-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System Component
+                Information</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that list of all access
+                points items provided by Device is received by Client using the
+                GetAccessPointInfoList operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with GetAccessPointInfoList operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetAccessPointInfoList request message to retrieve
+                            complete list of all access points configured on the Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            GetAccessPointInfoListResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetAccessPointInfoList request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetAccessPointInfoList request message has a proper hierarchy (refer to accesscontrol.wsdl) AND
+[S1] Client request contains "&lt;GetAccessPointInfoList>" tag after the "&lt;Body>" tag AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetAccessPointInfoListResponse>" tag
+AND
+[S4] At least one Device response in the same Conversation does not contain: "&lt;NextStartReference>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>SystemComponentInformation_AccessPointInfoList</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LISTING OF DOORS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System Component Information -
+                Listing of Doors</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEMCOMPONENTINFORMATION-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System Component
+                Information</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that list of all doors
+                items provided by Device is received by Client using the GetDoorInfoList
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with GetDoorInfoList operation present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetDoorInfoList request message to retrieve complete
+                            list of all doors configured on the Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetDoorInfoListResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetDoorInfoList request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetDoorInfoList request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;GetDoorInfoList>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetDoorInfoListResponse>" tag
+AND
+[S4] At least one Device response in the same Conversation does not contain: "&lt;NextStartReference>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>SystemComponentInformation_DoorInfoList</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LISTING OF AREAS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System Component Information -
+                Listing of Areas</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEMCOMPONENTINFORMATION-3</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System Component
+                Information</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that list of all areas
+                items provided by Device is received by Client using the GetAreaInfoList
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetAreaInfoList operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetAreaInfoList request message to retrieve complete
+                            list of all areas configured on the Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetAreaInfoListResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetAreaInfoList request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetAreaInfoList request message has a proper hierarchy (refer to accesscontrol.wsdl) AND
+[S1] Client request contains "&lt;GetAreaInfoList>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetAreaInfoListResponse>" tag
+AND
+[S4] At least one Device response in the same Conversation does not contain: "&lt;NextStartReference>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>SystemComponentInformation_AreaInfoList</para>
+        </section>        
+    </section>
+    <section>
+        <title>System Component State Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client invokes a specific System Component State command to retrieve
+                            current state of Device in the system.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client uses Pull Point event mechanism to receive Device state
+                            updates.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting System Component State if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to receive a state of access point through
+                                        the use of Pull Point event mechanism AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to receive a state of door through the use
+                                        of Pull Point event mechanism</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting System Component State if ANY
+                            of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>Client unable to receive Pull Point event message with a
+                                        state of access point OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to receive Pull Point event message with a
+                                        state of door OR</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">STATE OF ACCESS POINTS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System Component State - State of
+                Access Points </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEMCOMPONENTSTATE-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System Component State</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                receive state of access point through the use of Pull Point event mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with CreatePullPointSubscription, PullMessages
+                            operations present.</para>
+                </listitem>
+                    <listitem>
+                        <para>SYSTEMCOMPONENTINFORMATION-1 has passed.</para>
+                    </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message without any filter
+                            or with appropriate filter.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> In case when Filter is specified for Client
+                CreatePullPointSubscription request message and if it does not contain
+                "*:AccessPoint/State" OR "*:AccessPoint//." value of "&lt;TopicExpression>" tag then
+                Test shall be deemed as "NOT DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag 
+    OR
+    ([S2] "&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND 
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND 
+    "&lt;TopicExpression>" contains value EITHER ("*:AccessPoint/State" OR ":AccessPoint//.")))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag 
+AND
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND
+[S5] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND
+    [S7] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>" AND
+[S8] Device response contains "HTTP/* 200 OK" AND
+[S9] Device response contains "&lt;PullMessagesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>SystemComponentState_AccessPointState</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">STATE OF DOORS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System Component State - State of
+                Doors</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEMCOMPONENTSTATE-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System Component State</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                receive state of door through the use of Pull Point event mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with CreatePullPointSubscription, PullMessages
+                            operations present.</para>
+                </listitem>
+                    <listitem>
+                        <para>SYSTEMCOMPONENTINFORMATION-2 has passed.</para>
+                    </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message without any filter
+                            or with appropriate filter.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> In case when Filter is specified for Client
+                CreatePullPointSubscription request message and if it does not contain
+                "*:Door/State" OR "*:Door//." value of "&lt;TopicExpression>" tag then Test shall be
+                deemed as "NOT DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag 
+    OR
+    ([S2] "&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND 
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND 
+    "&lt;TopicExpression>" contains value EITHER ("*:Door/State" OR "*:Door//.")))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag 
+AND
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND
+[S5] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND
+    [S7] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>" AND
+[S8] Device response contains "HTTP/* 200 OK" AND
+[S9] Device response contains "&lt;PullMessagesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>SystemComponentState_DoorState</para>
+        </section>
+    </section>
+    <section>
+        <title>Door Control Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client invokes a specific, valid mandatory Door Control command in
+                            order to change the state of door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Door Control if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Device returns a valid response to AccessDoor request
+                                        AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Device returns a valid response to LockDoor request
+                                        AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Device returns a valid response to UnlockDoor
+                                        request</para>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support any of the following
+                                        conditional features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>Device returns a valid response to DoubleLockDoor
+                                                request OR</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>Device returns a valid response to BlockDoor
+                                                request</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support LockDown conditional
+                                        features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>Device returns a valid response to LockDownDoor
+                                                request AND</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>Device returns a valid response to
+                                                LockDownReleaseDoor request</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support LockOpen conditional
+                                        features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>Device returns a valid response to LockOpenDoor
+                                                request AND</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>Device returns a valid response to
+                                                LockOpenReleaseDoor request.</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Door Control if ANY of the
+                            following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No valid Device response to AccessDoor request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No valid Device response to LockDoor request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No valid Device response to UnlockDoor request</para>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support any of the following
+                                        conditional features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>No valid Device response to DoubleLockDoor request
+                                                AND</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>No valid Device response to BlockDoor
+                                                request</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support LockDown conditional
+                                        features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>No valid Device response to LockDownDoor request
+                                                OR</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>No valid Device response to LockDownReleaseDoor
+                                                request</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para>When Device and Client support LockOpen conditional
+                                        features:</para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para>No valid Device response to LockOpenDoor request
+                                                OR</para>
+                                        </listitem>
+                                        <listitem>
+                                            <para>No valid Device response to LockOpenReleaseDoor
+                                                request.</para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">ACCESS DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - AccessDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of door using AccessDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with AccessDoor operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes AccessDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and AccessDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client AccessDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client AccessDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;AccessDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;AccessDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;AccessDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_AccessDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LOCK DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - LockDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of door using LockDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with LockDoor operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes LockDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and LockDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client LockDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client LockDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;LockDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;LockDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;LockDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_LockDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">UNLOCK DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - UnlockDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-3</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of door using UnlockDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with UnlockDoor operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes UnlockDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and UnlockDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client UnlockDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client UnlockDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;UnlockDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;UnlockDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;UnlockDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_UnlockDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">DOUBLE LOCK DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - DoubleLockDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-4</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of door using DoubleLockDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with DoubleLockDoor operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes DoubleLockDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and DoubleLockDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client DoubleLockDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client DoubleLockDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;DoubleLockDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;DoubleLockDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;DoubleLockDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_DoubleLockDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">BLOCK DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - BlockDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-5</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of door using BlockDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with BlockDoor operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes BlockDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and BlockDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client BlockDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client BlockDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;BlockDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;BlockDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;BlockDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_BlockDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LOCK DOWN DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - LockDownDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-6</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of Door using LockDownDoor operation and then releasing this state
+                using LockDownReleaseDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with LockDownDoor and LockDownReleaseDoor operations
+                            present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes LockDownDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and LockDownDoorResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes LockDownReleaseDoor request message to release the
+                            LockedDown state.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and LockDownReleaseDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client LockDownDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client LockDownDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;LockDownDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;LockDownDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;LockDownDoorResponse>" tag
+AND
+Client LockDownReleaseDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client LockDownReleaseDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S5] Client request contains "&lt;LockDownReleaseDoor>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;LockDownReleaseDoor>" includes tag: "&lt;Token>" with token value from LockDownDoor operation AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response contains "&lt;LockDownReleaseDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_LockDownDoor</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">LOCK OPEN DOOR OPERATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Door Control - LockOpenDoor</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DOORCONTROL-7</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Door Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                change the state of Door using LockOpenDoor operation and then releasing this state
+                using LockOpenReleaseDoor operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with LockOpenDoor and LockOpenReleaseDoor
+                            operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes LockOpenDoor request message to change the state of
+                            door.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and LockOpenDoorResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes LockOpenReleaseDoor request message to release the
+                            LockOpenDoor state.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and LockOpenReleaseDoorResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client LockOpenDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client LockOpenDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S1] Client request contains "&lt;LockOpenDoor>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;LockOpenDoor>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;LockOpenDoorResponse>" tag.
+AND
+Client LockOpenReleaseDoor request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client LockOpenReleaseDoor request message has a proper hierarchy (refer to doorcontrol.wsdl) AND
+[S5] Client request contains "&lt;LockOpenReleaseDoor>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;LockOpenReleaseDoor>" includes tag: "&lt;Token>" with token value from LockOpenDoor operation AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response contains "&lt;LockOpenReleaseDoorResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DoorControl_LockOpenDoor</para>
+        </section>
+    </section>
+    <section>
+        <title>Access Points Control Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>            
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client invokes a specific Access Points Control commands in order to
+                            change the state of access point. </para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Access Points Control if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Device returns a valid response to EnableAccessPoint
+                                        request AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Device returns a valid response to DisableAccessPoint
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Access Points Control if ANY of
+                            the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No valid Device response to EnableAccessPoint request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No valid Device response to DisableAccessPoint
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">DISABLE ENABLE ACCESS POINT OPERATION</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Access Points Control -
+                DisableEnableAccessPoint</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSPOINTCONTROL-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Points Control</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                disable Access Point using DisableAccessPoint operation and enable Access Point
+                using EnableAccessPoint operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with DisableAccessPoint and EnableAccessPoint
+                            operations present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes DisableAccessPoint request message to disable Access
+                            Point.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and DisableAccessPointResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes EnableAccessPoint request message to enable access
+                            point.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and EnableAccessPointResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client DisableAccessPoint request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client DisableAccessPoint request message has a proper hierarchy (refer to accesscontrol.wsdl) AND
+[S1] Client request contains "&lt;DisableAccessPoint>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;DisableAccessPoint>" includes tag: "&lt;Token>" with non-empty string value of specific token AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;DisableAccessPointResponse>" tag
+AND
+Client EnableAccessPoint request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client EnableAccessPoint request message has a proper hierarchy (refer to accesscontrol.wsdl) AND
+[S5] Client request contains "&lt;EnableAccessPoint>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;EnableAccessPoint>" includes tag: "&lt;Token>" with token value from DisableAccessPoint operation AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response contains "&lt;EnableAccessPointResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessPointsControl_DisableEnableAccessPoint</para>
+        </section>        
+    </section>
+    
+    <section>
+        <title>External Authorization Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client subscribes to device messages using CreatePullPointSubscription
+                            operation.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client receives authorization request from Device and makes a decision
+                            about granting access.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client uses Pull Point event mechanism to retrieve notification events
+                            from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting External Authorization if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to receive authorization request from
+                                        Device AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to send authorization decision to Device
+                                        using ExternalAuthorization operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about access
+                                        decisions related to External Authorization.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting External Authorization if ANY
+                            of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>Client unable to receive authorization request from Device
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to ExternalAuthorization request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about access
+                                        decisions related to External Authorization.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RECEIVE AUTHORIZATION REQUEST </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> External Authorization - Receive
+                Authorization Request </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EXTERNALAUTHORIZATION-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> External Authorization</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                receive authorization request from Device using Pull Point event mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with CreatePullPointSubscription and PullMessages
+                            operations present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message without any filter
+                            or with appropriate filter.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message with corresponding event topic value.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value EITHER ("*:AccessControl/Request/Credential" OR 
+                                                                                "*:AccessControl/Request/Anonymous" OR
+                                                                                "*:AccessControl/Request//." OR
+                                                                                "*:AccessControl//.")
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+AND
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND
+[S5] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND
+    [S7] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>" 
+AND
+[S8] Device response contains "HTTP/* 200 OK" AND
+[S9] Device response contains "&lt;PullMessagesResponse>" tag AND
+    [S10] "&lt;PullMessagesResponse>" includes tag: "&lt;NotificationMessage>" AND
+    [S11] "&lt;NotificationMessage>" includes tag: "&lt;Topic>" with value EITHER ("*:AccessControl/Request/Credential" OR
+                                                                                                                                "*:AccessControl/Request/Anonymous")</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ExternalAuthorization_ReceiveAuthorizationRequest</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SEND AUTHORIZATION DECISION</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> External Authorization - Send
+                Authorization Decision</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EXTERNALAUTHORIZATION-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> External Authorization</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                send Granted or Denied decision to Device.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with ExternalAuthorization operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client sends ExternalAuthorization message to Device with Granted or
+                            Denied decision.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            ExternalAuthorizationResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client ExternalAuthorization request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client ExternalAuthorization request message has a proper hierarchy (refer to accesscontrol.wsdl) AND
+[S1] Client request contains "&lt;ExternalAuthorization>" tag after the "&lt;Body>" tag AND
+    [S2] "&lt;ExternalAuthorization>" includes tag: "&lt;AccessPointToken>" with non-empty string value of specific token
+    AND
+    [S3] "&lt;ExternalAuthorization>" includes tag: "&lt;Decision>" AND
+    [S4] "&lt;Decision>" contains value EITHER ("Granted" OR "Denied") AND
+[S5] Device response contains "HTTP/* 200 OK" AND
+[S6] Device response contains "&lt;ExternalAuthorizationResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ExternalAuthorization_SendAuthorizationDecision</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE NOTIFICATIONS ABOUT ACCESS
+                DECISIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> External Authorization - Retrieve
+                Notifications about Access Decisions</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EXTERNALAUTHORIZATION-3</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> External Authorization</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about access decisions from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription and
+                            PullMessages operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message without any filter
+                            or with appropriate filter.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message with corresponding event topic value.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value EITHER ("*:AccessControl/Request/Timeout" OR
+                                                                                "*:AccessControl/Request//." OR 
+                                                                                "*:AccessControl//.")))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+AND
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND
+[S5] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND
+    [S6] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND
+    [S7] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>" 
+AND
+[S8] Device response contains "HTTP/* 200 OK" AND
+[S9] Device response contains "&lt;PullMessagesResponse>" tag AND
+    [S10] "&lt;PullMessagesResponse>" includes tag: "&lt;NotificationMessage>" AND
+    [S11] "&lt;NotificationMessage>" includes tag: "&lt;Topic>" with value "*:AccessControl/Request/*".</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ExternalAuthorization_RetrieveNotifications</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Access Control Decisions Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client subscribes to device messages using CreatePullPointSubscription
+                            operation to get Access Control Decisions notifications.</para>
+                    </listitem>                
+                    <listitem>
+                        <para>Client is considered as supporting Access Control Decisions if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client supports EventHandling_Pullpoint feature AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client supports SystemComponentInformation_AccessPointInfoList feature AND</para>
+                                </listitem>                            
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about access control decisions</para>
+                                </listitem>
+                        </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Access Control Decisions if ANY
+                            of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>Client does not support EventHandling_Pullpoint feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client does not support SystemComponentInformation_AccessPointInfoList feature
+                                        OR</para>
+                                </listitem>                            
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about access control
+                                        decisions.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>        
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS GRANTED WITH CREDENTIAL NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessGranted/Credential event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Granted with Credential notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessGranted/Credential event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessGrantedCredential</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS GRANTED TO ANONYMOUS NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessGranted/Anonymous event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Granted to Anonymous notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>            
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] (Device supports tns1:AccessControl/AccessGranted/Anonymous event AND
+    "&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains Dialect attribute with value EITHER 
+                                                                 "http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet"
+                                                                 OR
+                                                                 "http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete"
+    AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessGranted/Anonymous event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessGrantedAnonymous</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS DENIED WITH CREDENTIAL NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/Denied/Credential event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-3</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Denied with Credential notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/Denied/Credential event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessDeniedCredential</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS DENIED TO ANONYMOUS NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/Denied/Anonymous event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-4</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Denied to Anonymous notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/Denied/Anonymous event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessDeniedAnonymous</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS DENIED WITH CREDENTIAL (CREDENTIAL NOT FOUND – CARD)
+ NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/Denied/CredentialNotFound/Card event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-5</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Denied with Credential (Credential Not Found) notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/Denied/CredentialNotFound/Card event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessDeniedCredentialNotFoundCard</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS TAKEN WITH CREDENTIAL NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessTaken/Credential event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-6</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Taken with Credential notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessTaken/Credential event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessTakenCredential</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS TAKEN BY ANONYMOUS NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessTaken/Anonymous event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-7</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Taken by Anonymous notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessTaken/Anonymous event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessTakenAnonymous</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS NOT TAKEN WITH CREDENTIAL NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessNotTaken/Credential event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-8</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Not Taken with Credential notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessNotTaken/Credential event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessNotTakenCredential</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS NOT TAKEN BY ANONYMOUS NOTIFICATIONS
+</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Access Control Decisions: tns1:AccessControl/AccessNotTaken/Anonymous event</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ACCESSCONTROLDECISIONS-9</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Access Control Decisions</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve Access Not Taken by Anonymous notifications from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                 
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/AccessNotTaken/Anonymous event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+          </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>AccessControlDecisionRetrieval_AccessNotTakenAnonymous</para>
+        </section>
+    </section>
+	 
+    <section>
+        <title>Configuration Change Notifications Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client subscribes to device messages using CreatePullPointSubscription
+                            operation to get Configuration Change notifications.</para>
+                    </listitem>                  
+                    <listitem>
+                        <para>Client uses Pull Point event mechanism to retrieve notification events
+                            from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Configuration change  notification if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client supports EventHandling_Pullpoint feature AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client supports SystemComponentInformation_AccessPointInfoList feature AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client supports SystemComponentInformation_DoorInfoList feature AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client supports SystemComponentInformation_AreaInfoList feature</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about configuration changes for access points AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about remove of access points AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about configuration changes for doors AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about remove of doors AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about configuration changes for areas AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about remove of areas.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Configuration change notification if ANY
+                            of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>Client does not support EventHandling_Pullpoint feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client does not support SystemComponentInformation_AccessPointInfoList feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client does not support SystemComponentInformation_DoorInfoList feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client does not support SystemComponentInformation_AreaInfoList feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about configuration changes for access points
+                                       OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about remove of access points
+                                       OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about configuration changes for doors
+                                       OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about remove of doors
+                                       OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about configuration changes for areas OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about remove of areas.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>        
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS POINTS CONFIGURATION CHANGED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Acess Points Configuration Changed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Acess Points Configuration changed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about configuration changes for access points or about added access point from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/AccessPoint/Changed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_AcessPointChanged</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE ACCESS POINTS REMOVED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Acess Points Removed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-2</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Acess Points Removed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about remove of access points from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/AccessPoint/Removed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_AcessPointRemoved</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE DOORS CONFIGURATION CHANGED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Doors Configuration Changed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-3</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Doors Configuration changed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about configuration changes for doors or about added doors from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+            Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/Door/Changed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+            </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_DoorChanged</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE DOORS REMOVED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Doors Removed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-4</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Doors Removed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about remove of doors from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+            Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/Door/Removed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+            </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_DoorRemoved</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE AREAS CONFIGURATION CHANGED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Areas Configuration Changed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-5</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Areas Configuration changed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about configuration changes for areas or about added areas from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+            Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/Area/Changed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+           </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_AreaChanged</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">RETRIEVE AREAS REMOVED NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Areas Configuration Removed</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CONFIGURATIONCHANGENOTIFICATION-6</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Areas removed notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about remove of areas from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>                    
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+            Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:Configuration/Area/Removed event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+           </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ConfigurationMonitoring_AreaRemoved</para>
+        </section>
+    </section>
+  
+    <section>
+        <title>Duress Notifications Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client subscribes to device messages using CreatePullPointSubscription
+                            operation.</para>
+                    </listitem>                    
+                    <listitem>
+                        <para>Client uses Pull Point event mechanism to retrieve notification events
+                            from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Duress notification if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client supports EventHandling_Pullpoint feature AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client supports SystemComponentInformation_AccessPointInfoList feature AND</para>
+                                </listitem>                           
+                                <listitem>
+                                    <para>Client is able to retrieve notifications about duress situation detected at an access point.</para>
+                                </listitem>            
+                                </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Duress notification if ANY
+                            of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>Client does not support EventHandling_Pullpoint feature
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client does not support SystemComponentInformation_AccessPointInfoList feature
+                                        OR</para>
+                                </listitem>                                
+                                <listitem>
+                                    <para>Client unable to retrieve notifications about duress situation detected at an access point.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>        
+        <section>
+            <title><emphasis role="italic">RETRIEVE DURESS NOTIFICATIONS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Retrieve
+                Notifications about Duress</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DURESS-1</para>
+            <para><emphasis role="bold">Profile C Requirement:</emphasis> Mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Duress Situation Detected notification</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                retrieve notifications about duress situation detected at an access point from Device using the Pull Point event
+                mechanism.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with CreatePullPointSubscription operations present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis>
+                      <orderedlist>  
+                        <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                      </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+             Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag
+    AND
+    [S2] (Client request does not contain "&lt;Filter>" tag
+    OR
+    [S2] ("&lt;CreatePullPointSubscription>" includes tag: "&lt;Filter>" AND
+    "&lt;Filter>"  includes tag: "&lt;TopicExpression>" AND
+    "&lt;TopicExpression>" contains value AND
+    "&lt;TopicExpression>" value does not filter out tns1:AccessControl/Duress event))
+    AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+           </literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Duress</para>
+        </section>
+        
+        
+    </section>
+	
+  <appendix id="changes">
+    <title>Revision History</title>
+        <para>
+          <emphasis role="bold">September 28, 2015 Version 16.01</emphasis>
+            <itemizedlist>
+                <listitem>
+                    <para>Added Access Control Decisions Test Cases, Configuration Change  Notifications, Duress Notifications Test Cases sections</para>
+                </listitem>
+            </itemizedlist>
+       </para>
+        <para>
+          <emphasis role="bold">June 10, 2015 Version 15.06</emphasis>
+            <itemizedlist>
+                <listitem>
+                    <para>No major changes were made, just minor formatting fixes.</para>
+                </listitem>
+            </itemizedlist>
+       </para>
+        <para><emphasis role="bold">May 20, 2015 Version 15.05</emphasis><itemizedlist>
+                <listitem>
+                    <para>No major changes were made, just minor grammatical corrections.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">March 20, 2015 Version 15.03</emphasis><itemizedlist>
+                <listitem>
+                    <para>Added External Authorization Test Cases section.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">February 19, 2015 Version 15.02</emphasis><itemizedlist>
+                <listitem>
+                    <para>Pass criteria in SYSTEMCOMPONENTSTATE-1 and 2 test cases have been updated
+                        (added additional criteria for checking &lt;TopicExpression> tag
+                        value).</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">December 11, 2014 Version 14.12</emphasis><itemizedlist>
+                <listitem>
+                    <para>Fixed typos and inconsistencies.</para>
+                </listitem>
+            </itemizedlist><emphasis role="bold">November 21, 2014 Version 14.11</emphasis><itemizedlist>
+                <listitem>
+                    <para>Fixed typos and inconsistencies.</para>
+                </listitem>
+                <listitem>
+                    <para>Removed examples of expected Requests and Responses from all Test
+                        Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>Removed unnecessary PASS criteria from all Test Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>ACCESSPOINTCONTROL-1 and 2 test cases have been merged to the single
+                        ACCESSPOINTCONTROL-1 test case.</para>
+                </listitem>
+                <listitem>
+                    <para>DOORCONTROL-6 and 7 test cases have been merged to the single
+                        DOORCONTROL-6 test case.</para>
+                </listitem>
+                <listitem>
+                    <para>DOORCONTROL-8 and 9 test cases have been merged to the single
+                        DOORCONTROL-7 test case.</para>
+                </listitem>
+                <listitem>
+                    <para>SYSTEMCOMPONENTINFORMATION-1, 2 and 3 test cases have been updated.</para>
+                </listitem>
+                <listitem>
+                    <para>"7.1. Expected Scenarios Under Test" section has been updated.</para>
+                </listitem>
+                <listitem>
+                    <para>"3. Terms and Definitions" section has been updated.</para>
+                </listitem>
+                <listitem>
+                    <para>Introduced YY.MM method of version numbering</para>
+                </listitem>
+            </itemizedlist></para>
+    <para><emphasis role="bold">October 16, 2014 Version 1.0</emphasis><itemizedlist>
+                <listitem>
+                    <para>Initial version</para>
+                </listitem>
+            </itemizedlist></para>
+  </appendix>
+</article>

@@ -1,0 +1,664 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using ClientTestTool.Data.Conversations;
+using ClientTestTool.Data.Conversations.Enums;
+using ClientTestTool.Data.Conversations.Messages.Http;
+using ClientTestTool.Data.Conversations.Messages.Rtsp;
+using ClientTestTool.Data.Enums;
+using ClientTestTool.Data.Soap;
+using ClientTestTool.Parsers.HttpParser;
+using ClientTestTool.Tests.Definitions.Attributes;
+using ClientTestTool.Tests.Definitions.Base;
+using ClientTestTool.Tests.Definitions.Enums;
+using ClientTestTool.Tests.Definitions.Exceptions;
+using ClientTestTool.Tests.Engine.Enums;
+
+namespace ClientTestTool.Tests.Definitions.TestCases.VideoStreaming
+{
+  [Test(
+    Name              = "H264 Video Streaming",
+    Category          = Category.ProfileS,
+    Id                = "3",
+    RequirementLevel = RequirementLevel.Conditional,
+    FeatureUnderTest = Feature.H264
+    )]
+  public class H264Test : BaseTest {
+    protected override void StartTest(IEnumerable<Conversation> conversations) {
+      foreach (Conversation con in conversations) {
+        bool fS1Printed = false;
+        bool fS2Printed = false;
+        bool fS3Printed = false;
+        bool fS7PrintedSOAP = false;
+        bool fS7Printed = false;
+        bool fS8Printed = false;
+        bool fS9Printed = false;
+        bool fS10Printed = false;
+        bool fS11PrintedDESCRIBE = false;
+        bool fS11Printed = false;
+        bool fS12Printed = false;
+        bool fS13Printed = false;
+        bool fS14Printed = false;
+        bool fS15Printed = false;
+        bool fS16PrintedSETUP = false;
+        bool fS16Printed = false;
+        bool fS17Printed = false;
+        bool fS18Printed = false;
+        bool fS19Printed = false;
+        bool fS20Printed = false;
+        bool fS21PrintedPLAY = false;
+        bool fS21Printed = false;
+        bool fS22Printed = false;
+        bool fS23Printed = false;
+        bool fS24Printed = false;
+        bool fS25Printed = false;
+        bool fS26Printed = false;
+        int nBestStep = 0;
+        int nBestIdx = 0;
+        int nBestIdxRTSP = 0;
+        List<RequestResponsePair> msgs = con.GetMessages();
+        int idx = -1;
+        int idxRTSP = -1;
+        while (idx + 1 < msgs.Count && (idx = msgs.FindIndex(idx + 1, 
+          item => ContentType.Http == item.ContentType &&
+            item.GetRequest<HttpMessage>().ContainsTag("GetProfiles"))) != -1) {
+          if (!fS1Printed) {
+            BeginStep("Client request contains \"<GetProfiles>\" tag");
+            StepCompleted();
+            fS1Printed = true;
+          }
+          if (nBestStep == 0) {
+            nBestStep = 1;
+            nBestIdx = idx;
+          }
+
+          String httpContent = msgs[idx].GetResponse<HttpMessage>().GetHttpString();
+          HttpInfoParser parser =
+            new HttpInfoParser(new StringReader(httpContent));
+          if ("200" == parser.StatusCode) {
+            if (!fS2Printed) {
+              BeginStep("Device response contains \"HTTP/* 200 OK\"");
+              StepCompleted();
+              fS2Printed = true;
+            }
+            if (nBestStep < 2) {
+              nBestStep = 2;
+              nBestIdx = idx;
+            }
+            if (msgs[idx].GetResponse<HttpMessage>().ContainsTag(
+                "GetProfilesResponse")) {
+              if (!fS3Printed) {
+                BeginStep(
+                  "Device response contains \"<GetProfilesResponse>\" tag");
+                StepCompleted();
+                fS3Printed = true;
+              }
+              if (nBestStep < 3) {
+                nBestStep = 3;
+                nBestIdx = idx;
+              }
+
+              if (idx + 1 < msgs.Count && ValidationStatus.Failed != 
+                msgs[idx + 1].Request.ValidationStatus) {
+                // SOAP Validation failed == step failed
+                if (!fS7PrintedSOAP) {
+                  BeginStep(
+                    "Client request message is a well-formed SOAP request");
+                  StepCompleted();
+                  fS7PrintedSOAP = true;
+                }
+                if (msgs[idx + 1].GetRequest<HttpMessage>().ContainsTag(
+                  "GetStreamUri")) {
+                  if (!fS7Printed) {
+                    BeginStep(
+                      "Client request contains \"<GetStreamUri>\" tag");
+                    StepCompleted();
+                    fS7Printed = true;
+                  }
+                  if (nBestStep < 7) {
+                    nBestStep = 7;
+                    nBestIdx = idx;
+                  }
+                  System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                  doc.LoadXml(msgs[idx + 1].GetRequest<HttpMessage>().GetXmlString());
+                  System.Xml.XmlElement docElem = doc.DocumentElement;
+                  System.Xml.XmlNode nodeProfileToken =
+                    docElem.SelectSingleNode("Body/GetStreamUri/ProfileToken");
+
+                  if (nodeProfileToken != null) {
+                    if (!fS8Printed) {
+                      BeginStep(
+                        "\"<GetStreamUri>\" includes tag \"<ProfileToken>\" with a string value");
+                      StepCompleted();
+                      fS8Printed = true;
+                    }
+                    if (nBestStep < 8) {
+                      nBestStep = 8;
+                      nBestIdx = idx;
+                    }
+                    httpContent = msgs[idx + 1].GetResponse<HttpMessage>().GetHttpString();
+                    parser = new HttpInfoParser(new StringReader(httpContent));
+                    if ("200" == parser.StatusCode) {
+                      if (!fS9Printed) {
+                        BeginStep(
+                          "Device response contains \"HTTP/* 200 OK\"");
+                        StepCompleted();
+                        fS9Printed = true;
+                      }
+                      if (nBestStep < 9) {
+                        nBestStep = 9;
+                        nBestIdx = idx;
+                      }
+                      if (msgs[idx + 1].GetResponse<HttpMessage>().ContainsTag(
+                            "GetStreamUriResponse")) {
+                        if (!fS10Printed) {
+                          BeginStep(
+                            "Device response contains \"<GetStreamUriResponse>\" tag");
+                          StepCompleted();
+                          fS10Printed = true;
+                        }
+                        if (nBestStep < 10) {
+                          nBestStep = 10;
+                          nBestIdx = idx;
+                        }
+
+                        bool fDESCRIBE_W_RESPONSE = false; // on the HIKVISION
+                        // file we have 2 sequential DESCRIBE command.
+                        // first with 401 response, and second with 200 OK
+                        // so here we will try to find DESCRIBE with proper
+                        // response first
+                        fDESCRIBE_W_RESPONSE = idx + 2 < msgs.Count &&
+                          (idxRTSP = msgs.FindIndex(idx + 2,
+                            item => ContentType.Rtsp == item.ContentType &&
+                            item.GetRequest<RtspMessage>().GetDetails() ==
+                            "DESCRIBE" &&
+                            (item.GetResponse<RtspMessage>().
+                              GetContent().Contains("RTSP/") &&
+                             item.GetResponse<RtspMessage>().
+                              GetContent().Contains("200 OK")))) != -1;
+
+                        // It looks like there is a gap beetween
+                        // <GetStreamUriResponse> and DESCRIBE command
+                        // which is another SOAP message
+                        // <trt:SetSynchronizationPoint> and 
+                        // RTSP OPTIONS command,
+                        // so msgs[idx + 4] is our DESCRIBE command
+                        if (fDESCRIBE_W_RESPONSE || (idx + 2 < msgs.Count &&
+                             (idxRTSP = msgs.FindIndex(idx + 2, 
+                              item => ContentType.Rtsp == item.ContentType &&
+                              item.GetRequest<RtspMessage>().GetDetails() ==
+                                "DESCRIBE")) != -1)) {
+                          if (!fS11PrintedDESCRIBE) {
+                            BeginStep("Client request contains DESCRIBE command");
+                            StepCompleted();
+                            fS11PrintedDESCRIBE = true;
+                          }
+                          if (nBestStep < 11) {
+                            nBestStep = 11;
+                            nBestIdx = idx;
+                            nBestIdxRTSP = idxRTSP;
+                          }
+                          int protocolIdx = 
+                            msgs[idxRTSP].GetRequest<RtspMessage>().GetContent().
+                              IndexOf("rtsp://");
+                          if (protocolIdx != -1) {
+                            if (!fS11Printed) {
+                              BeginStep(
+                                "DESCRIBE command in the request includes URI");
+                              StepCompleted();
+                              fS11Printed = true;
+                            }
+                            if (nBestStep < 11) {
+                              nBestStep = 11;
+                              nBestIdx = idx;
+                              nBestIdxRTSP = idxRTSP;
+                            }
+                            if (msgs[idxRTSP].GetRequest<RtspMessage>().GetContent().
+                                  Contains("RTSP/")) {
+                              if (!fS12Printed) {
+                                BeginStep("DESCRIBE includes \"RTSP/*\" " +
+                                  " version identifier");
+                                StepCompleted();
+                                fS12Printed = true;
+                              }
+                              if (nBestStep < 12) {
+                                nBestStep = 12;
+                                nBestIdx = idx;
+                                nBestIdxRTSP = idxRTSP;
+                              }
+                              if (msgs[idxRTSP].GetRequest<RtspMessage>().CSeq != 0) {
+                                if (!fS13Printed) {
+                                  BeginStep("DESCRIBE includes \"CSeq\" identifier");
+                                  StepCompleted();
+                                  fS13Printed = true;
+                                }
+                                if (nBestStep < 13) {
+                                  nBestStep = 13;
+                                  nBestIdx = idx;
+                                  nBestIdxRTSP = idxRTSP;
+                                }
+                                if (msgs[idxRTSP].GetResponse<RtspMessage>().
+                                    GetContent().Contains("RTSP/") &&
+                                    msgs[idxRTSP].GetResponse<RtspMessage>().
+                                    GetContent().Contains("200 OK")) {
+                                  if (!fS14Printed) {
+                                    BeginStep("Device response contains " + 
+                                      "\"RTSP/* 200 OK\"");
+                                    StepCompleted();
+                                    fS14Printed = true;
+                                  }
+                                  if (nBestStep < 14) {
+                                    nBestStep = 14;
+                                    nBestIdx = idx;
+                                    nBestIdxRTSP = idxRTSP;
+                                  }
+                                  if (msgs[idxRTSP].GetResponse<RtspMessage>().
+                                      GetContent().Contains("rtpmap:") &&
+                                      msgs[idxRTSP].GetResponse<RtspMessage>().
+                                      GetContent().Contains("H264/")) {                                    
+                                    if (!fS15Printed) {
+                                      BeginStep("Device response contains " + 
+                                        "SDP information with \"a=rtpmap:* H264/*\"");
+                                      StepCompleted();
+                                      fS15Printed = true;
+                                    }
+                                    if (nBestStep < 15) {
+                                      nBestStep = 15;
+                                      nBestIdx = idx;
+                                      nBestIdxRTSP = idxRTSP;
+                                    }
+                                    if (idxRTSP + 1 < msgs.Count &&
+                                        ContentType.Rtsp == 
+                                          msgs[idxRTSP + 1].ContentType &&
+                                        msgs[idxRTSP + 1].
+                                          GetRequest<RtspMessage>().GetDetails() ==
+                                            "SETUP") {
+                                      if (!fS16PrintedSETUP) {
+                                        BeginStep("Client request contains SETUP command");
+                                        StepCompleted();
+                                        fS16PrintedSETUP = true;
+                                      }
+                                      if (nBestStep < 16) {
+                                        nBestStep = 16;
+                                        nBestIdx = idx;
+                                        nBestIdxRTSP = idxRTSP;
+                                      }
+                                      protocolIdx = msgs[idxRTSP + 1].
+                                        GetRequest<RtspMessage>().GetContent().
+                                        IndexOf("rtsp://");
+                                      if (protocolIdx != -1) {
+                                        if (!fS16Printed) {
+                                          BeginStep("SETUP includes any URI");
+                                          StepCompleted();
+                                          fS16Printed = true;
+                                        }
+                                        if (nBestStep < 16) {
+                                          nBestStep = 16;
+                                          nBestIdx = idx;
+                                          nBestIdxRTSP = idxRTSP;
+                                        }
+                                        if (msgs[idxRTSP + 1].
+                                              GetRequest<RtspMessage>().
+                                              GetContent().Contains("RTSP/")) {
+                                          if (!fS17Printed) {
+                                            BeginStep("SETUP includes " + 
+                                              "\"RTSP/*\" version identifier");
+                                            StepCompleted();
+                                            fS17Printed = true;
+                                          }
+                                          if (nBestStep < 17) {
+                                            nBestStep = 17;
+                                            nBestIdx = idx;
+                                            nBestIdxRTSP = idxRTSP;
+                                          }
+                                          if (msgs[idxRTSP + 1].
+                                                GetRequest<RtspMessage>().CSeq != 0) {
+                                            if (!fS18Printed) {
+                                              BeginStep("SETUP includes " + 
+                                                "\"CSeq\" identifier");
+                                              StepCompleted();
+                                              fS18Printed = true;
+                                            }
+                                            if (nBestStep < 18) {
+                                              nBestStep = 18;
+                                              nBestIdx = idx;
+                                              nBestIdxRTSP = idxRTSP;
+                                            }
+                                            if (msgs[idxRTSP + 1].
+                                              GetRequest<RtspMessage>().
+                                              GetContent().Contains("Transport")) {
+                                              if (!fS19Printed) {
+                                                BeginStep("SETUP includes " + 
+                                                  "\"Transport\" parameter");
+                                                StepCompleted();
+                                                fS19Printed = true;
+                                              }
+                                              if (nBestStep < 19) {
+                                                nBestStep = 19;
+                                                nBestIdx = idx;
+                                                nBestIdxRTSP = idxRTSP;
+                                              }
+                                              if (msgs[idxRTSP + 1].
+                                                    GetResponse<RtspMessage>().
+                                                    GetContent().Contains("RTSP/") &&
+                                                  msgs[idxRTSP + 1].
+                                                    GetResponse<RtspMessage>().
+                                                    GetContent().Contains("200 OK")) {
+                                                if (!fS20Printed) {
+                                                  BeginStep("Device response " + 
+                                                    "contains \"RTSP/* 200 OK\"");
+                                                  StepCompleted();
+                                                  fS20Printed = true;
+                                                }
+                                                if (nBestStep < 20) {
+                                                  nBestStep = 20;
+                                                  nBestIdx = idx;
+                                                  nBestIdxRTSP = idxRTSP;
+                                                }
+                                                if (idxRTSP + 2 < msgs.Count &&
+                                                    ContentType.Rtsp == 
+                                                      msgs[idxRTSP + 2].ContentType &&
+                                                    msgs[idxRTSP + 2].
+                                                      GetRequest<RtspMessage>().
+                                                        GetDetails() == "PLAY") {
+                                                  if (!fS21PrintedPLAY) {
+                                                    BeginStep("Client request" + 
+                                                      " contains PLAY command");
+                                                    StepCompleted();
+                                                    fS21PrintedPLAY = true;
+                                                  }
+                                                  if (nBestStep < 21) {
+                                                    nBestStep = 21;
+                                                    nBestIdx = idx;
+                                                    nBestIdxRTSP = idxRTSP;
+                                                  }
+                                                  protocolIdx = msgs[idxRTSP + 2].
+                                                    GetRequest<RtspMessage>().
+                                                      GetContent().IndexOf("rtsp://");
+                                                  if (protocolIdx != -1) {
+                                                    if (!fS21Printed) {
+                                                      BeginStep("PLAY includes any URI");
+                                                      StepCompleted();
+                                                      fS21Printed = true;
+                                                    }
+                                                    if (nBestStep < 21) {
+                                                      nBestStep = 21;
+                                                      nBestIdx = idx;
+                                                      nBestIdxRTSP = idxRTSP;
+                                                    }
+                                                    if (msgs[idxRTSP + 2].
+                                                          GetRequest<RtspMessage>().
+                                                          GetContent().
+                                                          Contains("RTSP/")) {
+                                                      if (!fS22Printed) {
+                                                        BeginStep("PLAY " + 
+                                                          "includes \"RTSP/*\"" +
+                                                          " version identifier");
+                                                        StepCompleted();
+                                                        fS22Printed = true;
+                                                      }
+                                                      if (nBestStep < 22) {
+                                                        nBestStep = 22;
+                                                        nBestIdx = idx;
+                                                        nBestIdxRTSP = idxRTSP;
+                                                      }
+                                                      if (msgs[idxRTSP + 2].
+                                                            GetRequest<RtspMessage>().
+                                                            CSeq != 0) {
+                                                        if (!fS23Printed) {
+                                                          BeginStep("PLAY " + 
+                                                            "includes \"CSeq\"" +
+                                                            " identifier");
+                                                          StepCompleted();
+                                                          fS23Printed = true;
+                                                        }
+                                                        if (nBestStep < 23) {
+                                                          nBestStep = 23;
+                                                          nBestIdx = idx;
+                                                          nBestIdxRTSP = idxRTSP;
+                                                        }
+                                                        if (msgs[idxRTSP + 2].
+                                                            GetRequest<RtspMessage>().
+                                                            GetContent().
+                                                            Contains("Range")) {
+                                                          if (!fS24Printed) {
+                                                            BeginStep("PLAY " + 
+                                                              "includes " + 
+                                                              "\"Range\" " + 
+                                                              "parameter");
+                                                            StepCompleted();
+                                                            fS24Printed = true;
+                                                          }
+                                                          if (nBestStep < 24) {
+                                                            nBestStep = 24;
+                                                            nBestIdx = idx;
+                                                            nBestIdxRTSP = idxRTSP;
+                                                          }
+                                                          if (msgs[idxRTSP + 2].
+                                                            GetRequest<RtspMessage>().
+                                                            GetContent().
+                                                            Contains("Session")) {
+                                                            if (!fS25Printed) {
+                                                              BeginStep("PLAY " + 
+                                                                "includes " + 
+                                                                "\"Session\" " + 
+                                                                "parameter");
+                                                              StepCompleted();
+                                                              fS25Printed = true;
+                                                            }
+                                                            if (nBestStep < 25) {
+                                                              nBestStep = 25;
+                                                              nBestIdx = idx;
+                                                              nBestIdxRTSP = idxRTSP;
+                                                            }
+                                                            if (msgs[idxRTSP + 2].
+                                                              GetResponse<RtspMessage>().
+                                                              GetContent().
+                                                              Contains("RTSP/") &&
+                                                              msgs[idxRTSP + 2].
+                                                              GetResponse<RtspMessage>().
+                                                              GetContent().
+                                                              Contains("200 OK")) {
+                                                              if (!fS26Printed) {
+                                                                BeginStep("Device" +
+                                                                  " response " + 
+                                                                  "contains " +
+                                                                  "\"RTSP/* " + 
+                                                                  "200 OK\"");
+                                                                StepCompleted();
+                                                                fS26Printed = true;
+                                                              }
+                                                              if (nBestStep < 26) {
+                                                                nBestStep = 26;
+                                                                nBestIdx = idx;
+                                                                nBestIdxRTSP = idxRTSP;
+                                                              }
+                                                              break;
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }     
+          }
+        }
+        RequestResponsePair pair = null;
+        if (msgs.Count != 0) {
+          pair = msgs[nBestIdx];
+        }
+        if (!fS1Printed) {
+          throw new TestNotSupportedException(
+            "Conversation List does not contain requests with <GetProfiles> tag");
+            // TODO replace hardcoded values
+        }
+        if (!fS2Printed) {
+          BeginStep("Device response contains \"HTTP/* 200 OK\"");
+          StepFailed(pair, "Response does not contain 200 OK");
+          StepCompleted();
+        }
+        if (!fS3Printed) {
+          BeginStep("Device response contains \"<GetProfilesResponse>\" tag");
+          StepFailed(pair, "<GetProfilesResponse> tag is absent");
+          StepCompleted();
+        }
+        pair = null;
+        if (msgs.Count != 0 && nBestIdx + 1 < msgs.Count) {
+          pair = msgs[nBestIdx + 1];
+        }
+        if (!fS7Printed) {
+          BeginStep("Client request contains \"<GetStreamUri>\" tag");
+          StepFailed(pair, "<GetStreamUri> tag is absent");
+          StepCompleted();
+        }
+        if (!fS8Printed) {
+          BeginStep(
+            "\"<GetStreamUri>\" includes tag \"<ProfileToken>\" with a string value");
+          StepFailed(
+            pair,
+            "\"<GetStreamUri>\" does not include tag" +
+            " \"<ProfileToken>\" with a string value");
+          StepCompleted();
+        }
+        if (!fS9Printed) {
+          BeginStep("Device response contains \"HTTP/* 200 OK\"");
+          StepFailed(pair, "Response does not contain 200 OK");
+          StepCompleted();
+        }
+        if (!fS10Printed) {
+          BeginStep(
+            "Device response contains \"<GetStreamUriResponse>\" tag");
+          StepFailed(pair, "<GetStreamUriResponse> tag is absent");
+          StepCompleted();
+        }
+        pair = null;
+        if (msgs.Count != 0 && nBestIdxRTSP < msgs.Count) {
+          pair = msgs[nBestIdxRTSP];
+        }
+        if (!fS11PrintedDESCRIBE) {
+          BeginStep("Client request contains DESCRIBE command");
+          StepFailed(pair, "DESCRIBE command is absent");
+          StepCompleted();
+        }
+        if (!fS11Printed) {
+          BeginStep("DESCRIBE command in the request includes URI");
+          StepFailed(pair, "URI is absent");
+          StepCompleted();
+        }
+        if (!fS12Printed) {
+          BeginStep("DESCRIBE includes \"RTSP/*\" version identifier");
+          StepFailed(pair, "\"RTSP/*\" version identifier is absent");
+          StepCompleted();
+        }
+        if (!fS13Printed) {
+          BeginStep("DESCRIBE includes \"CSeq\" identifier");
+          StepFailed(pair, "\"CSeq\" identifier is absent");
+          StepCompleted();
+        }
+        if (!fS14Printed) {
+          BeginStep("Device response contains \"RTSP/* 200 OK\"");
+          StepFailed(pair, "Response does not contain 200 OK");
+          StepCompleted();
+        }
+        if (!fS15Printed) {
+          BeginStep("Device response contains SDP information with \"a=rtpmap" +
+                      ":* H264/*\"");
+          StepFailed(pair, "SDP information with \"a=rtpmap:* H264/*\" is absent");
+          StepCompleted();
+        }
+        pair = null;
+        if (nBestIdxRTSP + 1 < msgs.Count) {
+          pair = msgs[nBestIdxRTSP + 1];
+        }
+        if (!fS16PrintedSETUP) {
+          BeginStep("Client request contains SETUP command");
+          StepFailed(pair, "SETUP command is absent");
+          StepCompleted();
+        }
+        if (!fS16Printed) {
+          BeginStep("SETUP includes any URI");
+          StepFailed(pair, "URI is absent");
+          StepCompleted();
+        }
+        if (!fS17Printed) {
+          BeginStep("SETUP includes \"RTSP/*\" version identifier");
+          StepFailed(pair, "\"RTSP/*\" version identifier is absent");
+          StepCompleted();
+        }
+        if (!fS18Printed) {
+          BeginStep("SETUP includes \"CSeq\" identifier");
+          StepFailed(pair, "\"CSeq\" identifier is absent");
+          StepCompleted();
+        }
+        if (!fS19Printed) {
+          BeginStep("SETUP includes \"Transport\" parameter");
+          StepFailed(pair, "\"Transport\" parameter is absent");
+          StepCompleted();
+        }
+        if (!fS20Printed) {
+          BeginStep("Device response contains \"RTSP/* 200 OK\"");
+          StepFailed(pair, "Response does not contain 200 OK");
+          StepCompleted();
+        }
+        pair = null;
+        if (nBestIdxRTSP + 2 < msgs.Count) {
+          pair = msgs[nBestIdxRTSP + 2];
+        }
+        if (!fS21PrintedPLAY) {
+          BeginStep("Client request contains PLAY command");
+          StepFailed(pair, "PLAY command is absent");
+          StepCompleted();
+        }
+        if (!fS21Printed) {
+          BeginStep("PLAY includes any URI");
+          StepFailed(pair, "URI is absent");
+          StepCompleted();
+        }
+        if (!fS22Printed) {
+          BeginStep("PLAY includes \"RTSP/*\" version identifier");
+          StepFailed(pair, "\"RTSP/*\" version identifier is absent");
+          StepCompleted();
+        }
+        if (!fS23Printed) {
+          BeginStep("PLAY includes \"CSeq\" identifier");
+          StepFailed(pair, "\"CSeq\" identifier is absent");
+          StepCompleted();
+        }
+        if (!fS24Printed) {
+          BeginStep("PLAY includes \"Range\" parameter");
+          StepFailed(pair, "\"Range\" parameter is absent");
+          StepCompleted();
+        }
+        if (!fS25Printed) {
+          BeginStep("PLAY includes \"Session\" parameter");
+          StepFailed(pair, "\"Session\" parameter is absent");
+          StepCompleted();
+        }
+        if (!fS26Printed) {
+          BeginStep("Device response contains \"RTSP/* 200 OK\"");
+          StepFailed(pair, "Response does not contain 200 OK");
+          StepCompleted();
+        }
+      }
+    }
+  }
+}

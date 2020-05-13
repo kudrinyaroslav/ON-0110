@@ -1,0 +1,754 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Audio Output" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>MEDIA-3-4-3 SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKEN</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.MC.3_4_3.01" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>Correct fault, not changed values</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+          MEDIA-3-4-3 SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKEN
+
+          STEP 1 - Getting media service address
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 2 - Connect to Media service
+          Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+          STEP PASSED
+
+          STEP 3 - Get audio output configurations
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 4 - Get audio output configuration options
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 5 - Set audio output configuration - negative test
+          Transmit done
+          Receive done
+          SOAP fault returned
+          Code: Sender
+          Subcode: InvalidArgVal
+          Subcode: ConfigModify
+          Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+          at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+          at DUT.CameraWebService.Media10.MediaService.SetAudioOutputConfiguration(AudioOutputConfiguration Configuration, Boolean ForcePersistence) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 891
+          STEP PASSED
+
+          STEP 6 - Get audio output configuration
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 7 - Check that configuration has not been changed
+          STEP PASSED
+
+          TEST PASSED
+         
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>Name1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:OutputToken>OT1</tt:OutputToken>
+            <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+            <tt:OutputLevel>1</tt:OutputLevel>
+          </AudioOutputConfiguration>
+          </ArrayOfAudioOutputConfiguration>
+        </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:SendPrimacyOptions>http://uri1</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri2</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri3</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>ConfigModify</Subcode>
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.GetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Name1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:OutputToken>OT1</tt:OutputToken>
+          <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+          <tt:OutputLevel>1</tt:OutputLevel>
+        </AudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.3_4_3.02" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>no AudioOutputs</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+          
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:SendPrimacyOptions>http://uri1</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri2</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri3</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArg</Subcode>
+
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.GetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Name1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:OutputToken>OT1</tt:OutputToken>
+          <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+          <tt:OutputLevel>1</tt:OutputLevel>
+        </AudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.3_4_3.03" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>Normal Response on SetAudioOutputConfiguration</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+          MEDIA-3-4-3 SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKEN
+
+          STEP 1 - Getting media service address
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 2 - Connect to Media service
+          Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+          STEP PASSED
+
+          STEP 3 - Get audio output configurations
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 4 - Get audio output configuration options
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 5 - Set audio output configuration - negative test
+          Transmit done
+          Receive done
+          "Sender/InvalidArgVal/ConfigModify" fault is expected, but no SOAP fault returned
+          STEP FAILED
+
+          TEST FAILED
+
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>Name1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:OutputToken>OT1</tt:OutputToken>
+            <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+            <tt:OutputLevel>1</tt:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:SendPrimacyOptions>http://uri1</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri2</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri3</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MC.3_4_3.04" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>Values are changed after Set</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+          MEDIA-3-4-3 SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKEN
+
+          STEP 1 - Getting media service address
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 2 - Connect to Media service
+          Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+          STEP PASSED
+
+          STEP 3 - Get audio output configurations
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 4 - Get audio output configuration options
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 5 - Set audio output configuration - negative test
+          Transmit done
+          Receive done
+          SOAP fault returned
+          Code: Sender
+          Subcode: InvalidArg
+          Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+          at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+          at DUT.CameraWebService.Media10.MediaService.SetAudioOutputConfiguration(AudioOutputConfiguration Configuration, Boolean ForcePersistence) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 891
+          WARNING: The SOAP FAULT returned from the DUT is not as expected: fault subcodes sequence is incorrect. Expected: env:Sender/ter:InvalidArgVal/ter:ConfigModify, actual: env:Sender/ter:InvalidArg
+          STEP PASSED
+
+          STEP 6 - Get audio output configuration
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 7 - Check that configuration has not been changed
+          Name does not match. Expected: Name1, actual: Name1 new
+
+          OutputToken does not match. Expected: OT1, actual: PUaX
+
+          SendPrimacy does not match. Expected: http://uri1, actual: uuiX
+
+          OutputLevel does not match. Expected: 1, actual: 3
+          STEP FAILED
+
+          TEST FAILED
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>Name1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:OutputToken>OT1</tt:OutputToken>
+            <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+            <tt:OutputLevel>1</tt:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:SendPrimacyOptions>http://uri1</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri2</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri3</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArg</Subcode>
+
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.GetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Name1 new</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:OutputToken>PUaX</tt:OutputToken>
+          <tt:SendPrimacy>uuiX</tt:SendPrimacy>
+          <tt:OutputLevel>3</tt:OutputLevel>
+        </AudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.3_4_3.05" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>No SendPrimacy in GetAudioOutputConfigurationOptions</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+         
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>Name1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:OutputToken>OT1</tt:OutputToken>
+            <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+            <tt:OutputLevel>1</tt:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArg</Subcode>
+
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.GetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Name1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:OutputToken>OT1</tt:OutputToken>
+          <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+          <tt:OutputLevel>1</tt:OutputLevel>
+        </AudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.3_4_3.06" ONVIFTestID="3.4.3" Enabled="true">
+    <TestName>SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKENN</TestName>
+    <Name>Incorrect fault</Name>
+    <Description>
+      <ExpectedResult>
+        <TestSummary>
+          MEDIA-3-4-3 SET AUDIO OUTPUT CONFIGURATION – INVALID OUTPUTTOKEN
+
+          STEP 1 - Getting media service address
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 2 - Connect to Media service
+          Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+          STEP PASSED
+
+          STEP 3 - Get audio output configurations
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 4 - Get audio output configuration options
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 5 - Set audio output configuration - negative test
+          Transmit done
+          Receive done
+          SOAP fault returned
+          Code: Sender
+          Subcode: InvalidArg
+          Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+          at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+          at DUT.CameraWebService.Media10.MediaService.SetAudioOutputConfiguration(AudioOutputConfiguration Configuration, Boolean ForcePersistence) in D:\!ONVIF\DUT\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 891
+          WARNING: The SOAP FAULT returned from the DUT is not as expected: fault subcodes sequence is incorrect. Expected: env:Sender/ter:InvalidArgVal/ter:ConfigModify, actual: env:Sender/ter:InvalidArg
+          STEP PASSED
+
+          STEP 6 - Get audio output configuration
+          Transmit done
+          Receive done
+          STEP PASSED
+
+          STEP 7 - Check that configuration has not been changed
+          STEP PASSED
+
+          TEST PASSED
+        </TestSummary>
+      </ExpectedResult>
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>Name1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:OutputToken>OT1</tt:OutputToken>
+            <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+            <tt:OutputLevel>1</tt:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:OutputTokensAvailable>OT1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>OT3</tt:OutputTokensAvailable>
+          <tt:SendPrimacyOptions>http://uri1</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri2</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>http://uri3</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>1</tt:Min>
+            <tt:Max>2</tt:Max>
+          </tt:OutputLevelRange>
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.SetAudioOutputConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArg</Subcode>
+      <RequestParameters>
+        <Configuration>
+          <token>AOC1</token>
+          <Name>Name1</Name>
+          <UseCount>0</UseCount>
+          <OutputToken>PUaX</OutputToken>
+          <SendPrimacy>uuiX</SendPrimacy>
+          <OutputLevel>3</OutputLevel>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.GetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfiguration token="AOC1" xmlns:p2="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Name1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:OutputToken>OT1</tt:OutputToken>
+          <tt:SendPrimacy>http://uri1</tt:SendPrimacy>
+          <tt:OutputLevel>1</tt:OutputLevel>
+        </AudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

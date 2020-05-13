@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Real Time Streaming" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>RTSS-3-1-1 NOTIFICATION STREAMING</Name>
+    <Description>
+      Only first two steps:
+      - GetCapabilities,
+      - CreateProfile.
+    </Description>
+  </Parameters>
+  <Test ID = "TC.RTSS-4-1-1.01" ONVIFTestID="RTSS-4-1-1" Enabled="true">
+    <TestName>RTSS-3-1-1 NOTIFICATION STREAMING</TestName>
+    <Name>Correct response (for first two steps)</Name>
+    <Description>
+      Check RTSS-3-1-1 NOTIFICATION STREAMING test
+      when DUT return correct response (for first two steps).
+      (With Date and Time synchronization)
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://localhost:39238/onvif/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>            
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>CreateProfile</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Name>Test</Name>
+        <Token>Test</Token>
+      </RequestParameters>
+      <ResponseParameters>
+        <Profile fixed="false" token="Test" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>Test</tt:Name>
+        </Profile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetMetadataConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMetadataConfiguration>
+          <MetadataConfiguration token="m_config1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>m_config1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:Multicast>
+              <tt:Address>
+                <tt:Type>IPv4</tt:Type>
+                <tt:IPv4Address>0.0.0.0</tt:IPv4Address>
+              </tt:Address>
+              <tt:Port>0</tt:Port>
+              <tt:TTL>3</tt:TTL>
+              <tt:AutoStart>false</tt:AutoStart>
+            </tt:Multicast>
+            <tt:SessionTimeout>PT0S</tt:SessionTimeout>
+          </MetadataConfiguration>
+        </ArrayOfMetadataConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <VideoSourceConfiguration token="VSC1" >
+            <tt:Name>VideoSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"/>
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" >
+            <tt:Name>VideoSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"/>
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media10.AddVideoSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+        <ProfileToken>Xnf</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media10.AddMetadataConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>MDC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media10.SetMetadataConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArg</Subcode>
+      <Subcode>ConfigModify</Subcode>
+      <RequestParameters>
+        <ConfigurationToken>MDC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <!--<Step id ="8">
+      <Command>Media10.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <StreamSetup>
+          <Stream>RTP-Unicast</Stream>
+          <Transport>
+            <Protocol>UDP</Protocol>
+          </Transport>
+        </StreamSetup>
+        <ProfileToken>nX</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <MediaUri xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Uri>rtsp://192.168.10.203/encoder1</tt:Uri>
+          <tt:InvalidAfterConnect>true</tt:InvalidAfterConnect>
+          <tt:InvalidAfterReboot>false</tt:InvalidAfterReboot>
+          <tt:Timeout>PT0S</tt:Timeout>
+        </MediaUri>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media10.SetSynchronizationPoint</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>nX</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>-->
+    <Step id ="10">
+      <Command>Media10.DeleteProfile</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>Xnf</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>EVENT-3-1-5 REALTIME PULLPOINT SUBSCRIPTION - UNSUBSCRIBE</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.EV.RTPP.EVENT-3-1-5.01" ONVIFTestID="EVENT-3-1-5" Enabled="true">
+    <TestName>REALTIME PULLPOINT SUBSCRIPTION - UNSUBSCRIBE</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check REALTIME PULLPOINT SUBSCRIPTION - UNSUBSCRIBE test
+      when DUT return Correct response.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        EVENT-3-1-5 REALTIME PULLPOINT SUBSCRIPTION - UNSUBSCRIBE
+
+        STEP 1 - Get Event service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Create Pull Point Subsciption
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 3 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 4 - Validate times
+        STEP PASSED
+
+        STEP 5 - Check if the DUT returned SubscriptionReference
+        STEP PASSED
+
+        STEP 6 - Check if SubscriptionReference contains address
+        STEP PASSED
+
+        STEP 7 - Check that URL specified is valid
+        STEP PASSED
+
+        STEP 8 - Send unsubscribe request
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 9 - Renew - negative test
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Events10.SubscriptionManagerService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\SubscriptionManagerService.asmx.cs:line 72
+        at DUT.CameraWebService.Events10.SubscriptionManagerService.Renew(Renew Renew1) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\SubscriptionManagerService.asmx.cs:line 100
+        Validate fault...
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:1305/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:1305/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">20</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <Code>Sender</Code>
+      <Details>
+        <soap:Detail xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+          <ResourceUnknownFault xmlns="http://docs.oasis-open.org/wsrf/r-2">
+            <Timestamp xmlns="http://docs.oasis-open.org/wsrf/bf-2">1900-01-01T01:01:01+03:00</Timestamp>
+            <Originator xmlns="http://docs.oasis-open.org/wsrf/bf-2">
+              <Address xmlns="http://www.w3.org/2005/08/addressing">http://uri1</Address>
+              <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+              <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+            </Originator>
+            <ErrorCode dialect="http://uri1" xmlns:p3="http://docs.oasis-open.org/wsrf/r-2" xmlns="http://docs.oasis-open.org/wsrf/bf-2" />
+            <Description xml:lang="en" xmlns="http://docs.oasis-open.org/wsrf/bf-2">Description1</Description>
+            <Description xml:lang="ru" xmlns="http://docs.oasis-open.org/wsrf/bf-2">Description2</Description>
+            <Description xml:lang="fr" xmlns="http://docs.oasis-open.org/wsrf/bf-2">Description3</Description>
+          </ResourceUnknownFault>
+        </soap:Detail>
+      </Details>
+    </Step>
+  </Test>
+</TestSuit>

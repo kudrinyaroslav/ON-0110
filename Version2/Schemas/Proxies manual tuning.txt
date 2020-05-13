@@ -1,0 +1,45 @@
+
+VideoEncoderOptionsExtension  - убрать Order
+
+[2011.11.08] : то же самое для разных других Extension'ов, которые входят в Capabiilties 
+
+Events: Action URI's (at least check)
+Прблемы с типом fault'а (см. письмо 02.09.10 - проверить, поправили или нет)
+
+<xs:element name="PullMessagesFaultResponse">
+      <xs:complexType>
+            <xs:sequence>
+                  <xs:element name="MaxTimeout" type="xs:duration"/>
+                  <xs:element name="MaxMessageLimit" type="xs:int"/>
+                  <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+      </xs:complexType>
+</xs:element>
+надо поменять на
+      <xs:complexType name="PullMessagesFaultResponseType">
+        <xs:sequence>
+          <xs:element name="MaxTimeout" type="xs:duration"/>
+          <xs:element name="MaxMessageLimit" type="xs:int"/>
+          <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PullMessagesFaultResponse"
+                 type="tev:PullMessagesFaultResponseType"/>
+
+мое письмо 13.11.3010:
+Тюнинг текущей версии events.wsdl и баги, которые лучше перепроверить:
+
+1)	Пришлось повторить действия из письма в аттаче (изменения в events.wsdl)
+2)	Автосгенеренный файл не компилировался – одно и то же имя использовалось дважды. Поправила в C#-ном коде.
+3)	Поменяла атрибут для TopicExpressionDialect (опять-таки, внутри C#-ного кода. Возможно, глюк кодогенератора). По этому поводу у нас был баг 4903
+4)	Аналогичная проблема для PullMessagesResponse. Вроде баги не успели появиться.
+5)	Fault’s для CreatePullPointSubsciption – поправлено в wsdl (ими).  У нас это был баг 4990 и вроде ещё сколько-то похожих.
+
+Я проверила что 4903 не воспроизводится и сообщения в ответе на PullMessages тоже находятся. 4990 попробую проверить, но не факт что в моем DUT’e есть достаточное количество тестов. Хотя если других проблем нет – можно не торопясь сделать.
+
+Аня.
+
+
+кроме этого
+(20120606)
+поменять fault'ам Action'ы на "*"

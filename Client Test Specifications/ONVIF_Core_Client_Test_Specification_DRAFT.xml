@@ -1,0 +1,2822 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+For online publishing use:
+<?xml-stylesheet type="text/xsl" 
+href="http://docs.oasis-open.org/templates/DocBook/spec-0.5/stylesheets/oasis-specification-html.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" 
+
+For offline publishing use:
+<?xml-stylesheet type="text/xsl" 
+href="file:///c:/oasis/spec-0.5/stylesheets/oasis-specification-html-offline.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"file:///c:/oasis/spec-0.5/docbook/docbookx.dtd" 
+-->
+<?xml-stylesheet type="text/xsl" 
+    href="http://docs.oasis-open.org/templates/DocBook/spec-0.5/stylesheets/oasis-specification-html.xsl"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+
+<article>
+<articleinfo>
+        <title>ONVIF Core Client Test Specification</title>
+        <subtitle>Version 15.06 June, 2015</subtitle>
+        <productname>ONVIF Core Client Test Specification</productname>
+        <productnumber>Version 15.06 June, 2015</productnumber>
+        <copyright>
+            <year>2015</year>
+            <holder>ONVIF, Inc. All rights reserved. www.onvif.org</holder>
+        </copyright>
+        <legalnotice role="notices">
+            <para>Recipients of this document may copy, distribute, publish, or display this
+                document so long as this copyright notice, license and disclaimer are retained with
+                all copies of the document. No license is granted to modify this document.</para>
+            <para>THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR
+                AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT
+                NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+                NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY
+                PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+                COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</para>
+            <para>IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR
+                ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES,
+                ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR
+                NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE
+                POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND
+                ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT. THE
+                FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR
+                LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE
+                AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE
+                CORPORATION.</para>
+        </legalnotice>
+    </articleinfo>
+
+<section id="s.intro">
+<title>Introduction</title>
+
+    <para>The goal of the ONVIF Test Specification set is to make it possible to realize fully
+            interoperable IP physical security implementations from different vendors. This
+            specification also acts as an input document to the development of a test tool which
+            will be used to test the ONVIF Client implementation conformance towards ONVIF standard.
+            This Client Test Tool analyzes network communications between ONVIF Devices and Clients
+            being tested and determines whether a specific Client is ONVIF conformant (see ONVIF
+            Conformance Process Specification).</para>
+    <para>This particular document defines test cases required for testing Core features of a Client
+            application e.g. EventHandling, Security and Capabilities. Also the test cases are to be
+            basic inputs for some Profile specification requirements. It also describes the test
+            framework, test setup, pre-requisites, test policies needed for the execution of the
+            described test cases.</para>
+
+<section id="s.scope">
+<title>Scope</title>
+    
+    <para>This ONVIF Core Client Test Specification defines and regulates the conformance testing
+                procedure for the ONVIF conformant Clients in the scope of Core features.
+                Conformance testing is meant to be black-box network traces analysis and
+                verification. The objective of this specification is to provide the test cases to
+                test individual requirements of ONVIF Clients in the scope of Core features
+                according to ONVIF Profile Specifications.</para>
+    <para>The principal intended purposes are:<itemizedlist>
+                    <listitem>
+                        <para>Provide self-assessment tool for implementations.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Provide comprehensive test suite coverage for Core features.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para>This specification <emphasis role="bold">does not</emphasis> address the following:<itemizedlist>
+                    <listitem>
+                        <para>Product use cases and non-functional (performance and regression)
+                            testing and analysis.</para>
+                    </listitem>
+                    <listitem>
+                        <para>SOAP Implementation Interoperability test i.e. Web Services
+                            Interoperability Basic Profile version 2.0 (WS-I BP2.0).</para>
+                    </listitem>
+                    <listitem>
+                        <para>Network protocol implementation Conformance test for HTTPS, HTTP, RTP
+                            and RTSP protocols.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para>The following sections cover test cases needed for the verification of relevant
+                features as mentioned in the ONVIF Profile Specifications.</para>
+</section>
+
+<section>
+<title>Security</title>
+    <para>Security section defines security mechanism for two different authentication methods:
+                Digest Authentication and Username Token Profile. The scope of this specification is
+                limited to Message level security.</para>
+</section>
+
+<section>
+            <title>Capabilities</title>            
+            <para>Capabilities section specifies Client ability to retrieve available services and
+                advanced functionalities which are offered by a Device.</para>
+        </section>
+    
+<section>
+            <title>Event Handling</title>
+            <para>Event Handling section defines Client ability to initiate and receive
+                notifications (events) from a Device.</para>
+            <para>The event handling test cases cover the following mandatory interfaces: <itemizedlist>
+                    <listitem>
+                        <para>Pull Point Notification Interface<itemizedlist>
+                                <listitem>
+                                    <para>This test specification provides test cases to verify the
+                                        implementation of the PullPoint Interface of a
+                                        Client.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Basic Notification Interface<itemizedlist>
+                                <listitem>
+                                    <para>This test specification provides test cases to verify the
+                                        implementation of the Basic Notification Interface of a
+                                        Client.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Metadata Streaming Interface<itemizedlist>
+                                <listitem>
+                                    <para>This test specification provides test cases to verify the
+                                        implementation of the Metadata Streaming Interface of a
+                                        Client.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </itemizedlist></para>
+        </section>
+        <section>
+            <title>Discovery</title>
+            <para>Discovery section defines Client ability to locate services on a local network
+                using Web Services Dynamic Discovery (WS-Discovery) protocol. It uses IP multicast
+                address 239.255.255.250 and TCP and UDP port 3702 and SOAP-over-UDP standard for
+                communication between nodes.</para>
+        </section>
+        <section>
+            <title>Network Configuration</title>
+            <para>Network Configuration section defines Client ability to obtain and configure of
+                network settings on Device.</para>
+        </section>
+        <section>
+            <title>System</title>
+            <para>System section defines Client ability to obtain Device information and configure
+                of system settings on Device.</para>
+        </section>
+        <section>
+            <title>User Handling</title>
+            <para>User Handling section defines Client ability to manage users on Device.</para>
+        </section>
+        <section>
+            <title>Relay Outputs</title>
+            <para>Relay Outputs section defines Client ability to list, configure and trigger relay
+                outputs on Device.</para>
+        </section>
+        <section>
+            <title>NTP</title>
+            <para>NTP section defines Client ability to configure synchronization of time using NTP
+                servers on Device.</para>
+        </section>
+        <section>
+            <title>Dynamic DNS</title>
+            <para>Dynamic DNS section defines Client ability to configure dynamic DNS settings on
+                Device.</para>
+        </section>
+        <section>
+            <title>Zero Configuration</title>
+            <para>Zero Configuration section defines Client ability to enable or disable zero
+                configuration on Device.</para>
+        </section>
+        <section>
+            <title>IP Address Filtering</title>
+            <para>IP Address Filtering section defines Client ability to manage IP address filters
+                on Device.</para>
+        </section>
+        <section>
+            <title>Persistent Notification Storage Retrieval</title>
+            <para>Persistent Notification Storage Retrieval section defines Client ability to seek
+                stored events in Device.</para>
+        </section>
+    
+</section>
+    <section id="s.docbook">
+        <title>Normative references</title>
+        <para>ONVIF Conformance Process Specification:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile Policy:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Core Specifications:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile G specification version 1.0, Jun 2014:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile C Specification version 1.0, Dec 2013:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ONVIF Profile S Specification version 1.0, Dec 2011:</para>
+        <para><ulink url="http://www.onvif.org/Documents/Specifications.aspx"/></para>
+        <para>ISO/IEC Directives, Part 2:</para>
+        <para><ulink url="www.iso.org/directives"/></para>
+        <para>Rules for the structure and drafting of International Standards, Annex H: Verbal forms for the expression of provisions.</para>
+    </section>
+    <section id="additions">
+        <title>Terms and Definitions</title>
+        <section>
+            <title>Conventions</title>
+            <para>The key words "shall", "shall not", "should", "should not", "may", "need not",
+                "can", "cannot" in this specification are to be interpreted as described in [ISO/IEC
+                Directives Part 2].</para>
+        </section>
+        <section>
+            <title>Definitions</title>
+            <para>This section describes terms and definitions used in this document.</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Address</term>
+                    <listitem>
+                        <para>An address refers to a URI.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Profile</term>
+                    <listitem>
+                        <para>See ONVIF Profile Policy.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>ONVIF Device</term>
+                    <listitem>
+                        <para>Computer appliance or software program that exposes one or multiple
+                            ONVIF Web Services.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>ONVIF Client</term>
+                    <listitem>
+                        <para>Computer appliance or software program that uses ONVIF
+                            Webservices.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Capability</term>
+                    <listitem>
+                        <para>List of services and features supported by an ONVIF Device.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Metadata</term>
+                    <listitem>
+                        <para>All streaming data except video and audio, including video analytics
+                            results, PTZ position data and other metadata (such as textual data from
+                            POS applications).</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Conversation</term>
+                    <listitem>
+                        <para>A conversation is all exchanges between two MAC addresses that
+                            contains SOAP request and response.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Network</term>
+                    <listitem>
+                        <para>A network is an interconnected group of devices communicating using
+                            the Internet protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Network Trace Capture file</term>
+                    <listitem>
+                        <para>Data file created by a network protocol analyzer software (such as
+                            Wireshark). Contains network packets data recorded during a live network
+                            communications.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>SOAP</term>
+                    <listitem>
+                        <para>SOAP is a lightweight protocol intended for exchanging structured
+                            information in a decentralized, distributed environment. It uses XML
+                            technologies to define an extensible messaging framework providing a
+                            message construct that can be exchanged over a variety of underlying
+                            protocols.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Client Test Tool</term>
+                    <listitem>
+                        <para>ONVIF Client Test Tool that tests ONVIF Client implementation towards
+                            the ONVIF Test Specification set.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>NO SOAP ERROR</term>
+                    <listitem>
+                        <para>Indication of absence of a SOAP Fault element (which is used to
+                            indicate error messages). If a Fault element is present, it shall appear
+                            as a child element of the Body element. A Fault element can only appear
+                            once in a SOAP message.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Valid Device Response</term>
+                    <listitem>
+                        <para>Device has responded to specific request with code HTTP or RTSP 200 OK
+                            and SOAP fault message has not appeared.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>WS-Discovery</term>
+                    <listitem>
+                        <para>Web service specification defines a multicast discovery protocol to
+                            locate services. By default, Client sends probes to a multicast group,
+                            and target services that match return a response directly to the
+                            requester.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Zero Configuration</term>
+                    <listitem>
+                        <para>Technology that allows automatically create a computer network over
+                            TCP/IP protocol suite between interconnected network units.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section>
+            <title>Abbreviations</title>
+            <para>This section describes abbreviations used in this document.</para>
+            <variablelist>
+                <varlistentry>
+                    <term>HTTP</term>
+                    <listitem>
+                        <para>Hyper Text Transport Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>HTTPS</term>
+                    <listitem>
+                        <para>Hyper Text Transport Protocol over Secure Socket Layer.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>IP</term>
+                    <listitem>
+                        <para>Internet Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>IPv4</term>
+                    <listitem>
+                        <para>Internet Protocol version 4.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>RTCP</term>
+                    <listitem>
+                        <para>RTP Control Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>RTSP</term>
+                    <listitem>
+                        <para>Real Time Streaming Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>SDP</term>
+                    <listitem>
+                        <para>Session Description Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>TCP</term>
+                    <listitem>
+                        <para>Transport Control Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>UDP</term>
+                    <listitem>
+                        <para>User Datagram Protocol.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>URI</term>
+                    <listitem>
+                        <para>Uniform Resource Identifier.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>WSDL</term>
+                    <listitem>
+                        <para>Web Services Description Language.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>WS-I BP 2.0</term>
+                    <listitem>
+                        <para>Web Services Interoperability Basic Profile version 2.0.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>XML</term>
+                    <listitem>
+                        <para>eXtensible Markup Language.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+    </section>
+    <section>
+        <title>Test Overview</title>
+        <para>This section provides information for the test setup procedure and required
+            prerequisites that should be followed during test case execution.</para>
+        <para>Conformance to ONVIF Core Client Test Specification is a prerequisite which is
+            required for testing Client to conformance with Profile S, G and C.</para>
+        <section>
+            <title>Test Setup</title>
+            <para>Collect Network Traces files required by the test cases.</para>
+            <para>Collect Feature List XML files for Devices detected in the Network Trace
+                files.</para>
+            <para>Client shall support all mandatory and conditional features listed in the Device
+                Feature List XML file supplied for the Profiles supported by the Client.</para>
+            <para>For compatibility with the Core Features, the ONVIF Client shall follow the
+                requirements of the conformance process. For details please see the latest ONVIF
+                Conformance Process Specification.</para>
+        </section>
+        <section>
+            <title>Prerequisites</title>
+            <para>The pre-requisites for executing the test cases described in this Test
+                Specification include:</para>
+            <para>The Device shall be configured with an IPv4 address.</para>
+            <para>The Device shall be able to be discovered by the Client.</para>
+        </section>
+    </section>
+
+    <section id="s.conformance">
+        <title>Security Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <?oxy_custom_start type="oxy_content_highlight" color="255,255,0"?>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para><?oxy_custom_end?>Client invokes a specific command which is under
+                            testing without any user credentials (no UsernameToken, no HTTP Digest
+                            authentication header). <itemizedlist>
+                                <listitem>
+                                    <para>IF Device returns a correct response, THEN Client
+                                        determines that Device does not require any user
+                                        authentication toward the command according to the
+                                        configured security policy.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client shall provide with the proper level of user credential to
+                            continue the test procedure in the following cases:<itemizedlist>
+                                <listitem>
+                                    <para>IF Device returns HTTP 401 Unauthorized error along with
+                                        WWW-Authentication: Digest header, THEN Client determines
+                                        that Device supports HTTP Digest authentication.</para>
+                                </listitem>
+                                <listitem>
+                                    <para>IF Device returns SOAP fault (Sender/NotAuthorized)
+                                        message, THEN Client determines that UsernameToken is
+                                        supported by Device.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Security User Authentication if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Device returns a valid response to specific request with
+                                        UsernameToken authentication header OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Device returns a valid response to specific request with
+                                        HTTP Digest authentication header.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Security (User Authentication)
+                            if the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>All HTTP Digest attempts detected are failed AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>All UsernameToken attempts detected are failed.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">USER TOKEN PROFILE</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Security - User token profile</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SECURITY-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Security</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that the Client supports
+                the User Token Profile for Message level security.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with UsernameToken Authentication
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client sends a request (e.g. GetUsers) to the Device with correctly
+                            formatted UsernameToken.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Verify that the Device accepts the correct request.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client request message is a well-formed SOAP request  (refer to onvif.xsd)  AND
+Client request contains UsernameToken SOAP header with a proper hierarchy (refer to WS-Security Specification)  AND
+[S1] Client request contains "&lt;Security>" tag after the "&lt;Header>" tag  AND
+     [S2] "&lt;Security>" includes tag: "&lt;UsernameToken>" AND
+     [S3] "&lt;UsernameToken>" includes tag: "&lt;Username>" AND
+     [S4] "&lt;UsernameToken>" includes tag: "&lt;Password>" AND
+     [S5] "&lt;UsernameToken>" includes tag: "&lt;Nonce>" AND
+     [S6] "&lt;UsernameToken>" includes tag: "&lt;Created>" AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response does NOT contain "&lt;Fault>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Security_UsernameToken</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">HTTP DIGEST AUTHENTICATION</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Security - HTTP Digest
+                Authentication.</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SECURITY-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - mandatory, G - mandatory,
+                C - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Security</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that the Client supports
+                the HTTP Digest Authentication for HTTP level security.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with HTTP Digest Authentication present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client sends a request that requires authentication (e.g. GetUsers) to
+                            the Device without any authentication.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device rejects the request with HTTP error code 401 AND an HTTP Digest
+                            challenge.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client sends a valid request with HTTP Digest Authentication.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device accepts the correct request with response code HTTP 200
+                            OK.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+[S1] Client request contains (HTTP GET method OR HTTP POST method) without any authentication AND
+Client HTTP GET request has a proper hierarchy (refer to RFC 1945 Specification) AND
+[S2] Device response contains "HTTP/* 401 Unauthorized" AND
+     [S3] Device response contains "realm=*" element AND
+     [S4] Device response contains "nonce=*" element AND
+[S5] Client request contains (HTTP GET method OR HTTP POST method) 
+with "Authorization: Digest username=*" element AND
+Client HTTP GET request with HTTP Authentication has a proper hierarchy (refer to RFC 2617 Specification) AND
+     [S6] Client request contains "realm=*" element with value from Device response AND
+     [S7] Client request contains "nonce=*" element with value from Device response AND
+     [S8] Client request contains "uri=*" element AND
+[S9] Device response contains "HTTP/* 200 OK".</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Security_HTTPDigest</para>                        
+        </section>        
+    </section>
+    <section>
+        <title>Capabilities Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client invokes a specific Capabilities command which is under
+                            testing.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Capabilities if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Device returns a valid response to GetServices request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Device returns a valid response to GetCapabilities
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Capabilities if the following
+                            is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetServices request AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to GetCapabilities
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET SERVICES </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Capabilities - Determine the
+                available Services </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CAPABILITY-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - mandatory, G - mandatory,
+                C - mandatory, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Capabilities</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Device Capabilities
+                is received using GetServices request.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetServices command present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetServices request message to retrieve all services of
+                            the Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Verify that GetServicesResponse message from the Device contains code
+                            HTTP 200 OK without SOAP Fault.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetServices request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetServices request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetServices>" tag after the "&lt;Body>" tag AND
+     [S2] (Client request does not contain "&lt;IncludeCapability>" tag 
+     OR 
+     "&lt;GetServices>" includes tag: "&lt;IncludeCapability>" with either "TRUE" OR "FALSE" values) 
+AND 
+[S3] Device response contains "HTTP/* 200 OK" AND 
+[S4] Device response contains "&lt;GetServicesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Capabilities_GetServices</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET CAPABILITIES</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Capabilities - Get Device
+                Capabilities</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> CAPABILITY-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Capabilities</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Device Capabilities
+                is received using GetCapabilities request.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetCapabilities command present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetCapabilities request message to retrieve Device
+                            Capabilities of the Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Verify that GetCapabilitiesResponse response message from the Device
+                            contains code HTTP 200 OK without SOAP Fault.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetCapabilities request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetCapabilities request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetCapabilities>" tag after the "&lt;Body>" tag AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetCapabilitiesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Capabilities_GetCapabilities</para>
+        </section>
+    </section>
+    <section>
+        <title>Event Handling Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to initiate Event Handling.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Event Handling if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to handle the Pull Point Event mechanism
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to handle the Base Notification Event
+                                        mechanism OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to handle the Metadata Streaming.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Event Handling if the following
+                            is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>All Pull Point attempts detected have failed AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>All Base Notification attempts detected have failed
+                                        AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>All Metadata Streaming attempts detected have
+                                        failed.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">PULLPOINT  </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Event Handling - Pull Point</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - governed by business rule #3</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Event Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+                to retrieve events using Pull Point.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with Pull Point event type.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND 
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND 
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag AND
+[S2] Device response contains "HTTP/* 200 OK" AND 
+[S3] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag 
+AND 
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND 
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND 
+[S4] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND 
+     [S5] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND 
+     [S6] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>" AND 
+[S7] Device response contains "HTTP/* 200 OK" AND 
+[S8] Device response contains "&lt;PullMessagesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>EventHandling_PullPoint</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">BASE NOTIFICATION  </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Event Handling - Basic
+                Notification</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - governed by business rule #3</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Event Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+                to retrieve events using WS-Base Notification.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with Basic Notification event type.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes Subscribe message with ConsumerReference
+                            element.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SubscribeResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client Subscribe request message is a well-formed SOAP request (refer to onvif.xsd) AND 
+Client Subscribe request message has a proper hierarchy (refer to WS-BaseNotification Specification) AND 
+[S1] Client request contains "&lt;Subscribe>" tag after the "&lt;Body>" tag AND 
+     [S2] "&lt;Subscribe>" includes tag: "&lt;ConsumerReference>" AND
+     [S3] "&lt;ConsumerReference>" includes tag: "&lt;Address>" AND
+[S4] Device response contains "HTTP/* 200 OK" AND 
+[S5] Device response contains "&lt;SubscribeResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>EventHandling_WS-BaseNotification</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">METADATA STREAMING</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Event Handling - Metadata
+                Streaming</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-3</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - governed by business rule #3</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Event Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+                to retrieve the Metadata Streaming.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with Metadata Streaming event type.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetProfiles request message to retrieve complete
+                            profiles list from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetProfilesResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes GetStreamUri request message with the Stream Setup
+                            element (contains two parts: Stream Type and Transport protocol) and
+                            Profile Token element (indicates the media profile selected).</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetStreamUriResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes RTSP DESCRIBE request to retrieve media stream
+                            description.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code RTSP 200 OK and SDP information with Media
+                            Type: "application" and MIME Type: "vnd.onvif.metadata".</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes RTSP SETUP request with transport parameter element to
+                            to set media session parameters for the Metadata stream.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code RTSP 200 OK.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes RTSP PLAY request to start media stream.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code RTSP 200 OK.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Device RTSP DESCRIBE response message
+                does not contain Media Type: "application" OR MIME Type: "vnd.onvif.metadata" inside
+                SDP information then Test shall be deemed as "NOT DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetProfiles request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetProfiles request message has a proper hierarchy (refer to media.wsdl) AND
+[S1] Client request contains "&lt;GetProfiles>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetProfilesResponse>" tag
+AND
+Client GetStreamUri request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetStreamUri request message has a proper hierarchy (refer to media.wsdl) AND
+[S4] Client request contains "&lt;GetStreamUri>" tag after the "&lt;Body>" tag AND
+     [S5] "&lt;GetStreamUri>" includes tag: "&lt;StreamSetup>" AND
+     [S6] "&lt;StreamSetup>" includes tag: "&lt;Stream>" with ("RTP-unicast" OR "RTP-multicast") value 
+     AND
+     [S7] "&lt;StreamSetup>" includes tag: "&lt;Transport>" AND
+     [S8] "&lt;Transport>" includes tag: "&lt;Protocol>" with ("UDP" OR "HTTP" OR "RTSP") value 
+     AND
+     [S9] "&lt;GetStreamUri>" includes tag: "&lt;ProfileToken>" with non-empty string value of specific profile token AND
+[S10] Device response contains "HTTP/* 200 OK" AND
+[S11] Device response contains "&lt;GetStreamUriResponse>" tag AND
+     [S12] "&lt;GetStreamUriResponse>" includes tag: "&lt;MediaUri>" AND
+     [S13] "&lt;MediaUri>" includes tag: "&lt;Uri>" with valid URI address
+AND
+[S14] Client request introduces RTSP DESCRIBE command AND
+Client RTSP DESCRIBE request command has a proper hierarchy (refer to RFC2326 Specification) AND
+     [S15] RTSP DESCRIBE includes: URI address obtained from GetStreamUriResponse AND
+     [S16] RTSP DESCRIBE includes: "RTSP/*" identifier AND
+     [S17] RTSP DESCRIBE includes: "CSeq" identifier AND
+[S18] Device response contains "RTSP/* 200 OK" AND
+[S19] Device response SDP information contains Media Type: "application" and MIME Type: "vnd.onvif.metadata"
+AND
+[S20] Client request introduces RTSP SETUP command AND
+Client RTSP SETUP request command has a proper hierarchy (refer to RFC2326 Specification) AND
+     [S21] RTSP SETUP includes: URI address to metadata stream (a=control value from RTSP DESCRIBE response is included into URI) AND
+     [S22] RTSP SETUP includes: "RTSP/*" identifier AND
+     [S23] RTSP SETUP includes: "CSeq" identifier AND
+     [S24] RTSP SETUP includes: "Transport" parameter AND
+[S25] Device response contains "RTSP/* 200 OK"
+AND
+[S26] Client request introduces RTSP PLAY command AND
+Client RTSP PLAY request command has a proper hierarchy (refer to RFC2326 Specification) AND
+     [S27] RTSP PLAY includes: the same URI address as in RTSP DESCRIBE request command AND
+     [S28] RTSP PLAY includes: "RTSP/*" identifier AND
+     [S29] RTSP PLAY includes: "CSeq" identifier AND
+     [S30] RTSP PLAY includes: "Session" parameter AND
+[S31] Device response contains "RTSP/* 200 OK"</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List: </emphasis>EventHandling
+                _MetadataStreaming</para>
+        </section>       
+    </section>
+    
+    <section>
+        <title>Discovery Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client sends Probe message to multicast IP address 239.255.255.250 and
+                            port 3702 to locate services on a local network.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Discovery if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Probe request detected AND at least one ProbeMatch
+                                        response detected</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Discovery if the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to Probe request,</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">DISCOVERING DEVICES </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Discovery - WS-Discovery </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DISCOVERY-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> WS-Discovery</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> o verify that Client is able to
+                send Probe request and receive ProbeMatch response from Device.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contain at least one Client Probe request
+                            to multicast IP address and one ProbeMatch response from Device directly
+                            to the Client.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes Probe request message to multicast IP address
+                            239.255.255.250 and port 3702.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device sends ProbeMatch message directly to the Client.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client Probe request message is a well-formed SOAP request (refer to WS-Discovery specification) AND
+Client Probe request message has a proper hierarchy (refer to WS-Discovery specification) AND
+[S1] Client request contains "&lt;Action>" tag after the "&lt;Header>" tag AND
+    [S2] "&lt;Action>" includes URL address which ends with "Probe" value AND
+[S3] Client request contains "&lt;MessageID>" with non-empty string value AND
+[S4] Client request contains "&lt;Probe>" tag after the "&lt;Body>" tag
+AND
+[S5] Device response message contains "&lt;ProbeMatches>" tag after the "&lt;Body>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>Discovery_WS-Discovery</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Network Configuration Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to configure network settings.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Network Configuration if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to list network interfaces of Device using
+                                        the GetNetworkInterfaces operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set network interfaces of Device using
+                                        the SetNetworkInterfaces operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to list default gateway of Device using the
+                                        GetNetworkDefaultGateway operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able set default gateway of Device using the
+                                        SetNetworkDefaultGateway operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Network Configuration if ANY of
+                            the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetNetworkInterfaces request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetNetworkInterfaces request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to GetNetworkDefaultGateway
+                                        request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetNetworkDefaultGateway
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET NETWORK INTERFACES </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Network Configuration - Get Network
+                Interfaces </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NETWORKCONFIGURATION-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NetworkConfiguration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                list network interfaces of Device using the GetNetworkInterfaces operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetNetworkInterfaces operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetNetworkInterfaces request message to get network
+                            interface configuration from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            GetNetworkInterfacesResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetNetworkInterfaces request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetNetworkInterfaces request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetNetworkInterfaces>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetNetworkInterfacesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>NetworkConfiguration_GetNetworkInterfaces</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET NETWORK INTERFACES</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Network Configuration - Set Network
+                Interfaces</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NETWORKCONFIGURATION-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NetworkConfiguration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set network interfaces of Device using the SetNetworkInterfaces operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetNetworkInterfaces operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetNetworkInterfaces request message to set the network
+                            interface configuration on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            SetNetworkInterfacesResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetNetworkInterfaces request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetNetworkInterfaces request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetNetworkInterfaces>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetNetworkInterfaces>" includes tag: "&lt;InterfaceToken>" with non-empty string value of specific token AND
+    [S3] "&lt;SetNetworkInterfaces>" includes tag: "&lt;NetworkInterface>" AND
+[S4] Device response contains "HTTP/* 200 OK" AND
+[S5] Device response contains "&lt;SetNetworkInterfacesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>NetworkConfiguration_SetNetworkInterfaces</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET NETWORK DEFAULT GATEWAY</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Network Configuration - Get Network
+                Default Gateway</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NETWORKCONFIGURATION-3</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NetworkConfiguration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                list default gateway of Device using the GetNetworkDefaultGateway operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with GetNetworkDefaultGateway operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetNetworkDefaultGateway request message to get the
+                            default gateway settings from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            GetNetworkDefaultGatewayResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetNetworkDefaultGateway request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetNetworkDefaultGateway request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetNetworkDefaultGateway>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetNetworkDefaultGatewayResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>NetworkConfiguration_GetNetworkDefaultGateway</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET NETWORK DEFAULT GATEWAY</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Network Configuration - Set Network
+                Default Gateway</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NETWORKCONFIGURATION-4</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NetworkConfiguration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set default gateway of Device using the SetNetworkDefaultGateway operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with SetNetworkDefaultGateway operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetNetworkDefaultGateway request message to set the
+                            default gateway settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            SetNetworkDefaultGatewayResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetNetworkDefaultGateway request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetNetworkDefaultGateway request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetNetworkDefaultGateway>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetNetworkDefaultGateway>" includes tag: EITHER "&lt;IPv4Address>"
+    OR "&lt;IPv6Address>" with specific IP address value AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;SetNetworkDefaultGatewayResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>NetworkConfiguration_SetNetworkDefaultGateway</para>
+        </section>
+    </section>
+
+    <section>
+        <title>System Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to get information, such as manufacturer,
+                            model, firmware version and etc.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting System if the following conditions
+                            are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to list Device information using the
+                                        GetDeviceInformation operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting System if ANY of the following
+                            is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetDeviceInformation
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET DEVICE INFORMATION </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> System - Get Device Information </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> SYSTEM-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> System</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                list Device information using the GetDeviceInformation operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetDeviceInformation operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetDeviceInformation request message to list Device
+                            information.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            GetDeviceInformationResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetDeviceInformation request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetDeviceInformation request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetDeviceInformation>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetDeviceInformationResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>System_GetDeviceInformation</para>
+        </section>
+    </section>
+
+    <section>
+        <title>User Handling Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to create, list, modify and delete
+                            users.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting User Handling if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to create users on Device using the
+                                        CreateUsers operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to list existing users of Device using the
+                                        GetUsers operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to modify users on Device using the SetUser
+                                        operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to delete users from Device using the
+                                        DeleteUsers operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting System if ANY of the following
+                            is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to CreateUsers request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to GetUsers request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetUser request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to DeleteUsers request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">CREATE USERS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> User Handling - CreateUsers </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> USERHANDLING-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> User Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                create users on Device using the CreateUsers operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with CreateUsers operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreateUsers request message to create new users and
+                            corresponding credentials on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and CreateUsersResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreateUsers request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreateUsers request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;CreateUsers>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;CreateUsers>" includes tag: "&lt;User>" AND
+    [S3] "&lt;User>" includes tag: "&lt;Username>" with non-empty string value AND
+    [S4] "&lt;User>" includes tag: "&lt;Password>" with non-empty string value AND
+    [S5] "&lt;User>" includes tag: "&lt;UserLevel>" with non-empty string value AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;CreateUsersResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>UserHandling_CreateUsers</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET USERS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> User Handling - GetUsers</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> USERHANDLING-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> User Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                list existing users of Device using the GetUsers operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetUsers operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetUsers request message to list registered users and
+                            their user levels.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetUsersResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetUsers request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetUsers request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetUsers>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetUsersResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>UserHandling_GetUsers</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET USER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> User Handling - SetUser</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> USERHANDLING-3</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> User Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                modify users on Device using the SetUser operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with SetUser operation present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetUser request message to update the authentication
+                            settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetUserResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetUser request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetUser request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetUser>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetUser>" includes tag: "&lt;User>" AND
+    [S3] "&lt;User>" includes tag: "&lt;Username>" with non-empty string value AND
+    [S4] "&lt;User>" includes tag: "&lt;UserLevel>" with non-empty string value AND
+[S5] Device response contains "HTTP/* 200 OK" AND
+[S6] Device response contains "&lt;SetUserResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>UserHandling_SetUser</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">DELETE USERS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> User Handling - DeleteUsers</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> USERHANDLING-4</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, G -
+                conditional, C - conditional, Q - mandatory</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> User Handling</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                delete users from Device using the DeleteUsers operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with DeleteUsers operation present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes DeleteUsers request message to delete specific users
+                            from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and DeleteUsersResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client DeleteUsers request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client DeleteUsers request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;DeleteUsers>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;DeleteUsers>" includes tag: "&lt;Username>" with non-empty string value AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;DeleteUsersResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>UserHandling_DeleteUsers</para>
+        </section>
+    </section>
+
+    <section>
+        <title>Relay Outputs Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to list, configure and trigger relay
+                            outputs.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Relay Outputs if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to list available relay outputs using the
+                                        GetRelayOutputs operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to trigger relay output using the
+                                        SetRelayOutputState operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set settings of relay output in EITHER
+                                        "Bistable" OR "Monostable" mode using the
+                                        SetRelayOutputSettings operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Relay Outputs if ANY of the
+                            following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetRelayOutputs request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetRelayOutputState request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetRelayOutputSettings
+                                        requests for BOTH "Bistable" AND "Monostable" mode.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET RELAY OUTPUTS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Relay Outputs - GetRelayOutputs </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> RELAYOUTPUTS-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Relay Outputs</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                list available relay outputs using the GetRelayOutputs operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetRelayOutputs operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetRelayOutputs request message to get list of all
+                            available relay outputs and their settings.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetRelayOutputsResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetRelayOutputs request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetRelayOutputs request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetRelayOutputs>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetRelayOutputsResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>RelayOutputs_GetRelayOutputs</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET RELAY OUTPUT STATE</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Relay Outputs -
+                SetRelayOutputState</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> RELAYOUTPUTS-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Relay Outputs</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                trigger relay output using the SetRelayOutputState operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetRelayOutputState operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetRelayOutputState request message to change state of
+                            relay output on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetRelayOutputStateResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetRelayOutputState request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetRelayOutputState request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetRelayOutputState>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetRelayOutputState>" includes tag: "&lt;RelayOutputToken>" with non-empty string value AND
+    [S3] "&lt;SetRelayOutputState>" includes tag: "&lt;LogicalState>" with "Active" OR "Inactive" value AND
+[S4] Device response contains "HTTP/* 200 OK" AND
+[S5] Device response contains "&lt;SetRelayOutputStateResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>RelayOutputs_SetRelayOutputState</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET RELAY OUTPUT SETTINGS BISTABLE
+                MODE</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Relay Outputs -
+                SetRelayOutputSettings Bistable Mode</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> RELAYOUTPUTS-3</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Relay Outputs</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set settings of relay output in "Bistable" mode using the SetRelayOutputSettings
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with SetRelayOutputSettings operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetRelayOutputSettings request message to set setting
+                            of relay output in "Bistable" mode.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            SetRelayOutputSettingsResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client SetRelayOutputSettings request
+                message does not contain "Bistable" value of "&lt;Mode>" tag then Test shall be
+                deemed as "NOT DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetRelayOutputSettings request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetRelayOutputSettings request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetRelayOutputSettings>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetRelayOutputSettings>" includes tag: "&lt;RelayOutputToken>" with non-empty string value AND
+    [S3] "&lt;SetRelayOutputSettings>" includes tag: "&lt;Properties>" AND
+    [S4] "&lt;Properties>" includes tag: "&lt;Mode>" with "Bistable" value AND
+    [S5] "&lt;Properties>" includes tag: "&lt;DelayTime>" AND
+    [S6] "&lt;Properties>" includes tag: "&lt;IdleState>" with "Closed" OR "Open" value AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response contains "&lt;SetRelayOutputSettingsResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>RelayOutputs_SetRelayOutputSettingsBistable</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET RELAY OUTPUT SETTINGS MONOSTABLE
+                MODE</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Relay Outputs -
+                SetRelayOutputSettings Monostable Mode</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> RELAYOUTPUTS-4</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Relay Outputs</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set settings of relay output in "Monostable" mode using the SetRelayOutputSettings
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with SetRelayOutputSettings operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetRelayOutputSettings request message to set setting
+                            of relay output in "Monostable" mode.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            SetRelayOutputSettingsResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client SetRelayOutputSettings request
+                message does not contain "Monostable" value of "&lt;Mode>" tag then Test shall be
+                deemed as "NOT DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetRelayOutputSettings request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetRelayOutputSettings request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetRelayOutputSettings>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetRelayOutputSettings>" includes tag: "&lt;RelayOutputToken>" with non-empty string value AND
+    [S3] "&lt;SetRelayOutputSettings>" includes tag: "&lt;Properties>" AND
+    [S4] "&lt;Properties>" includes tag: "&lt;Mode>" with "Monostable" value AND
+    [S5] "&lt;Properties>" includes tag: "&lt;DelayTime>" AND
+    [S6] "&lt;Properties>" includes tag: "&lt;IdleState>" with "Closed" OR "Open" value AND
+[S7] Device response contains "HTTP/* 200 OK" AND
+[S8] Device response contains "&lt;SetRelayOutputSettingsResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>RelayOutputs_SetRelayOutputSettingsMonostable</para>
+        </section>
+    </section>
+    <section>
+        <title>NTP Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to configure synchronization of time using
+                            NTP servers on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting NTP if the following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to get the NTP settings from Device using
+                                        the GetNTP operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set the NTP settings on Device using the
+                                        SetNTP operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting NTP if ANY of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetNTP request OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetNTP request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET NTP SETTINGS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> NTP - GetNTP </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NTP-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NTP</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                get the NTP settings from Device using the GetNTP operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetNTP operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetNTP request message to get current settings of NTP
+                            servers on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetNTPResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetNTP request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetNTP request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetNTP>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetNTPResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List: </emphasis>NTP_GetNTP</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET NTP SETTINGS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> NTP - SetNTP</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> NTP-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> NTP</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set the NTP settings on Device using the SetNTP operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetNTP operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetNTP request message to set the NTP servers settings
+                            on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetNTPResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetNTP request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetNTP request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetNTP>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetNTP>" includes tag: "&lt;FromDHCP>" with "TRUE" OR "FALSE" value AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;SetNTPResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List: </emphasis>NTP_SetNTP</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Dynamic DNS Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to configure Dynamic DNS settings.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Dynamic DNS if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to get the Dynamic DNS settings from Device
+                                        using the GetDynamicDNS operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set the Dynamic DNS settings on Device
+                                        using the SetDynamicDNS operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Dynamic DNS if ANY of the
+                            following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetDynamicDNS request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetDynamicDNS request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET DYNAMIC DNS SETTINGS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Dynamic DNS - GetDynamicDNS </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DYNAMICDNS-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Dynamic DNS</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able get
+                the dynamic DNS settings from Device using the GetDynamicDNS operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetDynamicDNS operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetDynamicDNS request message to get the dynamic DNS
+                            settings from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetDynamicDNSResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetDynamicDNS request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetDynamicDNS request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetDynamicDNS>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetDynamicDNSResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DynamicDNS_GetDynamicDNS</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET DYNAMIC DNS SETTINGS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Dynamic DNS - SetDynamicDNS</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> DYNAMICDNS-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Dynamic DNS</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able set
+                the dynamic DNS settings on Device using the SetDynamicDNS operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetDynamicDNS operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetDynamicDNS request message to set the dynamic DNS
+                            settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetDynamicDNSResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetDynamicDNS request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetDynamicDNS request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetDynamicDNS>" tag after the "&lt;Body>" tag  AND
+[S2] "&lt;SetDynamicDNS>" includes tag: "&lt;Type>" with value EITHER "NoUpdate" OR "ClientUpdates" OR "ServerUpdates"
+AND
+[S3] Device response contains "HTTP/* 200 OK" AND
+[S4] Device response contains "&lt;SetDynamicDNSResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>DynamicDNS_SetDynamicDNS</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Zero Configuration Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to configure Zero Configuration
+                            settings.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Zero Configuration if the following
+                            conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to get the Zero Configuration settings from
+                                        Device using the GetZeroConfiguration operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set the Zero Configuration settings on
+                                        Device using the SetZeroConfiguration operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Zero Configuration if ANY of
+                            the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetZeroConfiguration request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetZeroConfiguration
+                                        request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET ZERO CONFIGURATION SETTINGS </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Zero Configuration -
+                GetZeroConfiguration </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ZEROCONFIGURATION-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Zero Configuration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                get the Zero Configuration settings from Device using the GetZeroConfiguration
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetZeroConfiguration operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetZeroConfiguration request message to get the Zero
+                            Configuration settings from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            GetZeroConfigurationResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetZeroConfiguration request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetZeroConfiguration request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetZeroConfiguration>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetZeroConfigurationResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ZeroConfiguration_GetZeroConfiguration</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET ZERO CONFIGURATION SETTINGS</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Zero Configuration -
+                SetZeroConfiguration</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> ZEROCONFIGURATION-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Zero Configuration</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set the Zero Configuration settings on Device using the SetZeroConfiguration
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetZeroConfiguration operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetZeroConfiguration request message to set the Zero
+                            Configuration settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            SetZeroConfigurationResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetZeroConfiguration request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetZeroConfiguration request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetZeroConfiguration>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetZeroConfiguration>" includes tag: "&lt;InterfaceToken>" with non-empty string value of specific token AND
+    [S3] "&lt;SetZeroConfiguration>" includes tag: "&lt;Enabled>" with "TRUE" OR "FALSE" value AND
+[S4] Device response contains "HTTP/* 200 OK" AND
+[S5] Device response contains "&lt;SetZeroConfigurationResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>ZeroConfiguration_SetZeroConfiguration</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>IP Address Filtering Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client connects to Device to manage IP address filters.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting IP Address Filtering if the
+                            following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to get the IP address filter settings from
+                                        Device using the GetIPAddressFilter operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to set the IP address filter settings on
+                                        Device using the SetIPAddressFilter operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to add the IP address filter settings to
+                                        Device using the AddIPAddressFilter operation AND</para>
+                                </listitem>
+                                <listitem>
+                                    <para>Client is able to delete the IP address filter settings
+                                        from Device using the RemoveIPAddressFilter
+                                        operation.</para>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis role="bold">NOTE:</emphasis> Requests
+                                        SetIPAddressFilter, AddIPAddressFilter and
+                                        RemoveIPAddressFilter are permitted to use the IPv4 OR IPv6
+                                        protocol settings.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting IP Address Filtering if ANY of
+                            the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to GetIPAddressFilter request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to SetIPAddressFilter request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to AddIPAddressFilter request
+                                        OR</para>
+                                </listitem>
+                                <listitem>
+                                    <para>No Valid Device Response to RemoveIPAddressFilter
+                                        request.</para>
+                                </listitem>
+                                <listitem>
+                                    <para>NOTE: Requests SetIPAddressFilter, AddIPAddressFilter and
+                                        RemoveIPAddressFilter should be deemed as failed if both
+                                        IPv4 AND IPv6 protocol settings have No Valid Device
+                                        Responses.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">GET IP ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                GetIPAddressFilter </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                get the IP address filter settings from Device using the GetIPAddressFilter
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with GetIPAddressFilter operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes GetIPAddressFilter request message to get the IP
+                            address filter settings from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and GetIPAddressFilterResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client GetIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client GetIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;GetIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;GetIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_GetIPAddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET IPv4 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                SetIPv4AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-2</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set the IP address filter settings on Device using the SetIPAddressFilter
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with SetIPAddressFilter operation present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetIPAddressFilter request message to set the IP
+                            address filter settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetIPAddressFilterResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client SetIPAddressFilter request
+                message does not contain "&lt;IPv4Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;SetIPAddressFilter>" includes tag: "&lt;IPv4Address>" AND
+    [S4] "&lt;IPv4Address>" includes tag: "&lt;Address>" with specific IPv4 address value AND
+    [S5] "&lt;IPv4Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "32" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;SetIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_SetIPv4AddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SET IPv6 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                SetIPv6AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-3</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                set the IP address filter settings on Device using the SetIPAddressFilter
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with SetIPAddressFilter operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes SetIPAddressFilter request message to set the IP
+                            address filter settings on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SetIPAddressFilterResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client SetIPAddressFilter request
+                message does not contain "&lt;IPv6Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client SetIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client SetIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;SetIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;SetIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;SetIPAddressFilter>" includes tag: "&lt;IPv6Address>" AND
+    [S4] "&lt;IPv6Address>" includes tag: "&lt;Address>" with specific IPv6 address value AND
+    [S5] "&lt;IPv6Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "128" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;SetIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_SetIPv6AddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">ADD IPv4 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                AddIPv4AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-4</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                add the IP address filter to Device using the AddIPAddressFilter operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with AddIPAddressFilter operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes AddIPAddressFilter request message to add the IP
+                            address filter on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and AddIPAddressFilterResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client AddIPAddressFilter request
+                message does not contain "&lt;IPv4Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client AddIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client AddIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;AddIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;AddIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;AddIPAddressFilter>" includes tag: "&lt;IPv4Address>" AND
+    [S4] "&lt;IPv4Address>" includes tag: "&lt;Address>" with specific IPv4 address value AND
+    [S5] "&lt;IPv4Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "32" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;AddIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_AddIPv4AddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">ADD IPv6 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                AddIPv6AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-5</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                add the IP address filter to Device using the AddIPAddressFilter operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with AddIPAddressFilter operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes AddIPAddressFilter request message to add the IP
+                            address filter on Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and AddIPAddressFilterResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client AddIPAddressFilter request
+                message does not contain "&lt;IPv6Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client AddIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client AddIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;AddIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;AddIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;AddIPAddressFilter>" includes tag: "&lt;IPv6Address>" AND
+    [S4] "&lt;IPv6Address>" includes tag: "&lt;Address>" with specific IPv6 address value AND
+    [S5] "&lt;IPv6Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "128" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;AddIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_AddIPv6AddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">REMOVE IPv4 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                RemoveIPv4AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-6</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                delete the IP address filter from Device using the RemoveIPAddressFilter
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with RemoveIPAddressFilter operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes RemoveIPAddressFilter request message to delete the IP
+                            address filter from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            RemoveIPAddressFilterResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client RemoveIPAddressFilter request
+                message does not contain "&lt;IPv4Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client RemoveIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client RemoveIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;RemoveIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;RemoveIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;RemoveIPAddressFilter>" includes tag: "&lt;IPv4Address>" AND
+    [S4] "&lt;IPv4Address>" includes tag: "&lt;Address>" with specific IPv4 address value AND
+    [S5] "&lt;IPv4Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "32" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;RemoveIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_RemoveIPv4AddressFilter</para>
+        </section>
+        <section>
+            <title><emphasis role="italic">REMOVE IPv6 ADDRESS FILTER</emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> IP Address Filtering -
+                RemoveIPv6AddressFilter</para>
+            <para><emphasis role="bold">Test Case ID:</emphasis> IPADDRESSFILTERING-7</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> S - conditional, C -
+                conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> IP Address Filtering</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                delete the IP address filter from Device using the RemoveIPAddressFilter
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                    <listitem>
+                        <para>The Network Trace Capture files contains at least one Conversation
+                            between Client and Device with RemoveIPAddressFilter operation
+                            present.</para>
+                    </listitem>
+                </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                    file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes RemoveIPAddressFilter request message to delete the IP
+                            address filter from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            RemoveIPAddressFilterResponse message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <para><emphasis role="bold">NOTE:</emphasis> If Client RemoveIPAddressFilter request
+                message does not contain "&lt;IPv6Address>" tag then Test shall be deemed as "NOT
+                DETECTED".</para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client RemoveIPAddressFilter request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client RemoveIPAddressFilter request message has a proper hierarchy (refer to devicemgmt.wsdl) AND
+[S1] Client request contains "&lt;RemoveIPAddressFilter>" tag after the "&lt;Body>" tag  AND
+    [S2] "&lt;RemoveIPAddressFilter>" includes tag: "&lt;Type>" with "Allow" OR "Deny" value AND
+    [S3] "&lt;RemoveIPAddressFilter>" includes tag: "&lt;IPv6Address>" AND
+    [S4] "&lt;IPv6Address>" includes tag: "&lt;Address>" with specific IPv6 address value AND
+    [S5] "&lt;IPv6Address>" includes tag: "&lt;PrefixLength>" with value range from "0" to "128" AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;RemoveIPAddressFilterResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>IPAddressFiltering_RemoveIPv6AddressFilter</para>
+        </section>
+    </section>
+    
+    <section>
+        <title>Persistent Notification Storage Retrieval Test Cases</title>
+        <section>
+            <title>Expected Scenarios Under Test:</title>
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>Client subscribes to device messages using CreatePullPointSubscription
+                            operation.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client uses Seek method to change position of the pull pointer to
+                            include all NotificationMessages in the persistent storage with UtcTime
+                            attribute greater than or equal to the Seek argument.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client uses Pull Point event mechanism to retrieve notification events
+                            from Device.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as supporting Persistent Notification Storage
+                            Retrieval if the following conditions are met:<itemizedlist>
+                                <listitem>
+                                    <para>Client is able to seek stored events in Device using the
+                                        Seek operation.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                    <listitem>
+                        <para>Client is considered as NOT supporting Persistent Notification Storage
+                            Retrieval if ANY of the following is TRUE:<itemizedlist>
+                                <listitem>
+                                    <para>No Valid Device Response to Seek request.</para>
+                                </listitem>
+                            </itemizedlist></para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+        <section>
+            <title><emphasis role="italic">SEEK STORED EVENTS IN DEVICE </emphasis></title>
+            <para><emphasis role="bold">Test Label:</emphasis> Persistent Notification Storage
+                Retrieval - Seek </para>
+            <para><emphasis role="bold">Test Case ID:</emphasis>
+                PERSISTENTNOTIFICATIONSTORAGERETRIEVAL-1</para>
+            <para><emphasis role="bold">Affected Profiles:</emphasis> C - conditional</para>
+            <para><emphasis role="bold">Feature Under Test:</emphasis> Persistent Notification
+                Storage Retrieval</para>
+            <para><emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+                seek stored events in Device using Pull Point event mechanism and Seek
+                operation.</para>
+            <para><emphasis role="bold">Pre-Requisite:</emphasis><itemizedlist>
+                <listitem>
+                    <para>The Network Trace Capture files contains at least one Conversation between
+                            Client and Device with CreatePullPointSubscription, Seek and
+                            PullMessages operations present.</para>
+                </listitem>
+            </itemizedlist></para>
+            <para><emphasis role="bold">Test Procedure (expected to be reflected in network trace
+                file):</emphasis><orderedlist>
+                    <listitem>
+                        <para>Client invokes CreatePullPointSubscription message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and
+                            CreatePullPointSubscriptionResponse message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes Seek message to re-adjust the pull pointer into the
+                            past.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and SeekResponse
+                            message.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Client invokes PullMessages command with Timeout and MessageLimit
+                            elements.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Device responses with code HTTP 200 OK and PullMessagesResponse
+                            message.</para>
+                    </listitem>
+                </orderedlist></para>
+            <para><emphasis role="bold">Test Result:</emphasis></para>
+            <literallayout class="normal"><emphasis role="bold">PASS -</emphasis>
+Client CreatePullPointSubscription request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client CreatePullPointSubscription request message has a proper hierarchy (refer to event.wsdl) AND
+[S1] Client request contains "&lt;CreatePullPointSubscription>" tag after the "&lt;Body>" tag AND
+[S2] Device response contains "HTTP/* 200 OK" AND
+[S3] Device response contains "&lt;CreatePullPointSubscriptionResponse>" tag
+AND
+Client Seek request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client Seek request message has a proper hierarchy (refer to event.wsdl) AND
+[S4] Client request contains "&lt;Seek>" tag after the "&lt;Body>" tag AND
+    [S5] "&lt;Seek>" includes tag: "&lt;UtcTime>" with non-empty value of date and time AND
+[S6] Device response contains "HTTP/* 200 OK" AND
+[S7] Device response contains "&lt;SeekResponse>" tag
+AND
+Client PullMessages request message is a well-formed SOAP request (refer to onvif.xsd) AND
+Client PullMessages request message has a proper hierarchy (refer to event.wsdl) AND
+[S8] Client request contains "&lt;PullMessages>" tag after the "&lt;Body>" tag AND
+    [S9] "&lt;PullMessages>" includes tag: "&lt;Timeout>" AND
+    [S10] "&lt;PullMessages>" includes tag: "&lt;MessageLimit>"
+AND
+[S11] Device response contains "HTTP/* 200 OK" AND
+[S12] Device response contains "&lt;PullMessagesResponse>" tag.</literallayout>
+            <literallayout class="normal"><emphasis role="bold">FAIL -</emphasis>
+The Client failed PASS criteria.</literallayout>
+            <para><emphasis role="bold">Validated Feature List:
+                </emphasis>PersistentNotificationStorageRetrieval_Seek</para>
+        </section>
+    </section>
+    
+  <appendix id="changes">
+    <title>Revision History</title>
+          <para><emphasis role="bold">September 24, 2015 Version 16.01</emphasis><itemizedlist>
+                <listitem>
+                    <para>Pass criteria in EVENTHANDLING-3 test case has been updated (added check
+                        for URI in RTSP SETUP request).</para>
+                </listitem>
+            </itemizedlist></para>
+          <para><emphasis role="bold">June 10, 2015 Version 15.06</emphasis><itemizedlist>
+                <listitem>
+                    <para>No major changes were made, just minor formatting fixes.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">May 20, 2015 Version 15.05</emphasis><itemizedlist>
+                <listitem>
+                    <para>No major changes were made, just minor grammatical corrections.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">March 20, 2015 Version 15.03</emphasis><itemizedlist>
+                <listitem>
+                    <para>Added new Test Cases sections: Discovery, Network Configuration, System,
+                        User Handling, Relay Outputs, NTP, Dynamic DNS, Zero Configuration, IP
+                        Address Filtering and Persistent Notification Storage Retrieval.</para>
+                </listitem>
+            </itemizedlist><emphasis role="bold">February 19, 2015 Version 15.02</emphasis><itemizedlist>
+                <listitem>
+                    <para>Pass criteria in EVENTHANDLING-3 test case has been updated (added check
+                        for Media Type: "application" in RTSP DESCRIBE response).</para>
+                </listitem>
+            </itemizedlist></para>
+        <para><emphasis role="bold">December 11, 2014 Version 14.12</emphasis><itemizedlist>
+                <listitem>
+                    <para>Fixed typos and inconsistencies.</para>
+                </listitem>
+            </itemizedlist></para>
+      <para><emphasis role="bold">November 21, 2014 Version 14.11</emphasis><itemizedlist>
+                <listitem>
+                    <para>Fixed typos and inconsistencies.</para>
+                </listitem>
+                <listitem>
+                    <para>Removed examples of expected Requests and Responses from all Test
+                        Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>Removed unnecessary PASS criteria from all Test Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>EVENTHANDLING-1 and EVENTHANDLING-3 test cases have been updated.</para>
+                </listitem>
+                <listitem>
+                    <para>"3. Terms and Definitions" section has been updated.</para>
+                </listitem>
+                <listitem>
+                    <para>Introduced YY.MM method of version numbering</para>
+                </listitem>
+            </itemizedlist><emphasis role="bold">October 29, 2014 Version 1.5</emphasis><itemizedlist>
+                <listitem>
+                    <para>"ISO/IEC Directives, Part 2" reference has been added to "2. Normative
+                        references" section.</para>
+                </listitem>
+                <listitem>
+                    <para>The new section "3.1 Conventions" has been added.</para>
+                </listitem>
+                <listitem>
+                    <para>Changes were made in "PASS" criteria of the "7.2. PULLPOINT" and "7.4.
+                        METADATA STREAMING" Test Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>Specific Namespace prefixes have been removed from "PASS" criteria of all
+                        Test Cases.</para>
+                </listitem>
+                <listitem>
+                    <para>Fixed typos and inconsistencies.</para>
+                </listitem>
+            </itemizedlist></para>
+      <para><emphasis role="bold">September 04, 2014 Version 1.4</emphasis><itemizedlist>
+          <listitem>
+              <para>The SECURITY-1 USER TOKEN PROFILE test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The SECURITY-2 DIGEST AUTHENTICATION test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The CAPABILITY-1 GET SERVICES test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The CAPABILITY-2 GET CAPABILITIES test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-1 PULLPOINT test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-2 BASE NOTIFICATION test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-3 METADATA STREAMING test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>"Scope", "Security", "Capabilities" and "Event Handling" sections have
+                  been updated.</para>
+          </listitem>
+      </itemizedlist></para>
+      <para><emphasis role="bold">July 31, 2014 Version 1.3</emphasis><itemizedlist>
+          <listitem>
+              <para>The SECURITY-1 USER TOKEN PROFILE test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>The SECURITY-2 DIGEST AUTHENTICATION test case has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>Section "Test Policy" has been removed.</para>
+          </listitem>
+          <listitem>
+              <para>"Introduction", "Scope", "Security", "Capabilities", "Event Handling",
+                  "Normative references", "Definition" and "Test Setup" sections have been
+                  updated.</para>
+          </listitem>
+          <listitem>
+              <para>The CAPABILITY-1 GET SERVICES test case has been added.</para>
+          </listitem>
+          <listitem>
+              <para>The CAPABILITY-2 GET CAPABILITIES test case has been added.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-1 PULLPOINT test case has been added.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-2 BASE NOTIFICATION test case has been added.</para>
+          </listitem>
+          <listitem>
+              <para>The EVENTHANDLING-3 METADATA STREAMING test case has been added.</para>
+          </listitem>
+      </itemizedlist></para>
+      <para><emphasis role="bold">June 27, 2014 Version 1.2</emphasis><itemizedlist>
+          <listitem>
+              <para> Subsections "Capabilities" and "Event Handling" have been added to
+                  "Introduction" section.</para>
+          </listitem>
+          <listitem>
+              <para>"Definition" section has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>"Test Setup" section has been updated.</para>
+          </listitem>
+          <listitem>
+              <para>Subsections "Capabilities" and "Event Handling" have been added to "Test
+                  Policy" section.</para>
+          </listitem>
+          <listitem>
+              <para>Tests "GET SERVICES" and "GET CAPABILITIES" have been added to
+                  "Capabilities Test Cases" section.</para>
+          </listitem>
+          <listitem>
+              <para>Tests "PULLPOINT", "BASE NOTIFICATION" and "METADATA STREAMING" have been
+                  added to "Event Handling Test Cases" section.</para>
+          </listitem>
+          <listitem>
+              <para>Examples of expected Requests and Responses have been updated for
+                  "Security Test Cases" section.</para>
+          </listitem>
+      </itemizedlist></para>
+      <para><emphasis role="bold">June 16, 2014 Version 1.1</emphasis><itemizedlist>
+          <listitem>
+              <para>Changes were made in the Security Test Cases specification.</para>
+          </listitem>
+          <listitem>
+              <para>The new section "Normative references" has been added.</para>
+          </listitem>
+          <listitem>
+              <para>"Introduction", "Scope" and "Security" sections have been updated.</para>
+          </listitem>
+          <listitem>
+              <para>"Definition" section has been updated.</para>
+          </listitem>
+      </itemizedlist></para>
+      <para><emphasis role="bold">June 11, 2014 Version 1.0</emphasis><itemizedlist>
+                <listitem>
+                    <para>Initial version</para>
+                </listitem>
+      </itemizedlist></para>
+  </appendix>
+</article>

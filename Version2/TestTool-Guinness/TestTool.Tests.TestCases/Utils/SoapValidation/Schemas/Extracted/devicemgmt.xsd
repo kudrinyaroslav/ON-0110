@@ -1,0 +1,1795 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tds="http://www.onvif.org/ver10/device/wsdl" elementFormDefault="qualified">
+  <xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="http://www.onvif.org/onvif/ver10/schema/onvif.xsd"/>
+  <!--===============================-->
+  <xs:element name="GetServices">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IncludeCapability" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Indicates if the service capabilities (untyped) should be included in the response.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServicesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Service" type="tds:Service" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Each Service element contains information about one service.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:complexType name="Service">
+    <xs:sequence>
+      <xs:element name="Namespace" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation>Namespace of the service being described. This parameter allows to match the service capabilities to the service. Note that only one set of capabilities is supported per namespace.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="XAddr" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation>The transport addresses where the service can be reached. The schema and IP part shall match the one used in the request (i.e. the GetServices request).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Capabilities" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any namespace="##any" processContents="lax">
+              <xs:annotation>
+                <xs:documentation>The placeholder for the service capabilities. The service capability element shall be returned here. For example for the device service that would be the tds:DeviceServiceCapabilities element (not complextype).</xs:documentation>
+              </xs:annotation>
+            </xs:any>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Version" type="tt:OnvifVersion">
+        <xs:annotation>
+          <xs:documentation>The version of the service (not the ONVIF core spec version).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilities">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServiceCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="tds:DeviceServiceCapabilities">
+          <xs:annotation>
+            <xs:documentation>The capabilities for the device service is returned in the Capabilities element.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:complexType name="DeviceServiceCapabilities">
+    <xs:sequence>
+      <xs:element name="Network" type="tds:NetworkCapabilities">
+        <xs:annotation>
+          <xs:documentation>Network capabilities.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Security" type="tds:SecurityCapabilities">
+        <xs:annotation>
+          <xs:documentation>Security capabilities.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="System" type="tds:SystemCapabilities">
+        <xs:annotation>
+          <xs:documentation>System capabilities.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Capabilities" type="tds:DeviceServiceCapabilities"/>
+  <!--===============================-->
+  <xs:complexType name="NetworkCapabilities">
+    <xs:attribute name="IPFilter" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for IP filtering.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ZeroConfiguration" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for zeroconf.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IPVersion6" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for IPv6.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DynDNS" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for dynamic DNS configuration.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Dot11Configuration" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for IEEE 802.11 configuration.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HostnameFromDHCP" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for retrieval of hostname from DHCP.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="NTP" type="xs:int">
+      <xs:annotation>
+        <xs:documentation>Maximum number of NTP servers supported by the devices SetNTP command.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="EAPMethodTypes">
+    <xs:list itemType="xs:int"/>
+  </xs:simpleType>
+  <xs:complexType name="SecurityCapabilities">
+    <xs:attribute name="TLS1.0" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for TLS 1.0.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TLS1.1" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for TLS 1.1.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TLS1.2" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for TLS 1.2.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="OnboardKeyGeneration" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for onboard key generation.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="AccessPolicyConfig" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for access policy configuration.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Dot1X" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for IEEE 802.1X configuration.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RemoteUserHandling" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for remote user configuration. Used when accessing another device.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="X.509Token" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Security X.509 token.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SAMLToken" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Security SAML token.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="KerberosToken" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Security Kerberos token.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="UsernameToken" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Security Username token.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HttpDigest" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS over HTTP digest authenticated communication layer.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RELToken" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Security REL token.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SupportedEAPMethods" type="tds:EAPMethodTypes">
+      <xs:annotation>
+        <xs:documentation>
+          EAP Methods supported by the device. The int values refer to the <a href="http://www.iana.org/assignments/eap-numbers/eap-numbers.xhtml">IANA EAP Registry</a>.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SystemCapabilities">
+    <xs:attribute name="DiscoveryResolve" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS Discovery resolve requests.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DiscoveryBye" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for WS-Discovery Bye.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RemoteDiscovery" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for remote discovery, see WS-Discovery.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SystemBackup" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for system backup through MTOM.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SystemLogging" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for retrieval of system logging through MTOM.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="FirmwareUpgrade" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for firmware upgrade through MTOM.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HttpFirmwareUpgrade" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for system backup through MTOM.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HttpSystemBackup" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for system backup through HTTP.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HttpSystemLogging" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for retrieval of system logging through HTTP.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="HttpSupportInformation" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates support for retrieving support information through HTTP.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:element name="GetDeviceInformation">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDeviceInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Contains the device information.</xs:documentation>
+        </xs:annotation>
+        <xs:element name="Manufacturer" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The manufactor of the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Model" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The device model.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="FirmwareVersion" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The firmware version in the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="SerialNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The serial number of the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="HardwareId" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The hardware ID of the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetSystemDateAndTime">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DateTimeType" type="tt:SetDateTimeType">
+          <xs:annotation>
+            <xs:documentation>Defines if the date and time is set via NTP or manually.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="DaylightSavings" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Defines if daylight savings is on or off</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="TimeZone" type="tt:TimeZone" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>The time zone in POSIX 1003.1 format</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="UTCDateTime" type="tt:DateTime" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Date and time in UTC. If time is obtained via NTP, UTCDateTime has no meaning</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSystemDateAndTimeResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetSystemDateAndTime">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSystemDateAndTimeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SystemDateAndTime" type="tt:SystemDateTime">
+          <xs:annotation>
+            <xs:documentation>Contains information whether system date and time are set manually or by NTP, daylight savings is on or off, time zone in POSIX 1003.1 format and system date and time in UTC and also local system date and time.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetSystemFactoryDefault">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="FactoryDefault" type="tt:FactoryDefaultType">
+          <xs:annotation>
+            <xs:documentation>Specifies the factory default action type.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSystemFactoryDefaultResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="UpgradeSystemFirmware">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Firmware" type="tt:AttachmentData"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpgradeSystemFirmwareResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Message" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SystemReboot">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SystemRebootResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Message" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Contains the reboot message sent by the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="RestoreSystem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="BackupFiles" type="tt:BackupFile" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RestoreSystemResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetSystemBackup">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSystemBackupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="BackupFiles" type="tt:BackupFile" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetSystemSupportInformation">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSystemSupportInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SupportInformation" type="tt:SupportInformation">
+          <xs:annotation>
+            <xs:documentation>Contains the arbitary device diagnostics information.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetSystemLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="LogType" type="tt:SystemLogType">
+          <xs:annotation>
+            <xs:documentation>Specifies the type of system log to get.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSystemLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:annotation>
+          <xs:documentation>Contains the system log information.</xs:documentation>
+        </xs:annotation>
+        <xs:element name="SystemLog" type="tt:SystemLog"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetScopes">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetScopesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Scopes" type="tt:Scope" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains a list of URI definining the device scopes. Scope parameters can be of two types: fixed and configurable. Fixed parameters can not be altered.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetScopes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Scopes" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains a list of scope parameters that will replace all existing configurable scope parameters.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetScopesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="AddScopes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ScopeItem" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains a list of new configurable scope parameters that will be added to the existing configurable scope.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddScopesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="RemoveScopes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ScopeItem" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Contains a list of URIs that should be removed from the device scope.<br/>
+              Note that the response message always will match the request or an error will be returned. The use of the response is for that reason deprecated.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveScopesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ScopeItem" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains a list of URIs that has been removed from the device scope</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDiscoveryMode">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDiscoveryModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DiscoveryMode" type="tt:DiscoveryMode">
+          <xs:annotation>
+            <xs:documentation>
+              Indicator of discovery mode: Discoverable, NonDiscoverable.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetDiscoveryMode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DiscoveryMode" type="tt:DiscoveryMode">
+          <xs:annotation>
+            <xs:documentation>
+              Indicator of discovery mode: Discoverable, NonDiscoverable.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDiscoveryModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetRemoteDiscoveryMode">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRemoteDiscoveryModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RemoteDiscoveryMode" type="tt:DiscoveryMode">
+          <xs:annotation>
+            <xs:documentation>
+              Indicator of discovery mode: Discoverable, NonDiscoverable.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetRemoteDiscoveryMode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RemoteDiscoveryMode" type="tt:DiscoveryMode">
+          <xs:annotation>
+            <xs:documentation>
+              Indicator of discovery mode: Discoverable, NonDiscoverable.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetRemoteDiscoveryModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDPAddresses">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDPAddressesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DPAddress" type="tt:NetworkHost" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetDPAddresses">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DPAddress" type="tt:NetworkHost" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDPAddressesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetEndpointReference">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEndpointReferenceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="GUID" type="xs:string"/>
+        <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetRemoteUser">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRemoteUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RemoteUser" type="tt:RemoteUser" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetRemoteUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RemoteUser" type="tt:RemoteUser" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetRemoteUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetUsers">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUsersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="User" type="tt:User" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains a list of the onvif users and following information is included in each entry: username and user level.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="CreateUsers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="User" type="tt:User" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Creates new device users and corresponding credentials. Each user entry includes: username, password and user level. Either all users are created successfully or a fault message MUST be returned without creating any user. If trying to create several users with exactly the same username the request is rejected and no users are created. If password is missing, then fault message Too weak password is returned.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUsersResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="DeleteUsers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Username" type="xs:string" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Deletes users on an device and there may exist users that cannot be deleted to ensure access to the unit. Either all users are deleted successfully or a fault message MUST be returned and no users be deleted. If a username exists multiple times in the request, then a fault message is returned.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteUsersResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="User" type="tt:User" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Updates the credentials for one or several users on an device. Either all change requests are processed successfully or a fault message MUST be returned. If the request contains the same username multiple times, a fault message is returned. </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetWsdlUrl">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWsdlUrlResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="WsdlUrl" type="xs:anyURI"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetCapabilities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Category" type="tt:CapabilityCategory" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              List of categories to retrieve capability information on.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="tt:Capabilities">
+          <xs:annotation>
+            <xs:documentation>
+              Capability information.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetHostname">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHostnameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="HostnameInformation" type="tt:HostnameInformation">
+          <xs:annotation>
+            <xs:documentation>Contains the hostname information.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetHostname">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Name" type="xs:token">
+          <xs:annotation>
+            <xs:documentation>The hostname to set.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHostnameResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetHostnameFromDHCP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="FromDHCP" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>True if the hostname shall be obtained via DHCP.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHostnameFromDHCPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RebootNeeded" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates whether or not a reboot is required after configuration updates.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDNS">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDNSResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DNSInformation" type="tt:DNSInformation">
+          <xs:annotation>
+            <xs:documentation>
+              DNS information.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetDNS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="FromDHCP" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>
+              Indicate if the DNS address is to be retrieved using DHCP.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="SearchDomain" type="xs:token" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              DNS search domain.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="DNSManual" type="tt:IPAddress" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              DNS address(es) set manually.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDNSResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetNTP">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNTPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NTPInformation" type="tt:NTPInformation">
+          <xs:annotation>
+            <xs:documentation>
+              NTP information.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetNTP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="FromDHCP" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>
+              Indicate if NTP address information is to be retrieved using DHCP.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="NTPManual" type="tt:NetworkHost" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Manual NTP settings.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetNTPResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDynamicDNS">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDynamicDNSResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DynamicDNSInformation" type="tt:DynamicDNSInformation">
+          <xs:annotation>
+            <xs:documentation>
+              Dynamic DNS information.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetDynamicDNS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Type" type="tt:DynamicDNSType">
+          <xs:annotation>
+            <xs:documentation>
+              Dynamic DNS type.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Name" type="tt:DNSName" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              DNS name.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="TTL" type="xs:duration" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              DNS record time to live.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDynamicDNSResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetNetworkInterfaces">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNetworkInterfacesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NetworkInterfaces" type="tt:NetworkInterface" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              List of network interfaces.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetNetworkInterfaces">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="InterfaceToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>
+              Symbolic network interface name.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="NetworkInterface" type="tt:NetworkInterfaceSetConfiguration">
+          <xs:annotation>
+            <xs:documentation>
+              Network interface name.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetNetworkInterfacesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RebootNeeded" type="xs:boolean" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates whether or not a reboot is required after configuration updates.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetNetworkProtocols">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNetworkProtocolsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NetworkProtocols" type="tt:NetworkProtocol" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Contains an array of defined protocols supported by the device. There are three protocols defined; HTTP, HTTPS and RTSP. The following parameters can be retrieved for each protocol: port and enable/disable.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetNetworkProtocols">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NetworkProtocols" type="tt:NetworkProtocol" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Configures one or more defined network protocols supported by the device. There are currently three protocols defined; HTTP, HTTPS and RTSP. The following parameters can be set for each protocol: port and enable/disable.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetNetworkProtocolsResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetNetworkDefaultGateway">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNetworkDefaultGatewayResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NetworkGateway" type="tt:NetworkGateway">
+          <xs:annotation>
+            <xs:documentation>Gets the default IPv4 and IPv6 gateway settings from the device.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetNetworkDefaultGateway">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IPv4Address" type="tt:IPv4Address" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Sets IPv4 gateway address used as default setting.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="IPv6Address" type="tt:IPv6Address" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Sets IPv6 gateway address used as default setting.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetNetworkDefaultGatewayResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetZeroConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetZeroConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ZeroConfiguration" type="tt:NetworkZeroConfiguration">
+          <xs:annotation>
+            <xs:documentation>Contains the zero-configuration.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetZeroConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="InterfaceToken" type="tt:ReferenceToken">
+          <xs:annotation>
+            <xs:documentation>Unique identifier referencing the physical interface.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Enabled" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Specifies if the zero-configuration should be enabled or not.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetZeroConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetIPAddressFilter">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIPAddressFilterResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IPAddressFilter" type="tt:IPAddressFilter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetIPAddressFilter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IPAddressFilter" type="tt:IPAddressFilter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetIPAddressFilterResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="AddIPAddressFilter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IPAddressFilter" type="tt:IPAddressFilter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddIPAddressFilterResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="RemoveIPAddressFilter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IPAddressFilter" type="tt:IPAddressFilter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveIPAddressFilterResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetAccessPolicy">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAccessPolicyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PolicyFile" type="tt:BinaryData"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetAccessPolicy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PolicyFile" type="tt:BinaryData"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetAccessPolicyResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="CreateCertificate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateID" type="xs:token" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Certificate id.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Subject" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Identification of the entity associated with the public-key.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ValidNotBefore" type="xs:dateTime" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Certificate validity start date.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ValidNotAfter" type="xs:dateTime" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Certificate expiry start date.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateCertificateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NvtCertificate" type="tt:Certificate">
+          <xs:annotation>
+            <xs:documentation>
+              base64 encoded DER representation of certificate.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetCertificates">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NvtCertificate" type="tt:Certificate" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Id and base64 encoded DER representation of all available certificates.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetCertificatesStatus">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCertificatesStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateStatus" type="tt:CertificateStatus" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates if a certificate is used in an optional HTTPS configuration of the device.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetCertificatesStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateStatus" type="tt:CertificateStatus" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates if a certificate is to be used in an optional HTTPS configuration of the device.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetCertificatesStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="DeleteCertificates">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateID" type="xs:token" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              List of ids of certificates to delete.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteCertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetPkcs10Request">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateID" type="xs:token">
+          <xs:annotation>
+            <xs:documentation>
+              List of ids of certificates to delete.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Subject" type="xs:string" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              Relative Dinstinguished Name(RDN) CommonName(CN).
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Attributes" type="tt:BinaryData" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              Optional base64 encoded DER attributes.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPkcs10RequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Pkcs10Request" type="tt:BinaryData">
+          <xs:annotation>
+            <xs:documentation>
+              base64 encoded DER representation of certificate.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="LoadCertificates">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NVTCertificate" type="tt:Certificate" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Optional id and base64 encoded DER representation of certificate.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoadCertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetClientCertificateMode">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetClientCertificateModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Enabled" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates whether or not client certificates are required by device.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetClientCertificateMode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Enabled" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>
+              Indicates whether or not client certificates are required by device.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetClientCertificateModeResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetCACertificates">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCACertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CACertificate" type="tt:Certificate" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="LoadCertificateWithPrivateKey">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateWithPrivateKey" type="tt:CertificateWithPrivateKey" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoadCertificateWithPrivateKeyResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetCertificateInformation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateID" type="xs:token" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCertificateInformationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CertificateInformation" type="tt:CertificateInformation" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="LoadCACertificates">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CACertificate" type="tt:Certificate" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoadCACertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="CreateDot1XConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfiguration" type="tt:Dot1XConfiguration" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateDot1XConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetDot1XConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfiguration" type="tt:Dot1XConfiguration" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDot1XConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDot1XConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfigurationToken" type="tt:ReferenceToken" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDot1XConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfiguration" type="tt:Dot1XConfiguration" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDot1XConfigurations">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDot1XConfigurationsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfiguration" type="tt:Dot1XConfiguration" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="DeleteDot1XConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Dot1XConfigurationToken" type="tt:ReferenceToken" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDot1XConfigurationResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetRelayOutputs">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRelayOutputsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RelayOutputs" type="tt:RelayOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetRelayOutputSettings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RelayOutputToken" type="tt:ReferenceToken"/>
+        <xs:element name="Properties" type="tt:RelayOutputSettings"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetRelayOutputSettingsResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SetRelayOutputState">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RelayOutputToken" type="tt:ReferenceToken" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="LogicalState" type="tt:RelayLogicalState" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetRelayOutputStateResponse">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="SendAuxiliaryCommand">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AuxiliaryCommand" type="tt:AuxiliaryData" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendAuxiliaryCommandResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AuxiliaryCommandResponse" type="tt:AuxiliaryData" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDot11Capabilities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDot11CapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="tt:Dot11Capabilities"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetDot11Status">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="InterfaceToken" type="tt:ReferenceToken"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDot11StatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Status" type="tt:Dot11Status"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="ScanAvailableDot11Networks">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="InterfaceToken" type="tt:ReferenceToken"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ScanAvailableDot11NetworksResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Networks" type="tt:Dot11AvailableNetworks" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetSystemUris">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSystemUrisResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SystemLogUris" type="tt:SystemLogUriList" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="SupportInfoUri" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="SystemBackupUri" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="Extension" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="StartFirmwareUpgrade">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartFirmwareUpgradeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="UploadUri" type="xs:anyURI"/>
+        <xs:element name="UploadDelay" type="xs:duration"/>
+        <xs:element name="ExpectedDownTime" type="xs:duration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="StartSystemRestore">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartSystemRestoreResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="UploadUri" type="xs:anyURI"/>
+        <xs:element name="ExpectedDownTime" type="xs:duration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

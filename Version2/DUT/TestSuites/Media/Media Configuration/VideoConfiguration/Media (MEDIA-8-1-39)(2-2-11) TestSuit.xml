@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Media Configuration" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>MEDIA-8-1-39 VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.MC.8-1-39.01" ONVIFTestID="VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)" Enabled="true">
+    <TestName>VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check Video Source Configuration use count after setting video source configuration parameters
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-2-2-11 VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting video source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Setting video source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Getting video configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 7 - Check UseCount after setting new value via SetVideoSourceConfiguration
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <VideoSourceConfiguration token="VSC1">
+            <tt:Name>VideoSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2">
+            <tt:Name>VideoSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.SetVideoSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration token="VSC1">
+          <Name>VideoSourceConf1</Name>
+          <UseCount>2</UseCount>
+          <SourceToken>VS1</SourceToken>
+          <Bounds height="1080" width="1920" y="1" x="1"></Bounds>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetVideoSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <VideoSourceConfiguration token="VSC1" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>VideoSourceConf1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>VS1</tt:SourceToken>
+          <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+        </VideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.8-1-39.02" ONVIFTestID="VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)" Enabled="true">
+    <TestName>VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)</TestName>
+    <Name>Correct response (wrong UseCount)</Name>
+    <Description>
+      Check Video Source Configuration use count after setting video source configuration parameters
+      when UseCount value is changed after trying to set UseCount value
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-2-2-11 VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting video source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Setting video source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Getting video configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 7 - Check UseCount after setting new value via SetVideoSourceConfiguration
+        Use count value is invalid. Expected: 1, actual: 2
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <VideoSourceConfiguration token="VSC1">
+            <tt:Name>VideoSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2">
+            <tt:Name>VideoSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.SetVideoSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Configuration token="VSC1">
+          <Name>VideoSourceConf1</Name>
+          <UseCount>2</UseCount>
+          <SourceToken>VS1</SourceToken>
+          <Bounds height="1080" width="1920" y="1" x="1"></Bounds>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetVideoSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <VideoSourceConfiguration token="VSC1" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>VideoSourceConf1</tt:Name>
+          <tt:UseCount>2</tt:UseCount>
+          <tt:SourceToken>VS1</tt:SourceToken>
+          <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+        </VideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.8-1-39.03" ONVIFTestID="VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)" Enabled="true">
+    <TestName>VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)</TestName>
+    <Name>No response on SetVideoSourceConfiguration request</Name>
+    <Description>
+      No response on SetVideoSourceConfiguration request
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-2-2-11 VIDEO SOURCE CONFIGURATION USE COUNT (SET VIDEO SOURCE CONFIGURATION)
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:11569/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting video source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Setting video source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Getting video configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 7 - Check UseCount after setting new value via SetVideoSourceConfiguration
+        Use count value is invalid. Expected: 1, actual: 2
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <VideoSourceConfiguration token="VSC1">
+            <tt:Name>VideoSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2">
+            <tt:Name>VideoSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds height="1080" width="1920" y="1" x="1"></tt:Bounds>
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.SetVideoSourceConfiguration</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Configuration token="VSC1">
+          <Name>VideoSourceConf1</Name>
+          <UseCount>2</UseCount>
+          <SourceToken>VS1</SourceToken>
+          <Bounds height="1080" width="1920" y="1" x="1"></Bounds>
+        </Configuration>
+        <ForcePersistence>False</ForcePersistence>
+      </RequestParameters>
+    </Step>
+  </Test>
+
+</TestSuit>

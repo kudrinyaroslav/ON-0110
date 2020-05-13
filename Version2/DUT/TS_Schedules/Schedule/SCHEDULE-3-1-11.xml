@@ -1,0 +1,2588 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Draft Capabilities" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</Name>
+    <Description>
+      TODO:
+
+    </Description>
+  </Parameters>
+  <Test ID="TC.SCHEDULE-3-1-11.01.100" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.101" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="1"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="1" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.102" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="720"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="720" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.103" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="1000"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="1000" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.104" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="false"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="false" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+  <!--warnings-->
+  <Test ID="TC.SCHEDULE-3-1-11.01.200" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response: fault code = Receiver</Name>
+    <Description>
+      WARNING
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.201" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response: fault subcode1 = CapabilityViolated1</Name>
+    <Description>
+      WARNING
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated1</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.202" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>Correct response: fault subcode2 = MaxTimePeriods</Name>
+    <Description>
+      WARNING
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriods</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+  <!--failures-->
+  <Test ID="TC.SCHEDULE-3-1-11.01.300" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>GetServices: fails</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.301" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>GetServiceCapabilities: fails</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.302" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>CreateSchedule: fails</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.303" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>DeleteSchedule: fails</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.400" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>GetServices: no response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.401" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>GetServiceCapabilities: no response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.402" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>CreateSchedule: no response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.403" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>DeleteSchedule: no response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>CapabilityViolated</Subcode>
+      <Subcode>MaxTimePeriodsPerDay</Subcode>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="TC.SCHEDULE-3-1-11.01.404" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>CreateSchedule2: no response</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+  <!--fault reply-->
+  <Test ID="TC.SCHEDULE-3-1-11.01.500" ONVIFTestID="SCHEDULE-3-1-11" Enabled="true">
+    <TestName>SCHEDULE-3-1-11-v15.06 CREATE SCHEDULE - TOO MANY TIME PERIODS PER DAY</TestName>
+    <Name>no fault</Name>
+    <Description>
+      MaxTimePeriodsPerDay="2"
+      ExtendedRecurrenceSupported="true"
+      SpecialDaysSupported="true"
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <!--GetServices-->
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/accessrules/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/credential/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceDevice10/DeviceServiceFake.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2-->
+    <Step id="2">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="2" MaxSpecialDayGroups="3" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="true" SpecialDaysSupported="true" StateReportingSupported="false" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A.2 END-->
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Schedule10.DeleteSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>testtoken1</Token>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Schedule10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Schedule token="">
+          <Name>Test Name</Name>
+          <Description>Test Description</Description>
+          <Standard>
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:Access from 9 AM to 6 PM
+            DTSTART:20150422T090000
+            DTEND:20150427T180000
+            RRULE:FREQ=DAILY
+            UID:uid
+            END:VEVENT
+            END:VCALENDAR
+          </Standard>
+        </Schedule>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>testtoken1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+</TestSuit>

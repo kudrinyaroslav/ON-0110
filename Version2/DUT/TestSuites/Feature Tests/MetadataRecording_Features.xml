@@ -1,0 +1,994 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Recording service" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>Features for Metadata Recording service</Name>
+    <Description>
+      
+    </Description>
+  </Parameters>
+  <!--GetServices: MetadataRecording features detection******************************-->
+  <Test ID = "Features.01_01" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures is supported</Name>
+    <Description>
+     DUT sends Recording with Metadata Track. DataFrom is less than DataTo
+    </Description>
+    <ExpectedResult>
+      <TestSummary> 
+        RecordingSearch: supported
+        MetadataRecording: SUPPORTED        
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>          
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>0</tt:RecordingToken>
+          <tt:Source>
+            <tt:SourceId>
+            </tt:SourceId>
+            <tt:Name>VideoSource 1</tt:Name>
+            <tt:Location>
+            </tt:Location>
+            <tt:Description>
+            </tt:Description>
+            <tt:Address>http://192.168.10.209/onvif/media_service</tt:Address>
+          </tt:Source>
+          <tt:EarliestRecording>2012-05-28T07:44:50Z</tt:EarliestRecording>
+          <tt:LatestRecording>2012-05-29T06:15:31Z</tt:LatestRecording>
+          <tt:Content>ContentDescription</tt:Content>
+          <tt:Track>
+            <tt:TrackToken>VIDEO001</tt:TrackToken>
+            <tt:TrackType>Video</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:Track>
+            <tt:TrackToken>METADADO001</tt:TrackToken>
+            <tt:TrackType>Metadata</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:RecordingStatus>Stopped</tt:RecordingStatus>
+        </RecordingInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "Features.01_02" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures is not supported-1</Name>
+    <Description>
+      DUT sends Recording with Metadata Track. 
+      DataFrom is equal to DataTo
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: supported
+        MetadataRecording: NOT SUPPORTED
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>0</tt:RecordingToken>
+          <tt:Source>
+            <tt:SourceId>
+            </tt:SourceId>
+            <tt:Name>VideoSource 1</tt:Name>
+            <tt:Location>
+            </tt:Location>
+            <tt:Description>
+            </tt:Description>
+            <tt:Address>http://192.168.10.209/onvif/media_service</tt:Address>
+          </tt:Source>
+          <tt:EarliestRecording>2012-05-28T07:44:50Z</tt:EarliestRecording>
+          <tt:LatestRecording>2012-05-29T06:15:31Z</tt:LatestRecording>
+          <tt:Content>ContentDescription</tt:Content>
+          <tt:Track>
+            <tt:TrackToken>VIDEO001</tt:TrackToken>
+            <tt:TrackType>Video</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:Track>
+            <tt:TrackToken>METADADO001</tt:TrackToken>
+            <tt:TrackType>Metadata</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-28T07:44:50Z</tt:DataTo>
+          </tt:Track>
+          <tt:RecordingStatus>Stopped</tt:RecordingStatus>
+        </RecordingInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "Features.01_03" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures is not supported-2</Name>
+    <Description>
+      DUT sends Recording with Metadata Track.
+      DataFrom is more than DataTo
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: supported
+        MetadataRecording: NOT SUPPORTED
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>0</tt:RecordingToken>
+          <tt:Source>
+            <tt:SourceId>
+            </tt:SourceId>
+            <tt:Name>VideoSource 1</tt:Name>
+            <tt:Location>
+            </tt:Location>
+            <tt:Description>
+            </tt:Description>
+            <tt:Address>http://192.168.10.209/onvif/media_service</tt:Address>
+          </tt:Source>
+          <tt:EarliestRecording>2012-05-28T07:44:50Z</tt:EarliestRecording>
+          <tt:LatestRecording>2012-05-29T06:15:31Z</tt:LatestRecording>
+          <tt:Content>ContentDescription</tt:Content>
+          <tt:Track>
+            <tt:TrackToken>VIDEO001</tt:TrackToken>
+            <tt:TrackType>Video</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:Track>
+            <tt:TrackToken>METADADO001</tt:TrackToken>
+            <tt:TrackType>Metadata</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-28T07:10:50Z</tt:DataTo>
+          </tt:Track>
+          <tt:RecordingStatus>Stopped</tt:RecordingStatus>
+        </RecordingInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "Features.01_04" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures is not supported-3</Name>
+    <Description>
+      DUT sends Recording without Metadata Track.
+   
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: supported
+        MetadataRecording: NOT SUPPORTED
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>0</tt:RecordingToken>
+          <tt:Source>
+            <tt:SourceId>
+            </tt:SourceId>
+            <tt:Name>VideoSource 1</tt:Name>
+            <tt:Location>
+            </tt:Location>
+            <tt:Description>
+            </tt:Description>
+            <tt:Address>http://192.168.10.209/onvif/media_service</tt:Address>
+          </tt:Source>
+          <tt:EarliestRecording>2012-05-28T07:44:50Z</tt:EarliestRecording>
+          <tt:LatestRecording>2012-05-29T06:15:31Z</tt:LatestRecording>
+          <tt:Content>ContentDescription</tt:Content>
+          <tt:Track>
+            <tt:TrackToken>VIDEO001</tt:TrackToken>
+            <tt:TrackType>Video</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          
+          <tt:RecordingStatus>Stopped</tt:RecordingStatus>
+        </RecordingInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "Features.01_05" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures undefined -1</Name>
+    <Description>
+      DUT sends fault to GetRecordingInformation
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: supported
+        MetadataRecording: undefined
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <RecordingInformation xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:RecordingToken>0</tt:RecordingToken>
+          <tt:Source>
+            <tt:SourceId>
+            </tt:SourceId>
+            <tt:Name>VideoSource 1</tt:Name>
+            <tt:Location>
+            </tt:Location>
+            <tt:Description>
+            </tt:Description>
+            <tt:Address>http://192.168.10.209/onvif/media_service</tt:Address>
+          </tt:Source>
+          <tt:EarliestRecording>2012-05-28T07:44:50Z</tt:EarliestRecording>
+          <tt:LatestRecording>2012-05-29T06:15:31Z</tt:LatestRecording>
+          <tt:Content>ContentDescription</tt:Content>
+          <tt:Track>
+            <tt:TrackToken>VIDEO001</tt:TrackToken>
+            <tt:TrackType>Video</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:Track>
+            <tt:TrackToken>METADADO001</tt:TrackToken>
+            <tt:TrackType>Metadata</tt:TrackType>
+            <tt:Description>
+            </tt:Description>
+            <tt:DataFrom>2012-05-28T07:44:50Z</tt:DataFrom>
+            <tt:DataTo>2012-05-29T06:15:31Z</tt:DataTo>
+          </tt:Track>
+          <tt:RecordingStatus>Stopped</tt:RecordingStatus>
+        </RecordingInformation>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "Features.01_06" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>MetadataRecording subfeatures undefined-2</Name>
+    <Description>
+      DUT sends no response to GetRecordingInformation
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: supported
+        MetadataRecording: undefined
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/search/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+
+    <Step id ="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="4"/>
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" UsernameToken="true" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3"/>
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true"/>
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>Search10.GetRecordingInformation</Command>
+      <Response>NoResponse</Response>
+    
+      <RequestParameters>
+        <RecordingToken>0</RecordingToken>
+      </RequestParameters>
+      
+    </Step>
+    <Step id ="5">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+  
+  <!--GetCapabilities: MetadataRecording features detection****************************-->
+  
+  <Test ID = "Features.02_01" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>SearchService is not supported</Name>
+    <Description>
+      MetadataSearch=true
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        RecordingSearch: NOT SUPPORTED
+        RecordingControl: SUPPORTED
+        MetadataRecording: undefined
+        Other feature request is out of scope
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>true</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>true</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>true</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>true</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>4</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/onvif/event</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging</tt:XAddr>
+          </tt:Imaging>
+
+          <tt:PTZ>
+            <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+          </tt:PTZ>
+          <tt:Extension>
+            <tt:DeviceIO>
+              <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+              <tt:VideoSources>1</tt:VideoSources>
+              <tt:VideoOutputs>1</tt:VideoOutputs>
+              <tt:AudioSources>1</tt:AudioSources>
+              <tt:AudioOutputs>1</tt:AudioOutputs>
+              <tt:RelayOutputs>4</tt:RelayOutputs>
+            </tt:DeviceIO>
+            <tt:AnalyticsDevice>
+              <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+            </tt:AnalyticsDevice>
+
+            <tt:Recording>
+              <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+              <tt:MetadataSearch>true</tt:MetadataSearch>              
+            </tt:Recording>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+
+    </Step>
+    <Step id ="3">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+  </Test>  
+  
+  
+</TestSuit>
+

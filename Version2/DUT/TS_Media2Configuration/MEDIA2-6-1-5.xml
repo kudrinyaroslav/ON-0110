@@ -1,0 +1,3379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Media Streaming" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</Name>
+    <Description>
+      Media service must be: http://localhost:17934/ServiceMedia2SVC/Media2Service.svc
+    </Description>
+  </Parameters>
+  <!--Positive tests-->
+  <Test ID = "TC.MEDIA2-6-1-5.101" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Correct respons</Name>
+    <Description>
+      Modify All Supported Audio Source Configurations
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT20S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.102" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Configuration.SourceToken in GetAudioSourceConfigurationOptions the same as current value</Name>
+    <Description>
+      Modify All Supported Audio Source Configurations
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+       <Command>CreatePullPointSubscription</Command>
+       <Response>Normal</Response>
+       <RequestParameters>
+         <Filter>
+           <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+         </Filter>
+       </RequestParameters>
+       <ResponseParameters special="3">
+         <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+           <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+           <wsa:ReferenceParameters/>
+           <wsa:Metadata/>
+         </EndpointReferenceType>
+       </ResponseParameters>
+       <ResponseParametersAdditional>
+         <CurrentTime type="now"></CurrentTime>
+         <TerminationTime differance="true">60</TerminationTime>
+       </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step> 
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step> 
+    <Step id ="6">
+       <Command>PullPointSubscriptionService10.PullMessages</Command>
+       <Response>Normal</Response>
+       <RequestParameters>
+         <Timeout>PT20S</Timeout>
+         <MessageLimit>1</MessageLimit>
+       </RequestParameters>
+       <ResponseParametersAdditional>
+         <CurrentTime type="now"></CurrentTime>
+         <TerminationTime differance="true">30</TerminationTime>
+         <TimeShift>-2000</TimeShift>
+       </ResponseParametersAdditional>
+       <ResponseParameters special="1">
+         <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+           <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+             <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+             <wsnt:Message>
+               <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                 <tt:Source>
+                   <tt:SimpleItem Name="Type" Value="AudioSource" />
+                   <tt:SimpleItem Name="Token" Value="ASC1" />
+                 </tt:Source>
+               </tt:Message>
+             </wsnt:Message>
+           </NotificationMessageHolderType>
+         </ArrayOfNotificationMessageHolderType>
+       </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+    <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+       <Response>Normal</Response>
+       <RequestParameters>
+       </RequestParameters>
+       <ResponseParameters>
+       </ResponseParameters>
+  </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.103" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Correct respons. 2 audioSourceConfiguration in audioSourceConfList</Name>
+    <Description>
+      Modify All Supported Audio Source Configurations
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>AudioSourceConfig2</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  <Step id ="9">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+       <Command>PullPointSubscriptionService10.PullMessages</Command>
+       <Response>Normal</Response>
+       <RequestParameters>
+         <Timeout>PT20S</Timeout>
+         <MessageLimit>1</MessageLimit>
+       </RequestParameters>
+       <ResponseParametersAdditional>
+         <CurrentTime type="now"></CurrentTime>
+         <TerminationTime differance="true">30</TerminationTime>
+         <TimeShift>-2000</TimeShift>
+       </ResponseParametersAdditional>
+       <ResponseParameters special="1">
+         <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+           <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+             <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+             <wsnt:Message>
+               <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                 <tt:Source>
+                   <tt:SimpleItem Name="Type" Value="AudioSource" />
+                   <tt:SimpleItem Name="Token" Value="ASC2" />
+                 </tt:Source>
+               </tt:Message>
+             </wsnt:Message>
+           </NotificationMessageHolderType>
+         </ArrayOfNotificationMessageHolderType>
+       </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig2</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="14">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.104" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Correct respons. 3 audioSourceConfiguration in audioSourceConfList</Name>
+    <Description>
+      Modify All Supported Audio Source Configurations
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>AudioSourceConfig2</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>    
+          <AudioSourceConfiguration token="ASC3">
+            <tt:Name>AudioSourceConfig3</tt:Name>
+            <tt:SourceToken>AS3</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC2" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig2</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="14">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="15">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC3"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC3" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="17">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC3</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC3">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="18">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC3"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig3</tt:Name>
+          <tt:SourceToken>AS3</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="19">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--Negative tests-->
+  <Test ID = "TC.MEDIA2-6-1-5.201" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>GetAudioSourceConfigurationsResponse is not equal to Configuration from SetAudioSourceConfiguration</Name>
+    <Description>
+      Different Name
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.202" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>GetAudioSourceConfigurationsResponse is not equal to Configuration from SetAudioSourceConfiguration</Name>
+    <Description>
+      Different SourceToken
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.203" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>GetAudioSourceConfigurations -empty token</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.204" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>GetAudioSourceConfigurationsResponse is not equal to Configuration from SetAudioSourceConfiguration</Name>
+    <Description>
+      2 ASC. Different SourceToken and name in first ASC
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>AudioSourceConfig2</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  <Step id ="9">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC2" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig2</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="14">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.205" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>GetAudioSourceConfigurationsResponse is not equal to Configuration from SetAudioSourceConfiguration</Name>
+    <Description>
+      2 ASC. Different SourceToken and name in second ASC
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>AudioSourceConfig2</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS2</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS3</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC2" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC2">
+            <tt:Name>AudioSourceConfig2</tt:Name>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC2"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig2</tt:Name>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="14">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.206" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>AudioSourceConfList is empty</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+         
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.207" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Skipped ConfigurationToken and ProfileToken in GetAudioSourceConfigurations</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <!--<tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>-->
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--Negative tests PullPoitnSubscriptions-->
+  <Test ID = "TC.MEDIA2-6-1-5.208" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Negative tests PullPoitnSubscriptions</Name>
+    <Description>
+      Skippped SimpleItem Name="Type" in PullMessages
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <!--<tt:SimpleItem Name="Type" Value="AudioSource" />-->
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.209" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Negative tests PullPoitnSubscriptions</Name>
+    <Description>
+      Skippped SimpleItem Name="Token" in PullMessages
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <!--<tt:SimpleItem Name="Token" Value="ASC1" />-->
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.209" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Negative tests PullPoitnSubscriptions</Name>
+    <Description>
+      Skippped SimpleItem Name="Token" and Name="Type" in PullMessages
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <!--<tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />-->
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MEDIA2-6-1-5.209" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name>Negative tests PullPoitnSubscriptions</Name>
+    <Description>
+      Skippped unexisted token in field Name="Token" in PullMessages
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC2" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test> <!--wrong  ASC token in pullMessages-->
+  <!--Example Failed-->
+  <Test ID = "TC.MEDIA2-6-1-5.ExampleFailed" ONVIFTestID="MEDIA2-6-1-5" Enabled="true">
+    <TestName>MODIFY ALL SUPPORTED AUDIO SOURCE CONFIGURATIONS</TestName>
+    <Name></Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>AudioSourceConfig1</tt:Name>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>    
+      </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.onvif.org/ver10/topics">tns1:Media/ConfigurationChanged</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="3">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:3246/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioSourceConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ProfileToken>Token1</ProfileToken >-->
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <ArrayOfInputTokensAvailable>
+            <tt:InputTokensAvailable>ASNew1</tt:InputTokensAvailable>
+            <tt:InputTokensAvailable>AS1</tt:InputTokensAvailable>
+          </ArrayOfInputTokensAvailable>
+        </AudioSourceConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>TestName1</tt:Name>
+          <tt:SourceToken>ASNew1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>PullPointSubscriptionService10.PullMessages</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Timeout>PT60S</Timeout>
+        <MessageLimit>1</MessageLimit>
+      </RequestParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">30</TerminationTime>
+        <TimeShift>-2000</TimeShift>
+      </ResponseParametersAdditional>
+      <ResponseParameters special="1">
+        <ArrayOfNotificationMessageHolderType xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <NotificationMessageHolderType xmlns:tns1="http://www.onvif.org/ver10/topics">
+            <wsnt:Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet">tns1:Media/ConfigurationChanged</wsnt:Topic>
+            <wsnt:Message>
+              <tt:Message UtcTime="2012-12-01T07:18:40.321" xmlns:tt="http://www.onvif.org/ver10/schema">
+                <tt:Source>
+                  <tt:SimpleItem Name="Type" Value="AudioSource" />
+                  <tt:SimpleItem Name="Token" Value="ASC1" />
+                </tt:Source>
+              </tt:Message>
+            </wsnt:Message>
+          </NotificationMessageHolderType>
+        </ArrayOfNotificationMessageHolderType>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+        <!--<ProfileToken>media_profile1</ProfileToken>-->
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1">
+            <tt:Name>TestName1</tt:Name>
+            <tt:SourceToken>ASNew1</tt:SourceToken>
+          </AudioSourceConfiguration>
+
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.SetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioSourceConfiguration token="ASC1"  xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Name>AudioSourceConfig1</tt:Name>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </RequestParameters>
+
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>PullPointSubscriptionService10.Unsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>
+
+
+

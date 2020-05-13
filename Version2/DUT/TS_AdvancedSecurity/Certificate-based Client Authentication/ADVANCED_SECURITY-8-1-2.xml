@@ -1,0 +1,940 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Management" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</Name>
+    <Description>
+      A.1 HelperDeleteRSAKeyPair
+      A.3 HelperCreateCertificateFromPKCS10CSR
+      A.4 HelperCreateCACertificate
+      A.6 HelperDetermineRSAKeyLength
+      A.7 HelperCreateRSAKeyPair
+      A.8 HelperCreateSelfSignedCertificate
+      A.9 HelperDeleteCertWithKey
+      A.10 HelperGetServiceCapabilities
+      A.14 HelperCreateCASignedCertificate
+      A.15 HelperUploadCertificate
+      A.16 HelperUploadCASignedCertificate
+      A.17 HelperDeleteCertificationPath2
+      A.18 HelperCreateCertificationPath_CACertificates
+      A.23 HelperDeletePassphrase
+      A.24 NO ID
+      A.37 HelperCreateCRL
+      A.38 HelperDeleteCRL
+      A.39 HelperUploadCRL
+      A.40 HelperDeleteCertPathValidationPolicy
+      A.41 HelperPrepareCertificate
+      A.46 HelperUploadPassphrase
+      A.47 HelperDeleteDot1XConfiguration
+    </Description>
+  </Parameters>
+  <!--Valid-->
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.100" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      The DUT sends all correct responses
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <CRL>
+            <tas:CRLID>crlID0</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test0</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID11</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID2</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test1</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.101" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Correct response: empty list</Name>
+    <Description>
+      The DUT sends all correct responses
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <!--Invalid-->
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.200" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Incalid response: GetAllCRLsResponse contains removed item</Name>
+    <Description>
+      9.	If crlList contains crlID, FAIL the test.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <CRL>
+            <tas:CRLID>crlID0</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test0</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID1</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID2</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test1</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <!--Fault-->
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.300" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Fault response: DeleteCRL</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.301" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Fault response: GetAllCRLs</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <CRL>
+            <tas:CRLID>crlID0</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test0</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID11</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID2</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test1</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.302" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Fault response: UploadCRL</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.303" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>Fault response: GetServices</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--No response-->
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.400" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>No response: DeleteCRL</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.401" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>No response: GetAllCRLs</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+    <!--TEST BODY-->
+    <Step id ="3">
+      <Command>AdvancedSecurity10.DeleteCRL</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CrlID>crlID1</CrlID>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <CRL>
+            <tas:CRLID>crlID0</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test0</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID11</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID2</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test1</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.GetAllCRLs</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfCRL xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <CRL>
+            <tas:CRLID>crlID0</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test0</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID11</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+          <CRL>
+            <tas:CRLID>crlID2</tas:CRLID>
+            <tas:Alias>ONVIF_CRL_Test1</tas:Alias>
+            <tas:CRLContent>oLdM=</tas:CRLContent>
+          </CRL>
+        </ArrayOfCRL>
+      </ResponseParameters>
+    </Step>
+    <!--END TEST BODY-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.402" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>No response: UploadCRL</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--INTERNAL Annex A.37-->
+    <!--Annex A.39-->
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.UploadCRL</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Alias>ONVIF_CRL_Test</Alias>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>crlID1</string>
+      </ResponseParameters>
+    </Step>
+    <!--END Annex A.39-->
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-8-1-2.403" ONVIFTestID="ADVANCED_SECURITY-8-1-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-8-1-2-v15.06 Delete CRL</TestName>
+    <Name>No response: GetServices</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetServices</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>
+

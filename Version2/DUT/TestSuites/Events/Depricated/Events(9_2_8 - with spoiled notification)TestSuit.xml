@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>9.2.8 NVT BASIC NOTIFICATION INTERFACE - NOTIFY FILTER</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.EV.BNI.9_2_8.01" ONVIFTestID="9.2.8" Enabled="true">
+    <TestName>NVT BASIC NOTIFICATION INTERFACE - NOTIFY FILTER</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check NVT BASIC NOTIFICATION INTERFACE - NOTIFY FILTER test
+      when DUT return Correct response.
+      (With Date and Time synchronization)
+      (With spoiled Notification)
+    </Description>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:1305/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+          <tns1:VideoSource wstop:topic="true">
+            <tnsaxis:Tampering wstop:topic="true">
+              <tt:MessageDescription  IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItem Name="channel" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="tampering" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:Tampering>
+          </tns1:VideoSource>
+          <tns1:Device wstop:topic="true">
+            <tnsaxis:IO wstop:topic="true">
+              <VirtualPort wstop:topic="true">
+                <tt:MessageDescription>
+                  <tt:Source>
+                    <tt:SimpleItem Name="port" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItem Name="state" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </VirtualPort>
+              <Port wstop:topic="true">
+                <tt:MessageDescription>
+                  <tt:Source>
+                    <tt:SimpleItem Name="port" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItem Name="state" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Port>
+            </tnsaxis:IO>
+          </tns1:Device>
+          <tns1:VideoAnalytics wstop:topic="true">
+            <tnsaxis:MotionDetection wstop:topic="true">
+              <tt:MessageDescription>
+                <tt:Source>
+                  <tt:SimpleItem Name="window" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="motion" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:MotionDetection>
+          </tns1:VideoAnalytics>
+          <tns1:AudioSource wstop:topic="true">
+            <tnsaxis:TriggerLevel wstop:topic="true">
+              <tt:MessageDescription>
+                <tt:Source>
+                  <tt:SimpleItem Name="channel" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="triggered" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:TriggerLevel>
+          </tns1:AudioSource>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Address>http://192.168.10.66:8080/onvif_notify_server/</Address>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.axis.com/2009/event/topics">tns1:Tampering</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="6">
+      <Command>PMSSetSynchronizationPoint</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+      <Notification>
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:ax="http://www.axis.com/2009/event/topics">ax:Tampering</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <MessageATTENTION_FOR_INCORRECT_TAG xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="VideoSourceConfigurationToken" Value="1"/>
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="VideoAnalyticsConfigurationToken" Value="2"/>
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Value="MyImportantFence1" Name="Rule"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ObjectId" Value="15" />
+            </Data>
+          </MessageATTENTION_FOR_INCORRECT_TAG>
+        </Message>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="7">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.9_2_8.02" ONVIFTestID="9.2.8" Enabled="true">
+    <TestName>NVT BASIC NOTIFICATION INTERFACE - NOTIFY FILTER</TestName>
+    <Name>Hikvision: 10505</Name>
+    <Description>
+      From: yuxh [mailto:yuxh@hikvision.com]
+      Sent: Friday, February 11, 2011 3:11 PM
+      To: Anna Tarasova
+      Cc: Alexander Ryltsov
+      Subject: another problem
+
+      In DUT code in EventService.asmx for GetEventProperties uncomment string for XmlReplySubstituteExtension marked for this bug.
+    </Description>
+    <ExpectedResult>
+      No internal exception.
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:1305/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics"
+                      xmlns:tnsaxis="http://www.axis.com/2009/event/topics"
+                      xmlns:tt="http://www.onvif.org/ver10/schema"
+                      xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+          <tns1:VideoSource wstop:topic="true">
+            <tnsaxis:Tampering wstop:topic="true">
+              <tt:MessageDescription  IsProperty="true">
+                <tt:Source>
+                  <tt:SimpleItem Name="channel" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="tampering" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:Tampering>
+          </tns1:VideoSource>
+          <tns1:Device wstop:topic="true">
+            <tnsaxis:IO wstop:topic="true">
+              <VirtualPort wstop:topic="true">
+                <tt:MessageDescription>
+                  <tt:Source>
+                    <tt:SimpleItem Name="port" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItem Name="state" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </VirtualPort>
+              <Port wstop:topic="true">
+                <tt:MessageDescription>
+                  <tt:Source>
+                    <tt:SimpleItem Name="port" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Source>
+                  <tt:Data>
+                    <tt:SimpleItem Name="state" Type="xsd:int">
+                    </tt:SimpleItem>
+                  </tt:Data>
+                </tt:MessageDescription>
+              </Port>
+            </tnsaxis:IO>
+          </tns1:Device>
+          <tns1:VideoAnalytics wstop:topic="true">
+            <tnsaxis:MotionDetection wstop:topic="true">
+              <tt:MessageDescription>
+                <tt:Source>
+                  <tt:SimpleItem Name="window" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="motion" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:MotionDetection>
+          </tns1:VideoAnalytics>
+          <tns1:AudioSource wstop:topic="true">
+            <tnsaxis:TriggerLevel wstop:topic="true">
+              <tt:MessageDescription>
+                <tt:Source>
+                  <tt:SimpleItem Name="channel" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Source>
+                <tt:Data>
+                  <tt:SimpleItem Name="triggered" Type="xsd:int">
+                  </tt:SimpleItem>
+                </tt:Data>
+              </tt:MessageDescription>
+            </tnsaxis:TriggerLevel>
+          </tns1:AudioSource>
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT60S</InitialTerminationTime>
+        <Address>http://192.168.10.66:8080/onvif_notify_server/</Address>
+        <Filter>
+          <![CDATA[<wsnt:TopicExpression Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:tns1="http://www.axis.com/2009/event/topics">tns1:Tampering</wsnt:TopicExpression>]]>
+        </Filter>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">60</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>PMSSetSynchronizationPoint</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+      <Notification address="http://192.168.10.66:8080/onvif_notify_server/">
+        <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Envelope
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <Body>
+    <Notify
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://docs.oasis-open.org/wsn/b-2">
+      <NotificationMessage xmlns="http://docs.oasis-open.org/wsn/b-2">
+        <SubscriptionReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </SubscriptionReference>
+        <Topic Dialect="http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet" xmlns:ax="http://www.axis.com/2009/event/topics">ax:Tampering</Topic>
+        <Message xmlns="http://docs.oasis-open.org/wsn/b-2" >
+          <Message xmlns="http://www.onvif.org/ver10/schema" UtcTime="2008-10-10T12:24:57.321" PropertyOperation="Initialized">
+            <Source xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="VideoSourceConfigurationToken" Value="1"/>
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="VideoAnalyticsConfigurationToken" Value="2"/>
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Value="MyImportantFence1" Name="Rule"/>
+            </Source>
+            <Data xmlns="http://www.onvif.org/ver10/schema">
+              <SimpleItem xmlns="http://www.onvif.org/ver10/schema" Name="ObjectId" Value="15" />
+            </Data>
+          </Message>
+        </Message>
+        <ProducerReference>
+          <Address xmlns="http://www.w3.org/2005/08/addressing">http://192.168.10.79</Address>
+          <ReferenceParameters xmlns="http://www.w3.org/2005/08/addressing" />
+          <Metadata xmlns="http://www.w3.org/2005/08/addressing" />
+        </ProducerReference>
+      </NotificationMessage>
+    </Notify>
+  </Body>
+</Envelope>]]>
+      </Notification>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

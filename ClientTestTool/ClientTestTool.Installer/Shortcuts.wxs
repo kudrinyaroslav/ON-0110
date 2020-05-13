@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    
+    <?include Variables.wxi?>
+    
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcutCTT" Guid="4CEBD68F-E933-47f9-B02C-A4FC69FDB551">
+        
+        <Shortcut Id="ShortcutCTT"
+                  Name="$(var.Manufacturer) $(var.ProductName)"
+                  Description="$(var.ProductName)"
+                  Target="[INSTALLLOCATION]ClientTestTool.exe"
+                  WorkingDirectory="INSTALLLOCATION"/>
+
+        <Shortcut Id="UninstallProduct"
+                  Name="Uninstall My Application"
+                  Target="[SystemFolder]msiexec.exe"
+                  Arguments="/x [ProductCode]"
+                  Description="Uninstalls My Application" />
+        
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="$(var.DesktopShortcutGuid)">
+        <Shortcut Id="AppDesktopShortcut" Name="$(var.Manufacturer) $(var.ProductName)" Target="[INSTALLLOCATION]ClientTestTool.exe"  WorkingDirectory="INSTALLLOCATION" />
+        <RegistryValue Root="HKCU" Key="$(var.SoftwareRegKey)" Type="string" Value="" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

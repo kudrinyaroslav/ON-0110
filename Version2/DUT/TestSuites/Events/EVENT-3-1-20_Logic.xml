@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>EVENT-3-1-20 REALTIME PULLPOINT SUBSCRIPTION - TIMEOUT</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.EVENT-3-1-20.01" ONVIFTestID="EVENT-3-1-20" Enabled="true">
+    <TestName>REALTIME PULLPOINT SUBSCRIPTION - TIMEOUT</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check REALTIME PULLPOINT SUBSCRIPTION - TIMEOUT test
+      when DUT return Correct response.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        <![CDATA[
+        EVENT-3-1-20 REALTIME PULLPOINT SUBSCRIPTION - TIMEOUT
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Create Pull Point Subsciption
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 4 - Validate times
+   STEP PASSED
+
+   STEP 5 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 6 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 7 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 8 - Wait until subscription expires
+   STEP PASSED
+
+   STEP 9 - Renew - negative test
+      Transmit done
+      Receive done
+      SOAP fault returned
+      Code: Sender
+      Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+         at DUT.CameraWebService.Events10.SubscriptionManagerService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\SubscriptionManagerService.asmx.cs:line 72
+         at DUT.CameraWebService.Events10.SubscriptionManagerService.Renew(Renew Renew1) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\SubscriptionManagerService.asmx.cs:line 100
+      Validate fault...
+      Warning: Fault received is neither of type FaultException<ResourceUnknownFaultType> nor FaultException<UnableToDestroySubscriptionFaultType>
+   STEP PASSED
+
+   STEP 10 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+      Failed to unsubscribe through request. Error received: System.Web.Services.Protocols.SoapException: Server was unable to process request. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at DUT.CameraWebService.TestCommon.GenerateResponseStepTypeVoid(XmlNode test, SoapException& ex, Int32& Timeout) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\TestCommon.cs:line 532
+   at DUT.CameraWebService.Events10.EventServiceTest.SMSUnsubscribeTest(UnsubscribeResponse& target, SoapException& ex, Int32& timeOut, Unsubscribe Unsubscribe1) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\EventServiceTest.cs:line 248
+   at DUT.CameraWebService.Events10.SubscriptionManagerService.Unsubscribe(Unsubscribe Unsubscribe1) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceEvents10\SubscriptionManagerService.asmx.cs:line 118
+   --- End of inner exception stack trace ---
+      Wait until Subscription Manager is deleted by timeout
+   STEP PASSED
+
+TEST PASSED
+        ]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://localhost:11569/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>CreatePullPointSubscription</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT20S</InitialTerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <EndpointReferenceType xmlns:wsa="http://www.w3.org/2005/08/addressing">
+          <wsa:Address>http://localhost:1305/SubscriptionManagerService.asmx</wsa:Address>
+          <wsa:ReferenceParameters/>
+          <wsa:Metadata/>
+        </EndpointReferenceType>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">20</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <Code>Sender</Code>
+      <Details>
+        <soap:Detail xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+          <ResourceUnknownFault xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd">
+            <Timestamp xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">1900-01-01T01:01:01+03:00</Timestamp>
+            <Originator p2:any_Attr="anySimpleType" xmlns:p2="otherNS" xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">
+              <Address p2:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri1</Address>
+              <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+              <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+              <PortType p2:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname1</PortType>
+              <ServiceName p2:any_Attr="anySimpleType" PortName="NcName1" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname1</ServiceName>
+            </Originator>
+            <ErrorCode p2:any_Attr="anySimpleType" dialect="http://uri1" xmlns:p2="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd" />
+            <Description xml:lang="en" xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">Description1</Description>
+            <Description xml:lang="en" xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">Description2</Description>
+            <Description xml:lang="fr" xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">Description3</Description>
+            <FaultCause xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">
+              <Timestamp>1900-01-01T01:01:01+03:00</Timestamp>
+              <Originator p3:any_Attr="anySimpleType" xmlns:p3="otherNS">
+                <Address p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri2</Address>
+                <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <PortType p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname2</PortType>
+                <ServiceName p3:any_Attr="anySimpleType" PortName="NcName2" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname2</ServiceName>
+              </Originator>
+              <ErrorCode p3:any_Attr="anySimpleType" dialect="http://uri2" xmlns:p3="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+              <Description xml:lang="en">Description4</Description>
+              <Description xml:lang="de">Description5</Description>
+              <Description xml:lang="en">Description6</Description>
+              <FaultCause>
+                <Timestamp>0001-01-01T00:00:00+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri3</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname3</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName3" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname3</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri3" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="da">Description7</Description>
+                <Description xml:lang="en">Description8</Description>
+                <Description xml:lang="el">Description9</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>9999-12-31T23:59:59.9999999+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri4</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname4</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName4" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname4</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri4" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="en">Description10</Description>
+                <Description xml:lang="it">Description11</Description>
+                <Description xml:lang="en">Description12</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>1899-11-30T01:01:01+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri5</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname5</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName5" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname5</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri5" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="en-US">Description13</Description>
+                <Description xml:lang="en">Description14</Description>
+                <Description xml:lang="en">Description15</Description>
+              </FaultCause>
+            </FaultCause>
+            <FaultCause xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">
+              <Timestamp>1900-02-02T01:01:01+03:00</Timestamp>
+              <Originator p3:any_Attr="anySimpleType" xmlns:p3="otherNS">
+                <Address p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri6</Address>
+                <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <PortType p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname6</PortType>
+                <ServiceName p3:any_Attr="anySimpleType" PortName="NcName6" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname6</ServiceName>
+              </Originator>
+              <ErrorCode p3:any_Attr="anySimpleType" dialect="http://uri6" xmlns:p3="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+              <Description xml:lang="en">Description16</Description>
+              <Description xml:lang="fr">Description17</Description>
+              <Description xml:lang="en">Description18</Description>
+              <FaultCause>
+                <Timestamp>0001-02-02T00:00:00+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri7</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname7</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName7" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname7</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri7" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="de">Description19</Description>
+                <Description xml:lang="en">Description20</Description>
+                <Description xml:lang="da">Description21</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>9999-11-29T23:59:59.9999999+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri8</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname8</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName8" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname8</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri8" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="en">Description22</Description>
+                <Description xml:lang="el">Description23</Description>
+                <Description xml:lang="en">Description24</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>1899-10-29T01:01:01+04:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri9</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname9</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName9" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname9</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri9" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="it">Description25</Description>
+                <Description xml:lang="en">Description26</Description>
+                <Description xml:lang="en-US">Description27</Description>
+              </FaultCause>
+            </FaultCause>
+            <FaultCause xmlns="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-BaseFaults-1.2-draft-04.xsd">
+              <Timestamp>1900-03-06T01:01:01+03:00</Timestamp>
+              <Originator p3:any_Attr="anySimpleType" xmlns:p3="otherNS">
+                <Address p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri10</Address>
+                <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                <PortType p3:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname10</PortType>
+                <ServiceName p3:any_Attr="anySimpleType" PortName="NcName10" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname10</ServiceName>
+              </Originator>
+              <ErrorCode p3:any_Attr="anySimpleType" dialect="http://uri10" xmlns:p3="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+              <Description xml:lang="en">Description28</Description>
+              <Description xml:lang="en">Description29</Description>
+              <Description xml:lang="en">Description30</Description>
+              <FaultCause>
+                <Timestamp>0001-03-06T00:00:00+03:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri11</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname11</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName11" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname11</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri11" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="fr">Description31</Description>
+                <Description xml:lang="en">Description32</Description>
+                <Description xml:lang="de">Description33</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>9999-10-28T23:59:59.9999999+04:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri12</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname12</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName12" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname12</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri12" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="en">Description34</Description>
+                <Description xml:lang="da">Description35</Description>
+                <Description xml:lang="en">Description36</Description>
+              </FaultCause>
+              <FaultCause>
+                <Timestamp>1899-09-27T01:01:01+04:00</Timestamp>
+                <Originator p4:any_Attr="anySimpleType" xmlns:p4="otherNS">
+                  <Address p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">http://uri13</Address>
+                  <ReferenceProperties xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <ReferenceParameters xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+                  <PortType p4:any_Attr="anySimpleType" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname13</PortType>
+                  <ServiceName p4:any_Attr="anySimpleType" PortName="NcName13" xmlns="http://schemas.xmlsoap.org/ws/2004/08/addressing">qname13</ServiceName>
+                </Originator>
+                <ErrorCode p4:any_Attr="anySimpleType" dialect="http://uri13" xmlns:p4="http://docs.oasis-open.org/wsrf/2005/03/wsrf-WS-Resource-1.2-draft-03.xsd" />
+                <Description xml:lang="el">Description37</Description>
+                <Description xml:lang="en">Description38</Description>
+                <Description xml:lang="it">Description39</Description>
+              </FaultCause>
+            </FaultCause>
+          </ResourceUnknownFault>
+        </soap:Detail>
+      </Details>
+    </Step>
+  </Test>
+</TestSuit>

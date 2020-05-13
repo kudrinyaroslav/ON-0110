@@ -1,0 +1,2046 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Features" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>Schedule Service Features</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <!--GetServices: schedule Security service detection******************************-->
+  <Test ID="Features.01_01" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There in no Schedule Security service</Name>
+    <Description>
+      DUT sends GetServices response without Security service
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        Schedule Security service: NOT SUPPORTED
+        Schedule Security subfeatures: NOT SUPPORTED
+        Other feature request is out of scope
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>true</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>true</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>true</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>true</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>4</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+
+
+
+
+          <tt:Extension>
+
+
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl1</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id="6">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_02" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There in Schedule Security service (all features supported)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (all features supported)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="1" SpecialDaysSupported="true" StateReportingSupported="1" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_03" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There in Schedule Security service (only ExtendedRecurrenceSupported is supported)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (only ExtendedRecurrenceSupported is supported)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="1" SpecialDaysSupported="0" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_04" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There is Schedule Security service (only SpecialDaysSupported is supported)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (only SpecialDaysSupported is supported)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="1" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_05" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There is Schedule Security service (only StateReportingSupported is supported)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (only StateReportingSupported is supported)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="0" StateReportingSupported="1" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_06" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There is Schedule Security service (nothing is supported)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (nothing is supported)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="0" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_07" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There is Schedule Security service (fault on GetServiceCapabilities)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (fault on GetServiceCapabilities)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="0" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID="Features.01_08" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>There is Schedule Security service (no response on GetServiceCapabilities)</Name>
+    <Description>
+      DUT sends GetServices response with Schedule service (no response on GetServiceCapabilities)
+
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Extension>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/schedule/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost:17934/ServiceCredential10/CredentialService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security UsernameToken="true" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="4">
+      <Command>Event10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Capabilities MaxNotificationProducers="3" PersistentNotificationStorage="true" />
+      </ResponseParameters>
+    </Step>
+    <Step id="5">
+      <Command>GetEventProperties</Command>
+      <Response>Normal</Response>
+      <ResponseParameters name="TopicNamespaceLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/onvif/ver10/topics/topicns.xml</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="FixedTopicSet">
+        <boolean>false</boolean>
+      </ResponseParameters>
+      <ResponseParameters name="TopicSet">
+        <TopicSetType xmlns:tns1="http://www.onvif.org/ver10/topics" xmlns:tnsaxis="http://www.axis.com/2009/event/topics" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+        </TopicSetType>
+      </ResponseParameters>
+      <ResponseParameters name="TopicExpressionDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet</string>
+          <string>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentFilterDialect">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter</string>
+        </ArrayOfString>
+      </ResponseParameters>
+      <ResponseParameters name="MessageContentSchemaLocation">
+        <ArrayOfString>
+          <string>http://www.onvif.org/ver10/schema/onvif.xsd</string>
+        </ArrayOfString>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="0" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Schedule10.GetServiceCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <ServiceCapabilities MaxLimit="3" MaxSchedules="3" MaxTimePeriodsPerDay="10" MaxSpecialDayGroups="2" MaxDaysInSpecialDayGroup="1" MaxSpecialDaysSchedules="1" ExtendedRecurrenceSupported="0" SpecialDaysSupported="0" StateReportingSupported="0" xmlns:tcr="http://www.onvif.org/ver10/schedule/wsdl">
+        </ServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+    <Step id="9">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--GetCapabilities only: Advanced Security service detection***********************-->
+  <Test ID="Features.02_01" ONVIFTestID="FEATURES" Enabled="true">
+    <TestName>FEATURES</TestName>
+    <Name>GetSevices not supported</Name>
+    <Description>
+      Schedule service: NOT SUPPORETD
+      Schedule subfeatures: NOT SUPPORETD
+      Other feature request is out of scope
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>false</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>false</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>false</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>false</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>0</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/onvif/event</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+
+          <tt:Extension>
+
+
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServices</Command>
+      <Response>Fault</Response>
+      <Code>Reciever</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <RequestParameters>
+      </RequestParameters>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+
+    </Step>
+
+
+
+    <Step id="4">
+      <Command>Device10.GetScopes</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfScope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/ptz</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/f040b8ff-99fd-4a53-b96c-3a5e0d79bfb8</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/audio_encoder</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/hardware/P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/name/AXIS%20P3343</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Configurable</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/location/city/NewCity</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Transmitter</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Analytic</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Storage</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/Network_Video_Display</tt:ScopeItem>
+          </Scope>
+          <Scope xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:ScopeDef>Fixed</tt:ScopeDef>
+            <tt:ScopeItem>onvif://www.onvif.org/type/video_analytics</tt:ScopeItem>
+          </Scope>
+        </ArrayOfScope>
+      </ResponseParameters>
+    </Step>
+
+
+    <Step id="5">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>BOSCH</Manufacturer>
+        <Model>NBC-255-P</Model>
+        <FirmwareVersion>09500453</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>F0002041</HardwareId>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+</TestSuit>

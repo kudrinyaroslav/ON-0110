@@ -1,0 +1,1118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="./onvif-wsdl-viewer.xsl"?>
+<!--
+Copyright (c) 2010-2011 by ONVIF: Open Network Video Interface Forum. All rights reserved.
+PRELIMINARY and CONFIDENTIAL - under NDA (Non-Disclosure Agreement) or subject to ONVIF PACS license.
+
+THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND
+THEIR AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE;
+THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY PURPOSE;
+OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE
+FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL
+DAMAGES, ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS
+DOCUMENT, WHETHER OR NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES
+HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES
+WERE REASONABLY FORESEEABLE, AND ARISING OUT OF OR RELATING TO ANY USE OR
+DISTRIBUTION OF THIS DOCUMENT.
+THE FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO,
+INVALIDATE, OR LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS
+AND THEIR RESPECTIVE AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN
+CERTAIN WRITTEN POLICIES OF THE CORPORATION.
+-->
+<wsdl:definitions 
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:tsc="http://www.onvif.org/ver10/schedule/wsdl" name="ScheduleService" targetNamespace="http://www.onvif.org/ver10/schedule/wsdl">
+	<!-- The data types definition for the 'Schedule Service' -->
+	<wsdl:types>
+		<xs:schema targetNamespace="http://www.onvif.org/ver10/schedule/wsdl"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pt="http://www.onvif.org/ver10/pacs" 
+		xmlns:tsc="http://www.onvif.org/ver10/schedule/wsdl" elementFormDefault="qualified" version="1.0">
+			<xs:import namespace="http://www.onvif.org/ver10/pacs" schemaLocation="types.xsd"/>			
+			<!--ServiceCapabilities definitions-->
+			<xs:complexType name="ServiceCapabilities">
+				<xs:annotation>
+					<xs:documentation>
+						The service capabilities reflect optional functionality of a service.
+						The information is static and does not change during device operation.
+						The following capabilities are available:
+					</xs:documentation>
+				</xs:annotation>
+				<xs:attribute name="MaxLimit" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum number of entries returned by a single GetList request. 
+							The device shall never return more than this number of entities in a single response.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxSchedules" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum  number of schedules the device supports. 
+							The device shall support at least one schedule.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxTimePeriodsPerDay" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum  number of time periods per day the device supports in a schedule including special day schedule. 
+							The device shall support at least one time period per day.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxSpecialDayGroups" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum  number of "SpecialDayGroup" entity the device supports. 
+							The value zero indicates that the device doesn't support "SpecialDayGroup" entity.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxDaysInSpecialDayGroup" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum  number of days per "SpecialDayGroup" entity the device supports.
+							The device shall support at least one day per "SpecialDayGroup" entity.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxSpecialDaysSchedules" type="pt:PositiveInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum  number of  "SpecialDays" entities referred to by a schedule that the device supports.
+							The device shall support at least one day per "SpecialDays" entity.	
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ExtendedRecurrenceSupported" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							If true, the device supports the concept of dates in defining recurrence or non-recurring schedules. 
+							If this capability is not supported, device can not support non-recurring schedules 
+							and will use the date value as 1970-01-01 within recurring schedules.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="SpecialDaysSupported" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>							
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="StateReportingSupported" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							If true, the device shall be able to provide the schedule's state
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:complexType name="ServiceCapabilitiesExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--ScheduleInfo definitions-->
+			<xs:complexType name="ScheduleInfo">
+				<xs:annotation>
+					<xs:documentation>
+						The ScheduleInfo type represents the schedule as a logical object. 
+						The structure contains basic information of a specific schedule instance.
+						Design points: To support lazy loading in get request, ScheduleInfo is a subset of the Schedule type.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="pt:DataEntity">
+						<xs:sequence>
+							<xs:element name="Name" type="pt:Name">
+								<xs:annotation>
+									<xs:documentation></xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Description" type="pt:Description" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Optional user readable description for the AccessProfile. It shall be up to 1024 characters.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--Schedule definitions-->
+			<xs:complexType name="Schedule">
+				<xs:annotation>
+					<xs:documentation>
+						A set of time periods, e.g. working hours (weekdays from 8 AM to 6 PM). It may also include one or more special days schedules. 
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tsc:ScheduleInfo">
+						<xs:sequence>
+							<xs:element name="Standard" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>iCal representation</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SpecialDays" type="tsc:SpecialDaysSchedule" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation></xs:documentation>
+								</xs:annotation>
+							</xs:element>	
+							<xs:element name="Extension" type="tsc:ScheduleExtension" minOccurs="0"/>							
+						</xs:sequence>
+						<xs:anyAttribute processContents="lax"/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ScheduleExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--SpecialDaysSchedule definitions-->
+			<xs:complexType name="SpecialDaysSchedule">
+				<xs:annotation>
+					<xs:documentation>
+						A Schedule that defines time periods for a special days entity. 
+					</xs:documentation>
+				</xs:annotation>				
+				<xs:sequence>
+					<xs:element name="GroupToken" type="pt:ReferenceToken">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TimeRange" type="tsc:TimePeriod" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>No time period definition means "No Access"</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Extension" type="tsc:SpecialDaysScheduleExtension" minOccurs="0"/>					
+				</xs:sequence>	
+				<xs:anyAttribute processContents="lax"/>				
+			</xs:complexType>
+			<xs:complexType name="SpecialDaysScheduleExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!-- ScheduleState definitions-->
+			<xs:complexType name="ScheduleState">
+				<xs:annotation>
+					<xs:documentation>						
+					</xs:documentation>
+				</xs:annotation>							
+				<xs:sequence>
+					<xs:element name="Active" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SpecialDay" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Extension" type="tsc:ScheduleStateExtension" minOccurs="0"/>	
+				</xs:sequence>	
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:complexType name="ScheduleStateExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--TimePeriod definitions-->
+			<xs:complexType name="TimePeriod">
+				<xs:annotation>
+					<xs:documentation>
+						For full day access, start time = 00-00-00  with no defined end time.
+						For a time period with no end time, the schedule runs till midnight
+						End time is always greater than start time if not throw error						
+					</xs:documentation>
+				</xs:annotation>							
+				<xs:sequence>
+					<xs:element name="From" type="xs:time">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Until" type="xs:time" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Extension" type="tsc:TimePeriodExtension" minOccurs="0"/>	
+				</xs:sequence>	
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:complexType name="TimePeriodExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--SpecialDaysInfo definitions-->
+			<xs:complexType name="SpecialDayGroupInfo">
+				<xs:annotation>
+					<xs:documentation>
+						The SpecialDaysInfo type represents the special day as a logical object. 
+						The structure contains basic information of a specific special day instance.
+						Design points: To support lazy loading in get request, SpecialDaysInfo is a subset of the SpecialDays type.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="pt:DataEntity">
+						<xs:sequence>
+							<xs:element name="Name" type="pt:Name">
+								<xs:annotation>
+									<xs:documentation></xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Description" type="pt:Description" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Optional user readable description for the AccessProfile. It shall be up to 1024 characters.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>						
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--SpecialDays definitions-->
+			<xs:complexType name="SpecialDayGroup">
+				<xs:annotation>
+					<xs:documentation>
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tsc:SpecialDayGroupInfo">
+						<xs:sequence>
+							<xs:element name="Days" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>iCal representation</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Extension" type="tsc:SpecialDayGroupExtension" minOccurs="0"/>
+						</xs:sequence>
+						<xs:anyAttribute processContents="lax"/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="SpecialDayGroupExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!-- #################-->
+			<!-- Message request / response elements-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tsc:ServiceCapabilities">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the Schedule service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleState">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of a schedule item to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleStateResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ScheduleState" type="tsc:ScheduleState"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of ScheduleInfo items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ScheduleInfo" type="tsc:ScheduleInfo" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleInfoList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleInfoListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ScheduleInfo" type="tsc:ScheduleInfo" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of ScheduleInfo items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSchedules">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken"  minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of Schedule items to get</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSchedulesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Schedule" type="tsc:Schedule" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetScheduleListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Schedule" type="tsc:Schedule" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of Schedule items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="CreateSchedule">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Schedule" type="tsc:Schedule" minOccurs="1">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="CreateScheduleResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of an Schedule item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="ModifySchedule">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Schedule" type="tsc:Schedule" minOccurs="1">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="ModifyScheduleResponse">
+				<xs:complexType>
+					<xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="DeleteSchedule">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Token of an Schedule item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteScheduleResponse">
+				<xs:complexType>					
+					<xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of SpecialDayGroupInfo items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SpecialDayGroupInfo" type="tsc:SpecialDayGroupInfo" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupInfoList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupInfoListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SpecialDayGroupInfo" type="tsc:SpecialDayGroupInfo" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of SpecialDayGroupInfo items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroups">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of SpecialDayGroup items to get</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SpecialDayGroup" type="tsc:SpecialDayGroup" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetSpecialDayGroupListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SpecialDayGroup" type="tsc:SpecialDayGroup" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of SpecialDayGroup items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="CreateSpecialDayGroup">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SpecialDayGroup" type="tsc:SpecialDayGroup" minOccurs="1">
+							<xs:annotation>
+								<xs:documentation></xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="CreateSpecialDayGroupResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Token of an SpecialDayGroup item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>		
+			<!--===============================-->
+			<xs:element name="ModifySpecialDayGroup">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SpecialDayGroup" type="tsc:SpecialDayGroup" minOccurs="1">
+							<xs:annotation>
+								<xs:documentation></xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="ModifySpecialDayGroupResponse">
+				<xs:complexType>
+					<xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>		
+			<!--===============================-->
+			<xs:element name="DeleteSpecialDayGroup">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of an SpecialDayGroup item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteSpecialDayGroupResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<!-- #################-->
+		</xs:schema>
+	</wsdl:types>
+	<!--Definition of 'GetServiceCapabilities' message-->
+	<wsdl:message name="GetServiceCapabilitiesRequest">
+		<wsdl:part name="parameters" element="tsc:GetServiceCapabilities"/>
+	</wsdl:message>
+	<wsdl:message name="GetServiceCapabilitiesResponse">
+		<wsdl:part name="parameters" element="tsc:GetServiceCapabilitiesResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetScheduleState' message-->
+	<wsdl:message name="GetScheduleStateRequest">
+		<wsdl:part name="parameters" element="tsc:GetScheduleState"/>
+	</wsdl:message>
+	<wsdl:message name="GetScheduleStateResponse">
+		<wsdl:part name="parameters" element="tsc:GetScheduleStateResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetScheduleInfo' message-->
+	<wsdl:message name="GetScheduleInfoRequest">
+		<wsdl:part name="parameters" element="tsc:GetScheduleInfo"/>
+	</wsdl:message>
+	<wsdl:message name="GetScheduleInfoResponse">
+		<wsdl:part name="parameters" element="tsc:GetScheduleInfoResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetScheduleInfoList' message-->
+	<wsdl:message name="GetScheduleInfoListRequest">
+		<wsdl:part name="parameters" element="tsc:GetScheduleInfoList"/>
+	</wsdl:message>
+	<wsdl:message name="GetScheduleInfoListResponse">
+		<wsdl:part name="parameters" element="tsc:GetScheduleInfoListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetSchedules' message-->
+	<wsdl:message name="GetSchedulesRequest">
+		<wsdl:part name="parameters" element="tsc:GetSchedules"/>
+	</wsdl:message>
+	<wsdl:message name="GetSchedulesResponse">
+		<wsdl:part name="parameters" element="tsc:GetSchedulesResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetScheduleList' message-->
+	<wsdl:message name="GetScheduleListRequest">
+		<wsdl:part name="parameters" element="tsc:GetScheduleList"/>
+	</wsdl:message>
+	<wsdl:message name="GetScheduleListResponse">
+		<wsdl:part name="parameters" element="tsc:GetScheduleListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'CreateSchedule' message-->
+	<wsdl:message name="CreateScheduleRequest">
+		<wsdl:part name="parameters" element="tsc:CreateSchedule"/>
+	</wsdl:message>
+	<wsdl:message name="CreateScheduleResponse">
+		<wsdl:part name="parameters" element="tsc:CreateScheduleResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'ModifySchedule' message-->
+	<wsdl:message name="ModifyScheduleRequest">
+		<wsdl:part name="parameters" element="tsc:ModifySchedule"/>
+	</wsdl:message>
+	<wsdl:message name="ModifyScheduleResponse">
+		<wsdl:part name="parameters" element="tsc:ModifyScheduleResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'DeleteSchedule' message-->
+	<wsdl:message name="DeleteScheduleRequest">
+		<wsdl:part name="parameters" element="tsc:DeleteSchedule"/>
+	</wsdl:message>
+	<wsdl:message name="DeleteScheduleResponse">
+		<wsdl:part name="parameters" element="tsc:DeleteScheduleResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetSpecialDayGroupInfo' message-->
+	<wsdl:message name="GetSpecialDayGroupInfoRequest">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupInfo"/>
+	</wsdl:message>
+	<wsdl:message name="GetSpecialDayGroupInfoResponse">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupInfoResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetSpecialDayGroupInfoList' message-->
+	<wsdl:message name="GetSpecialDayGroupInfoListRequest">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupInfoList"/>
+	</wsdl:message>
+	<wsdl:message name="GetSpecialDayGroupInfoListResponse">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupInfoListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetSpecialDayGroups' message-->
+	<wsdl:message name="GetSpecialDayGroupsRequest">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroups"/>
+	</wsdl:message>
+	<wsdl:message name="GetSpecialDayGroupsResponse">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupsResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetSpecialDayGroupList' message-->
+	<wsdl:message name="GetSpecialDayGroupListRequest">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupList"/>
+	</wsdl:message>
+	<wsdl:message name="GetSpecialDayGroupListResponse">
+		<wsdl:part name="parameters" element="tsc:GetSpecialDayGroupListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'CreateSpecialDayGroup' message-->
+	<wsdl:message name="CreateSpecialDayGroupRequest">
+		<wsdl:part name="parameters" element="tsc:CreateSpecialDayGroup"/>
+	</wsdl:message>
+	<wsdl:message name="CreateSpecialDayGroupResponse">
+		<wsdl:part name="parameters" element="tsc:CreateSpecialDayGroupResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'ModifySpecialDayGroup' message-->
+	<wsdl:message name="ModifySpecialDayGroupRequest">
+		<wsdl:part name="parameters" element="tsc:ModifySpecialDayGroup"/>
+	</wsdl:message>
+	<wsdl:message name="ModifySpecialDayGroupResponse">
+		<wsdl:part name="parameters" element="tsc:ModifySpecialDayGroupResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'DeleteSpecialDayGroup' message-->
+	<wsdl:message name="DeleteSpecialDayGroupRequest">
+		<wsdl:part name="parameters" element="tsc:DeleteSpecialDayGroup"/>
+	</wsdl:message>
+	<wsdl:message name="DeleteSpecialDayGroupResponse">
+		<wsdl:part name="parameters" element="tsc:DeleteSpecialDayGroupResponse"/>
+	</wsdl:message>	
+	<!--===============================-->
+	<wsdl:portType name="SchedulePort">
+		<wsdl:operation name="GetServiceCapabilities">
+			<wsdl:documentation>Returns the capabilities of the schedule service. The result is returned in a typed answer.</wsdl:documentation>
+			<wsdl:input message="tsc:GetServiceCapabilitiesRequest"/>
+			<wsdl:output message="tsc:GetServiceCapabilitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleState">
+			<wsdl:documentation>
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetScheduleStateRequest"/>
+			<wsdl:output message="tsc:GetScheduleStateResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleInfo">
+			<wsdl:documentation>
+				This method returns a list of schedule info items, specified in the request
+				Only found schedules shall be returned, i.e. the returned number of elements can differ from the requested element.
+				The device shall ignore tokens it cannot resolve and may return an empty list if there are no 
+				schedules matching specified tokens.
+				If the number of requested items is greater than MaxLimit, a TooManyItems fault shall be returned.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetScheduleInfoRequest"/>
+			<wsdl:output message="tsc:GetScheduleInfoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleInfoList">
+			<wsdl:documentation>
+				This method returns a list of schedule info items, specified in the request
+				Used for pagination, refer to Profile C.
+				A call to this method shall return a start reference when not all data is returned and more data is available. 
+				The reference shall be valid for retrieving the next set of data.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetScheduleInfoListRequest"/>
+			<wsdl:output message="tsc:GetScheduleInfoListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSchedules">
+			<wsdl:documentation>
+				This method returns a list of Schedule items.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetSchedulesRequest"/>
+			<wsdl:output message="tsc:GetSchedulesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleList">
+			<wsdl:documentation>
+				This method returns a list of Schedule items, specified in the request 
+				Used for pagination, refer to Profile C. 
+				A call to this method shall return a StartReference when not all data is returned and more data is available.  
+				The reference shall be valid for retrieving the next set of data. 
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetScheduleListRequest"/>
+			<wsdl:output message="tsc:GetScheduleListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="CreateSchedule">
+			<wsdl:documentation>
+				This operation creates the specified schedule. 
+				When the specified schedule token doesn't exist, the device creates the schedule,
+				otherwise it is updated.
+				Not all devices may allow the client to specify a token for the schedule being created; 
+				so in that case the device will assign a token for the newly created schedule, even though
+				it was provided.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:CreateScheduleRequest"/>
+			<wsdl:output message="tsc:CreateScheduleResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="ModifySchedule">
+			<wsdl:documentation>
+				This operation updates the specified schedule.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:ModifyScheduleRequest"/>
+			<wsdl:output message="tsc:ModifyScheduleResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteSchedule">
+			<wsdl:documentation>
+				This method deletes the specified schedule. 	
+				The device may or may not delete the schedule if it is associated with one or more entities.
+				If the schedule is not deleted then the 'ReferenceInUse' fault must be generated.	
+			</wsdl:documentation>
+			<wsdl:input message="tsc:DeleteScheduleRequest"/>
+			<wsdl:output message="tsc:DeleteScheduleResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupInfo">
+			<wsdl:documentation>
+				This method returns a list of SpecialDayGroup info items, specified in the request
+				Only found SpecialDayGroup shall be returned, i.e. the returned number of elements can differ from the requested element.
+				The device shall ignore tokens it cannot resolve and may return an empty list if there are no 
+				SpecialDays matching specified tokens.
+				If the number of requested items is greater than MaxLimit, a TooManyItems fault shall be returned.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetSpecialDayGroupInfoRequest"/>
+			<wsdl:output message="tsc:GetSpecialDayGroupInfoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupInfoList">
+			<wsdl:documentation>
+				This method returns a list of SpecialDayGroup info items, specified in the request
+				Used for pagination, refer to Profile C.
+				A call to this method shall return a start reference when not all data is returned and more data is available. 
+				The reference shall be valid for retrieving the next set of data.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetSpecialDayGroupInfoListRequest"/>
+			<wsdl:output message="tsc:GetSpecialDayGroupInfoListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroups">
+			<wsdl:documentation>
+				This method returns the specified SpecialDayGroup item.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetSpecialDayGroupsRequest"/>
+			<wsdl:output message="tsc:GetSpecialDayGroupsResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupList">
+			<wsdl:documentation>
+				This method returns a list of SpecialDayGroup items, specified in the request 
+				Used for pagination, refer to Profile C. 
+				A call to this method shall return a StartReference when not all data is returned and more data is available.  
+				The reference shall be valid for retrieving the next set of data. 
+			</wsdl:documentation>
+			<wsdl:input message="tsc:GetSpecialDayGroupListRequest"/>
+			<wsdl:output message="tsc:GetSpecialDayGroupListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="CreateSpecialDayGroup">
+			<wsdl:documentation>
+				This operation creates the specified SpecialDayGroup item. 
+				When the specified SpecialDayGroup token doesn't exist, the device creates the SpecialDayGroup,
+				otherwise it is updated.
+				Not all devices may allow the client to specify a token for the SpecialDayGroup item being created; 
+				so in that case the device will assign a token for the newly created SpecialDayGroup, even though
+				it was provided.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:CreateSpecialDayGroupRequest"/>
+			<wsdl:output message="tsc:CreateSpecialDayGroupResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="ModifySpecialDayGroup">
+			<wsdl:documentation>
+				This operation updates the specified SpecialDayGroup item. 
+			</wsdl:documentation>
+			<wsdl:input message="tsc:ModifySpecialDayGroupRequest"/>
+			<wsdl:output message="tsc:ModifySpecialDayGroupResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteSpecialDayGroup">
+			<wsdl:documentation>
+				 This method deletes the specified SpecialDayGroup.	
+				 The device may or may not delete the SpecialDayGroup if it is associated with one or more schedules.
+				 If the SpecialDayGroup is not deleted then the 'ReferenceInUse' fault must be generated.
+			</wsdl:documentation>
+			<wsdl:input message="tsc:DeleteSpecialDayGroupRequest"/>
+			<wsdl:output message="tsc:DeleteSpecialDayGroupResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<!--Protocol & data format for the operations and messages for the port type 'SchedulePort'-->
+	<wsdl:binding name="ScheduleBinding" type="tsc:SchedulePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetServiceCapabilities">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetServiceCapabilities"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleState">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetScheduleState"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleInfo">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetScheduleInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleInfoList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetScheduleInfoList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSchedules">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetSchedules"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetScheduleList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetScheduleList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateSchedule">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/CreateSchedule"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ModifySchedule">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/ModifySchedule"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteSchedule">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/DeleteSchedule"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupInfo">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetSpecialDayGroupInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupInfoList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetSpecialDayGroupInfoList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroups">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetSpecialDayGroups"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSpecialDayGroupList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/GetSpecialDayGroupList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateSpecialDayGroup">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/CreateSpecialDayGroup"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ModifySpecialDayGroup">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/ModifySpecialDayGroup"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteSpecialDayGroup">
+			<soap:operation soapAction="http://www.onvif.org/ver10/schedule/wsdl/DeleteSpecialDayGroup"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+</wsdl:definitions>

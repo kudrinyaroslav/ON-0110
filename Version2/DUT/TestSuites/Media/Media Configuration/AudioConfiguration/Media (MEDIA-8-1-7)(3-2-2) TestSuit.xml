@@ -1,0 +1,795 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Media Configuration" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY  </Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.MC.8-1-7.01" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY" Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>Correct response with several ASC</Name>
+    <Description>
+      GetCapabilities
+      GetAudioSourceConfigurations (->ASC1, ASC2)
+      GetAudioSourceConfiguration (ASC1)
+      GetAudioSourceConfiguration (ASC2)
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Getting audio source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Check that configurations are the same
+        STEP PASSED
+
+        STEP 7 - Getting audio source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 8 - Check that configurations are the same
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+     <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+           </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>AudioSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+         </ArrayOfAudioSourceConfiguration>
+         </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+          <AudioSourceConfiguration token="ASC1" xmlns:tt="http://www.onvif.org/ver10/schema" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+       </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC2" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf2</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MC.8-1-7.02" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY " Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>Different parameters</Name>
+    <Description>
+      GetCapabilities (media)
+      GetAudioSourceConfigurations (-> ASC1 - ASC1, AudioSourceConf1,1,AS1)
+      GetAudioSourceConfiguration (ASC1->ASC2, AudioSourceConf2,2,AS2)
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Getting audio source configuration
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Check that configurations are the same
+        'Name' properties are different
+
+        'token' properties are different
+
+        'SourceToken' properties are different
+
+        'UseCount' properties are different
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>AudioSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC2" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf3</tt:Name>
+          <tt:UseCount>2</tt:UseCount>
+          <tt:SourceToken>AS3</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC2" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf2</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <Test ID = "TC.MC.8-1-7.03" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY " Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>Fault for GetAudioSourceConfigurations</Name>
+    <Description>
+      GetCapabilities
+      GetAudioSourceConfigurations
+      Fault
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+        at DUT.CameraWebService.Media10.MediaService.GetAudioSourceConfigurations() in D:\!ONVIF\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 391
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>AudioSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+          <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+       <ResponseParameters>
+        <AudioSourceConfiguration token="ASC1" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS1</tt:SourceToken>
+         </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC2" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf2</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MC.8-1-7.04" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY " Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>Fault for GetAudioSourceConfiguration</Name>
+    <Description>
+      GetCapabilities
+      GetAudioSourceConfigurations
+      GetAudioSourceConfiguration
+      Fault
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Getting audio source configuration
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\!ONVIF\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+        at DUT.CameraWebService.Media10.MediaService.GetAudioSourceConfiguration(String ConfigurationToken) in D:\!ONVIF\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 469
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>AudioSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC1" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf1</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS1</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioSourceConfiguration token="ASC2" xmlns:tt="http://www.onvif.org/ver10/schema" >
+          <tt:Name>AudioSourceConf2</tt:Name>
+          <tt:UseCount>1</tt:UseCount>
+          <tt:SourceToken>AS2</tt:SourceToken>
+        </AudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.MC.8-1-7.05" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY " Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>No Response for GetAudioSourceConfigurations</Name>
+    <Description>
+      No Response for GetAudioSourceConfigurations
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        The HTTP request has exceeded the allotted timeout
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>NoResponse</Response>
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>AudioSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>AS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+   </Test>
+  <Test ID = "TC.MC.8-1-7.06" ONVIFTestID="MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY" Enabled="true">
+    <TestName>AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY </TestName>
+    <Name>No Response for GetAudioSourceConfiguration</Name>
+    <Description>
+      No Response for GetAudioSourceConfiguration
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        MEDIA-8-1-7 AUDIO SOURCE CONFIGURATIONS AND AUDIO SOURCE CONFIGURATION CONSISTENCY
+
+        STEP 1 - Getting media service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Connect to Media service
+        Media service address: http://localhost:53346/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Getting audio source configurations
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check if the DUT returned configurations
+        STEP PASSED
+
+        STEP 5 - Getting audio source configuration
+        Transmit done
+        The HTTP request has exceeded the allotted timeout
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="-1">
+      <Command>SetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <DateTimeType>Manual</DateTimeType>
+        <DaylightSavings>True</DaylightSavings>
+        <TimeZone>PST8PDT,M3.2.0,M11.1.0</TimeZone>
+        <UTCDateTime now ="true">
+          <Time>
+            <Hour>1</Hour>
+            <Minute>1</Minute>
+            <Second>1</Second>
+          </Time>
+          <Date>
+            <Year>1</Year>
+            <Month>1</Month>
+            <Day>1</Day>
+          </Date>
+        </UTCDateTime>
+      </RequestParameters>
+      <ResponseParameters/>
+    </Step>
+    <Step id ="0">
+      <Command>GetSystemDateAndTime</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <SystemDateTime>
+          <DateTimeType xmlns="http://www.onvif.org/ver10/schema">NTP</DateTimeType>
+          <DaylightSavings xmlns="http://www.onvif.org/ver10/schema">true</DaylightSavings>
+        </SystemDateTime>
+      </ResponseParameters>
+    </Step>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/MediaService.asmx</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media10.GetAudioSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfAudioSourceConfiguration xmlns:tt="http://www.onvif.org/ver10/schema">
+          <AudioSourceConfiguration token="ASC1" >
+            <tt:Name>AudioSourceConf1</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+          </AudioSourceConfiguration>
+          <AudioSourceConfiguration token="ASC2" >
+            <tt:Name>VideoSourceConf2</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+          </AudioSourceConfiguration>
+        </ArrayOfAudioSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetAudioSourceConfiguration</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <ConfigurationToken>ASC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    </Test>
+</TestSuit>

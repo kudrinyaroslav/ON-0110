@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+		<xs:schema targetNamespace="http://www.onvif.org/ver20/ptz/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:tptz="http://www.onvif.org/ver20/ptz/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+			<xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="http://www.onvif.org/onvif/ver10/schema/onvif.xsd"/>
+			<!--  Message Request/Responses elements  -->
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tptz:Capabilities">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the PTZ service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="Capabilities">
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="EFlip" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates whether or not EFlip is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Reverse" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates whether or not reversing of PT control direction is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="GetCompatibleConfigurations" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates support for the GetCompatibleConfigurations command.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:element name="Capabilities" type="tptz:Capabilities"/>
+			<!--===============================-->
+			<xs:element name="GetNodes">
+				<xs:complexType/>
+			</xs:element>
+			<xs:element name="GetNodesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZNode" type="tt:PTZNode" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>A list of the existing PTZ Nodes on the device.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetNode">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NodeToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of the requested PTZNode.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetNodeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZNode" type="tt:PTZNode">
+							<xs:annotation>
+								<xs:documentation>A requested PTZNode.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetConfigurations">
+				<xs:complexType/>
+			</xs:element>
+			<xs:element name="GetConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfiguration" type="tt:PTZConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>A list of all existing PTZConfigurations on the device.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfigurationToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of the requested PTZConfiguration.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetConfigurationResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfiguration" type="tt:PTZConfiguration">
+							<xs:annotation>
+								<xs:documentation>A requested PTZConfiguration.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetConfiguration">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfiguration" type="tt:PTZConfiguration">
+							<xs:annotation>
+								<xs:documentation>
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ForcePersistence" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Flag that makes configuration persistent. Example: User wants the configuration to exist after reboot.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetConfigurationResponse">
+				<xs:complexType>
+					<xs:sequence minOccurs="0"/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetConfigurationOptions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ConfigurationToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of an existing configuration that the options are intended for.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetConfigurationOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfigurationOptions" type="tt:PTZConfigurationOptions">
+							<xs:annotation>
+								<xs:documentation>The requested PTZ configuration options.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SendAuxiliaryCommand">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AuxiliaryData" type="tt:AuxiliaryData">
+							<xs:annotation>
+								<xs:documentation>The Auxiliary request data.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SendAuxiliaryCommandResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AuxiliaryResponse" type="tt:AuxiliaryData">
+							<xs:annotation>
+								<xs:documentation>The response contains the auxiliary response.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetPresets">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetPresetsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Preset" type="tt:PTZPreset" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>A list of presets which are available for the requested MediaProfile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetPreset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PresetName" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>A requested preset name.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PresetToken" type="tt:ReferenceToken" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>A requested preset token.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetPresetResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PresetToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A token to the Preset which has been set.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="RemovePreset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PresetToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A requested preset token.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RemovePresetResponse">
+				<xs:complexType/>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GotoPreset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PresetToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A requested preset token.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Speed" type="tt:PTZSpeed" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>A requested speed.The speed parameter can only be specified when Speed Spaces are available for the PTZ Node.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GotoPresetResponse">
+				<xs:complexType/>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetStatus">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the PTZStatus should be requested.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetStatusResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZStatus" type="tt:PTZStatus">
+							<xs:annotation>
+								<xs:documentation>The PTZStatus for the requested MediaProfile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GotoHomePosition">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the operation should take place.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Speed" type="tt:PTZSpeed" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>A requested speed.The speed parameter can only be specified when Speed Spaces are available for the PTZ Node.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GotoHomePositionResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="SetHomePosition">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile where the home position should be set.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SetHomePositionResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="ContinuousMove">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Velocity" type="tt:PTZSpeed">
+							<xs:annotation>
+								<xs:documentation>A Velocity vector specifying the velocity of pan, tilt and zoom.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Timeout" type="xs:duration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>An optional Timeout parameter.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ContinuousMoveResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="RelativeMove">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Translation" type="tt:PTZVector">
+							<xs:annotation>
+								<xs:documentation>A positional Translation relative to the current position
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Speed" type="tt:PTZSpeed" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>An optional Speed parameter.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RelativeMoveResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="AbsoluteMove">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Position" type="tt:PTZVector">
+							<xs:annotation>
+								<xs:documentation>A Position vector specifying the absolute target position.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Speed" type="tt:PTZSpeed" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>An optional Speed.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AbsoluteMoveResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="Stop">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>A reference to the MediaProfile that indicate what should be stopped.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PanTilt" type="xs:boolean" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Set true when we want to stop ongoing pan and tilt movements.If PanTilt arguments are not present, this command stops these movements.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Zoom" type="xs:boolean" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Set true when we want to stop ongoing zoom movement.If Zoom arguments are not present, this command stops ongoing zoom movement.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="StopResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetPresetTours">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetPresetToursResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PresetTour" type="tt:PresetTour" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetPresetTour">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+						<xs:element name="PresetTourToken" type="tt:ReferenceToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetPresetTourResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PresetTour" type="tt:PresetTour"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetPresetTourOptions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+						<xs:element name="PresetTourToken" type="tt:ReferenceToken" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetPresetTourOptionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Options" type="tt:PTZPresetTourOptions"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="CreatePresetTour">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CreatePresetTourResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PresetTourToken" type="tt:ReferenceToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="ModifyPresetTour">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+						<xs:element name="PresetTour" type="tt:PresetTour"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ModifyPresetTourResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="OperatePresetTour">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+						<xs:element name="PresetTourToken" type="tt:ReferenceToken"/>
+						<xs:element name="Operation" type="tt:PTZPresetTourOperation"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OperatePresetTourResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="RemovePresetTour">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken"/>
+						<xs:element name="PresetTourToken" type="tt:ReferenceToken"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RemovePresetTourResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetCompatibleConfigurations">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ProfileToken" type="tt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Contains the token of an existing media profile the configurations shall be compatible with.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetCompatibleConfigurationsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PTZConfiguration" type="tt:PTZConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>A list of all existing PTZConfigurations on the NVT that is suitable to be added to the addressed media profile.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+		</xs:schema>

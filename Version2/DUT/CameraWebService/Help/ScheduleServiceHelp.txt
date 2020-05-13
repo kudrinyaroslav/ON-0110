@@ -1,0 +1,299 @@
+﻿DUT Schedule Service Help
+
+CreateSchedule Command************************************************************
+Example:
+    <Step id ="3">
+      <Command>AdvancedSecurity10.CreateSchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+	    <token>expected token from request</token>
+		<Name>expected Name from request</Name>
+		<Description>expected Description from request</Description>
+		<Standard>expected Standard from request</Standard>
+		<SpecialDays>
+		  <GroupToken>expected GroupToken from request</GroupToken>
+		  <TimeRange>
+		    <From>expected From from request</From>
+			<Until>expected Until from request</Until>
+		  </TimeRange>
+		</SpecialDays>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>token</string>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+token - mandatory, value string
+Name - mandatory, value string
+Description - mandatory, value string
+Standard - mandatory, value iCalendar
+SpecialDays - could be skipped, not more than one (if more requiered - update DUT sim)
+SpecialDays/GroupToken - mandatory, value string
+SpecialDays/TimeRange - could be skipped, not more than one (if more requiered - update DUT sim)
+SpecialDays/TimeRange/From - mandatory, value DateTime
+SpecialDays/TimeRange/Until - could be skipped, value DateTime
+
+ResponseParameters:
+string - mandatory, token of schedule
+
+Manual Validation:
+Standard value should be checked manually
+SpecialDays/TimeRange/From value should be checked manually
+SpecialDays/TimeRange/Until value should be checked manually
+
+ModifySchedule Command************************************************************
+Example:
+    <Step id ="3">
+      <Command>AdvancedSecurity10.ModifySchedule</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+	    <token>expected token from request</token>
+		<Name>expected Name from request</Name>
+		<Description>expected Description from request</Description>
+		<Standard>expected Standard from request</Standard>
+		<SpecialDays>
+		  <GroupToken>expected GroupToken from request</GroupToken>
+		  <TimeRange>
+		    <From>expected From from request</From>
+			<Until>expected Until from request</Until>
+		  </TimeRange>
+		</SpecialDays>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+token - mandatory, value string
+Name - mandatory, value string
+Description - mandatory, value string
+Standard - mandatory, value iCalendar
+SpecialDays - could be skipped, not more than one (if more requiered - update DUT sim)
+SpecialDays/GroupToken - mandatory, value string
+SpecialDays/TimeRange - could be skipped, not more than one (if more requiered - update DUT sim)
+SpecialDays/TimeRange/From - mandatory, value DateTime
+SpecialDays/TimeRange/Until - could be skipped, value DateTime
+
+Manual Validation:
+Standard value should be checked manually
+SpecialDays/TimeRange/From value should be checked manually
+SpecialDays/TimeRange/Until value should be checked manually
+
+GetSchedules Command************************************************************
+Example:
+    <Step id="4">
+      <Command>Schedule10.GetSchedules</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>Schedule1</Token>
+		<Token>Schedule2</Token>
+		<Token>Schedule3</Token>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfSchedule xmlns:tac="http://www.onvif.org/ver10/schedule/wsdl">
+          <Schedule token="Schedule1">
+            <tac:Name>Name1</tac:Name>
+            <tac:Description>Description1</tac:Description>
+            <tac:Standard>schedule standard</tac:Standard>
+            <tac:SpecialDays>
+              <tac:GroupToken>specialdaygroup1</tac:GroupToken>
+              <tac:TimeRange>
+                <tac:From>10:06:34.3266666+03:00</tac:From>
+              </tac:TimeRange>
+              <tac:TimeRange>
+                <tac:From>10:06:34.3266666+03:00</tac:From>
+              </tac:TimeRange>
+            </tac:SpecialDays>
+            <tac:SpecialDays>
+              <tac:GroupToken>specialdaygroup2</tac:GroupToken>
+              <tac:TimeRange>
+                <tac:From>12:12:12.0000000+03:00</tac:From>
+              </tac:TimeRange>
+              <tac:TimeRange>
+                <tac:From>11:11:11.0000000+03:00</tac:From>
+              </tac:TimeRange>
+            </tac:SpecialDays>
+          </Schedule>
+        </ArrayOfSchedule>
+      </ResponseParameters>
+	</Step>
+
+RequestParameters:
+Token - mandatory, unbaunded, value string
+
+Flag 'special' for response:
+skipped - no changes
+1 - Standard, SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+2 - Standard value will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+3 - SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+4 - Standard field is mixed, SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+
+
+GetScheduleList Command************************************************************
+Example:
+     <Step id="3">
+      <Command>Schedule10.GetScheduleList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Limit>1</Limit>
+		<StartReference>1</StartReference>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional special="1">
+        <ArrayOfSchedule xmlns:tac="http://www.onvif.org/ver10/schedule/wsdl">
+          <Schedule token="Schedule1">
+            <tac:Name>Name1</tac:Name>
+            <tac:Description>Description1</tac:Description>
+            <tac:Standard>schedule standard</tac:Standard>
+            <tac:SpecialDays>
+              <tac:GroupToken>specialdaygroup1</tac:GroupToken>
+              <tac:TimeRange>
+                <tac:From>10:06:34.3266666+03:00</tac:From>
+              </tac:TimeRange>
+            </tac:SpecialDays>
+          </Schedule>
+        </ArrayOfSchedule>
+      </ResponseParametersAdditional>
+    </Step>
+
+RequestParameters:
+Limit - could be skipped, value string
+StartReference - could be skipped, value string
+
+ResponseParameters:
+string - mandatory, token of schedule
+
+Flag 'special' for ResponseParametersAdditional:
+skipped - no changes
+1 - Standard, SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+2 - Standard value will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+3 - SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+4 - Standard field is mixed, SpecialDays/TimeRange/From, SpecialDays/TimeRange/Until values will be updated from last CreateSchedule/ModifySchedule request, if specified in response and in CreateSchedule/ModifySchedule request
+
+CreateSpecialDayGroup Command************************************************************
+Example:
+    <Step id ="3">
+      <Command>AdvancedSecurity10.CreateSpecialDayGroup</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+	    <token>expected token from request</token>
+		<Name>expected Name from request</Name>
+		<Description>expected Description from request</Description>
+		<Days>expected Days from request</Days>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>token</string>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+token - mandatory, value string
+Name - mandatory, value string
+Description - mandatory, value string
+Days - mandatory, value iCalendar
+
+ResponseParameters:
+string - mandatory, token of schedule
+
+Manual Validation:
+Days value should be checked manually
+
+ModifySpecialDayGroup Command************************************************************
+Example:
+    <Step id ="3">
+      <Command>AdvancedSecurity10.ModifySpecialDayGroup</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+	    <token>expected token from request</token>
+		<Name>expected Name from request</Name>
+		<Description>expected Description from request</Description>
+		<Days>expected Standard from request</Days>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+token - mandatory, value string
+Name - mandatory, value string
+Description - mandatory, value string
+Days - mandatory, value iCalendar
+
+Manual Validation:
+Days value should be checked manually
+
+GetSpecialDayGroups Command************************************************************
+Example:
+    <Step id="4">
+      <Command>Schedule10.GetSpecialDayGroups</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>specialdaygroup1</Token>
+        <Token>specialdaygroup2</Token>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfSpecialDayGroup xmlns:tsc="http://www.onvif.org/ver10/schedule/wsdl">
+          <SpecialDayGroup token="specialdaygroup1">
+            <tsc:Name>Name1</tsc:Name>
+            <tsc:Description>Description1</tsc:Description>
+            <tsc:Days>special day group days</tsc:Days>
+          </SpecialDayGroup>
+          <SpecialDayGroup token="specialdaygroup2">
+            <tsc:Name>Name1</tsc:Name>
+            <tsc:Description>Description1</tsc:Description>
+            <tsc:Days>special day group days</tsc:Days>
+          </SpecialDayGroup>
+        </ArrayOfSpecialDayGroup>
+      </ResponseParameters>
+    </Step>
+
+RequestParameters:
+Token - mandatory, unbaunded, value string
+
+Flag 'special' for response:
+skipped - no changes
+1 - Days value will be updated from last CreateSpecialDayGroup/ModifySpecialDayGroup request, if specified in response and in CreateSpecialDayGroup/ModifySpecialDayGroup request
+2 - Days value is mixed from last CreateSpecialDayGroup/ModifySpecialDayGroup request
+
+GetSpecialDayGroupList Command************************************************************
+Example:
+    <Step id="3">
+      <Command>Schedule10.GetSpecialDayGroupList</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+	    <Limit>1</Limit>
+		<StartReference>1</StartReference>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional special="1">
+        <ArrayOfSpecialDayGroup xmlns:tsc="http://www.onvif.org/ver10/schedule/wsdl">
+          <SpecialDayGroup token="specialdaygroup1">
+            <tsc:Name>Name1</tsc:Name>
+            <tsc:Description>Description1</tsc:Description>
+            <tsc:Days>special day group days</tsc:Days>
+          </SpecialDayGroup>
+          <SpecialDayGroup token="specialdaygroup2">
+            <tsc:Name>Name1</tsc:Name>
+            <tsc:Description>Description1</tsc:Description>
+            <tsc:Days>special day group days</tsc:Days>
+          </SpecialDayGroup>
+        </ArrayOfSpecialDayGroup>
+      </ResponseParametersAdditional>
+    </Step>
+
+RequestParameters:
+Limit - could be skipped, value string
+StartReference - could be skipped, value string
+
+ResponseParameters:
+string - mandatory, token of special day group
+
+Flag 'special' for ResponseParametersAdditional:
+skipped - no changes
+1 - Days values will be updated from last CreateSpecialDayGroup/ModifySpecialDayGroup request, if specified in response and in CreateSpecialDayGroup/ModifySpecialDayGroup request
+2 - Days value is mixed from last CreateSpecialDayGroup/ModifySpecialDayGroup request

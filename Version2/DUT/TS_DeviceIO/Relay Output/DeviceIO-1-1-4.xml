@@ -1,0 +1,4645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>DeviceIO commands template</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <!--Positive-->
+  <Test ID = "TC.DEVICEIO-1-1-4.101" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - several outputs</Name>
+    <Description>
+      - several outputs (RO1, RO2) with different options
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT30S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30 40 60 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <!--RO2-->
+    <Step id ="9">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT60S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT3S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT60S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.102" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete skipped, limit 1 3</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete skipped, limit 1 3)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3</DelayTimes>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT3S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT3S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.103" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = false, limit 10 30</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.104" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete skipped, limit 3 10</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete skipped, limit 3 10)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">3 10</DelayTimes>
+            <!--<Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>-->
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.105" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = false, limit 5 10</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 5 10)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">5 10</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.106" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete skipped, limit 1 5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete skipped, limit 1 5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 5</DelayTimes>
+            <!--<Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>-->
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.107" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1 5 10</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1 5 10)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 5 10</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.108" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 5 10</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 5 10)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">5 10</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.109" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1 5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1 5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.110" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1 4 2</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1 4 2)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 4 2</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT4S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT4S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.111" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 10 6 20</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 10 6 20)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 6 20</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT6S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT6S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.112" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 10 5 20</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 10 5 20)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 5 20</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.113" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Bistable only, DelayTimes skipped</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.114" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Bistable only, DelayTimes skipped, other DelayTime then in set</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT0S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.115" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1000, non seconds in Get</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1000)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1000</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT16M40S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1000S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.116" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1 1</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1 1)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 1</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.117" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1.1 1.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1.1 1.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1.1 1.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1.5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1.5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.118" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 1.1 5.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 1.1 5.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1.1 5.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5.5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5.5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.119" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = true, limit 6.1 15.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true, limit 6.1 15.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">6.1 15.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT6.1S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT6.1S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.120" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = false, limit 6.1 15.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 6.1 15.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">6.1 15.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT6.1S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT6.1S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.121" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = false, limit 1.1 15.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 1.1 15.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1.1 15.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.122" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Correct answer - Monostable only, Discrete = false, limit 1.1 4.5</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 1.1 4.5)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1.1 4.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT4.5S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT4.5S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <!--Negative-->
+  <Test ID = "TC.DEVICEIO-1-1-4.201" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Invalid answer - several outputs, wrong IdleState in first</Name>
+    <Description>
+      - several outputs (RO1, RO2) with different options
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT30S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30 40 60 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.202" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Invalid answer - several outputs, wrong IdleState in second</Name>
+    <Description>
+      - several outputs (RO1, RO2) with different options
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT30S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30 40 60 120</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="7">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT60S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT30S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <!--RO2-->
+    <Step id ="9">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 3</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="10">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT60S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="11">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT3S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="12">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO2</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT60S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.203" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Bistable only, wrong Mode</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.204" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Bistable only, wrong IdleState</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.205" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Bistable only, wrong token (in get)</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.206" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, wrong Mode</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.207" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, wrong IdleState</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.208" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, wrong DelayTime</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT20S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.209" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, wrong token</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO2">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT10S</tt:DelayTime>
+              <tt:IdleState>closed</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.210" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, empty list</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false, limit 10 30)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT10S</DelayTime>
+          <IdleState>closed</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.211" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Bistable only, empty list</Name>
+    <Description>
+      - Bistable only outputs
+      - RO1 (DelayTimes skipped)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Bistable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Bistable</Mode>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+    <Step id ="5">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Bistable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.212" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, skipped DelayTimes</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false,)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <!--<DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">10 30</DelayTimes>-->
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.212" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, range in DelayTimes: empty list</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false,)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl"></DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.213" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, range in DelayTimes: one item</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false,)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">2</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.214" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, range in DelayTimes: three items</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false,)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">1 2 3</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.215" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, range in DelayTimes: min > max</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = false,)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">3 2.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">false</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.216" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, list in DelayTimes: empty list</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl"></DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.217" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - Monostable only, list in DelayTimes: validation error</Name>
+    <Description>
+      - Monostable only outputs
+      - RO1 (Discrete = true)
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO1">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">5,5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.218" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - wrong token in options</Name>
+    <Description>
+      Wrong token in options
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutput token="RO1">
+            <tt:Properties>
+              <tt:Mode>Monostable</tt:Mode>
+              <tt:DelayTime>PT1S</tt:DelayTime>
+              <tt:IdleState>open</tt:IdleState>
+            </tt:Properties>
+          </RelayOutput>
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+    <!--RO1-->
+    <Step id ="3">
+      <Command>DeviceIO10.GetRelayOutputOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfRelayOutputOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <RelayOutputOptions token="RO2">
+            <Mode xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">Monostable</Mode>
+            <DelayTimes xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">5.5</DelayTimes>
+            <Discrete xmlns="http://www.onvif.org/ver10/deviceIO/wsdl">true</Discrete>
+          </RelayOutputOptions>
+        </ArrayOfRelayOutputOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.SetRelayOutputSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <RelayOutputToken>RO1</RelayOutputToken>
+        <Properties>
+          <Mode>Monostable</Mode>
+          <DelayTime>PT1S</DelayTime>
+          <IdleState>open</IdleState>
+        </Properties>
+      </RequestParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.DEVICEIO-1-1-4.219" ONVIFTestID="DEVICEIO-1-1-4" Enabled="true">
+    <TestName>IO SETRELAYOUTPUTSETTINGS</TestName>
+    <Name>Wrong answer - empty RO list</Name>
+    <Description>
+      Empty RO list
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/device_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://172.32.32.100/onvif/deviceIO_service</tds:XAddr>
+            <tds:Version>
+              <tt:Major>1</tt:Major>
+              <tt:Minor>0</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>DeviceIO10.GetRelayOutputs</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfRelayOutput xmlns:tt="http://www.onvif.org/ver10/schema">
+        </ArrayOfRelayOutput>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <!--bugs-->
+  
+</TestSuit>

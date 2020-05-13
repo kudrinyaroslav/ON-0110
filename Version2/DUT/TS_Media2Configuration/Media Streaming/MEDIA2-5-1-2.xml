@@ -1,0 +1,1645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Media Streaming" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>SNAPSHOT URI</Name>
+    <Description>
+     
+    </Description>
+  </Parameters>
+  <!--Positive tests-->
+  <Test ID = "TC.MEDIA2-4-5-2.101" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Several Video Sources. For one VS there are 2 VSCs, 2nd VSC has total &gt; 0</Name>
+    <Description>
+      DUT returns 4 video sources.
+      For each VS there is VSC that uses it.
+      VS with token VS2 is used in VSC2 and VSC3
+      GetVideoEncoderInstances total = 0 for VSC2
+      GetVideoEncoderInstances total = 1 for VSC3
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+     
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>         
+        </ArrayOfString>
+       
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC4</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    
+    
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.102" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Several Video Sources. For one VS there are 2 VSCs, 1st VSC has total &gt; 0</Name>
+    <Description>
+      DUT returns 4 video sources.
+      For each VS there is VSC that uses it.
+      VS with token VS2 is used in VSC2 and VSC3
+      GetVideoEncoderInstances total = 1 for VSC2
+      DTT shall no send GetVideoEncoderInstances VSC3
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>3</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC4</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>3</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.103" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>GetVideoEncoderInstancesResponse: no Codec optional element</Name>
+    <Description>
+      To check test when GetVideoEncoderInstancesResponse does not contain Codec optional element
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          
+          
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          
+          
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          
+          
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC4</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          
+          
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+
+
+  </Test>
+
+  <!--Negative tests-->
+  <Test ID = "TC.MEDIA2-4-5-2.201" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>For one Video Source there is no VSC</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>                  
+          
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>          
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>3</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC4</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>3</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.202" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Several Video Sources. For one VS there are 2 VSCs, both of them has total = 0</Name>
+    <Description>
+      DUT returns 4 video sources.
+      For each VS there is VSC that uses it.
+      VS with token VS2 is used in VSC2 and VSC3
+      GetVideoEncoderInstances total = 0 for VSC2
+      GetVideoEncoderInstances total = 0 for VSC3
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>0</tt:Number>
+          </tt:Codec>
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.203" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Total &lt; 0</Name>
+    <Description>
+      DUT returns 1 video source and one VSC.      
+      GetVideoEncoderInstances total = -1 
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+                   
+          
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>-1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.204" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Empty VSС list</Name>
+    <Description>
+      DUT returns no video source configurations
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <!--<VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>-->
+
+
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    
+    
+
+
+
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.205" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>No DeviceIo service is returned</Name>
+    <Description>
+     
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    
+    
+
+
+  </Test>
+  <!--Faults-->
+  <Test ID = "TC.MEDIA2-4-5-2.301" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Fault to GetVideoEncoderInstances</Name>
+    <Description>
+     
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC1</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC2</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>0</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC3</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetVideoEncoderInstances</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+        <ConfigurationToken>VSC4</ConfigurationToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <EncoderInstanceInfo xmlns:tt="http://www.onvif.org/ver20/media/wsdl">
+          <tt:Codec>
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:Number>7</tt:Number>
+          </tt:Codec>
+          <tt:Codec>
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:Number>2</tt:Number>
+          </tt:Codec>
+          <tt:Total>1</tt:Total>
+        </EncoderInstanceInfo>
+      </ResponseParameters>
+    </Step>
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.302" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Fault to GetVideoSources</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id="3">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Fault</Response>
+      <RequestParameters />
+      <ResponseParameters>
+        <ArrayOfString>
+          <string>VS1</string>
+          <string>VS2</string>
+          <string>VS3</string>
+        </ArrayOfString>
+
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    
+
+
+  </Test>
+  <Test ID = "TC.MEDIA2-4-5-2.303" ONVIFTestID="MEDIA2-4-5-2" Enabled="true">
+    <TestName>VIDEO ENCODER INSTANCES PER VIDEO SOURCE</TestName>
+    <Name>Fault to GetVideoSourceConfigurations</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/deviceIO/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Media210.GetVideoSourceConfigurations</Command>
+      <Response>Fault</Response>
+      <RequestParameters>
+
+      </RequestParameters>
+
+      <ResponseParameters>
+        <ArrayOfVideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC1" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS1</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC2" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC3" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS2</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+          <VideoSourceConfiguration token="VSC4" GovLength="10" Profile="Simple" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Name>user0</tt:Name>
+            <tt:UseCount>1</tt:UseCount>
+            <tt:SourceToken>VS3</tt:SourceToken>
+            <tt:Bounds x="1" y="1" width="100" height="50">
+            </tt:Bounds>
+
+          </VideoSourceConfiguration>
+        </ArrayOfVideoSourceConfiguration>
+      </ResponseParameters>
+    </Step>
+    
+
+
+
+
+
+
+  </Test>
+
+
+  
+  
+</TestSuit>
+
+
+

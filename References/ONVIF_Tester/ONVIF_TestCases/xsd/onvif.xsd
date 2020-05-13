@@ -1,0 +1,2302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2008-2009 by ONVIF: Open Network Video Interface Forum. All rights reserved.
+
+Recipients of this document may copy, distribute, publish, or display this document so long as this copyright notice, license and disclaimer are retained with all copies of the document. No license is granted to modify this document.
+
+THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES, ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT.  THE FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE CORPORATION.
+-->
+<xs:schema xmlns:tt="http://www.onvif.org/ver10/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" targetNamespace="http://www.onvif.org/ver10/schema" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/>
+  <xs:import namespace="http://docs.oasis-open.org/wsn/b-2" schemaLocation="http://docs.oasis-open.org/wsn/b-2.xsd"/>
+  <!--===============================-->
+  <!--         Generic Types         -->
+  <!--===============================-->
+  <xs:complexType name="DeviceEntity">
+    <xs:attribute name="token" type="tt:ReferenceToken" use="required"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="ReferenceToken">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="64"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="Name">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="64"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="IntRectangle">
+    <xs:attribute name="x" type="xs:int" use="required"/>
+    <xs:attribute name="y" type="xs:int" use="required"/>
+    <xs:attribute name="width" type="xs:int" use="required"/>
+    <xs:attribute name="height" type="xs:int" use="required"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IntRectangleRange">
+    <xs:sequence>
+      <xs:element name="XRange" type="tt:IntRange"/>
+      <xs:element name="YRange" type="tt:IntRange"/>
+      <xs:element name="WidthRange" type="tt:IntRange"/>
+      <xs:element name="HeightRange" type="tt:IntRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IntRange">
+    <xs:sequence>
+      <xs:element name="Min" type="xs:int"/>
+      <xs:element name="Max" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FloatRange">
+    <xs:sequence>
+      <xs:element name="Min" type="xs:float"/>
+      <xs:element name="Max" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DurationRange">
+    <xs:sequence>
+      <xs:element name="Min" type="xs:duration"/>
+      <xs:element name="Max" type="xs:duration"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IntList">
+    <xs:sequence>
+      <xs:element name="Items" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--      End, Generic Types       -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--      Media Related Types      -->
+  <!--===============================-->
+  <xs:complexType name="VideoSource">
+    <xs:complexContent>
+      <xs:extension base="tt:DeviceEntity">
+        <xs:sequence>
+          <xs:element name="Framerate" type="xs:float"/>
+          <xs:element name="Resolution" type="tt:VideoResolution"/>
+          <xs:element name="Imaging" type="tt:ImagingSettings" minOccurs="0"/>
+          <xs:element name="Extension" type="tt:VideoSourceExtension" minOccurs="0"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoSourceExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AudioSource">
+    <xs:complexContent>
+      <xs:extension base="tt:DeviceEntity">
+        <xs:sequence>
+          <xs:element name="Channels" type="xs:int"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Profile">
+    <xs:sequence>
+      <xs:element name="Name" type="tt:Name"/>
+      <xs:element name="VideoSourceConfiguration" type="tt:VideoSourceConfiguration" minOccurs="0"/>
+      <xs:element name="AudioSourceConfiguration" type="tt:AudioSourceConfiguration" minOccurs="0"/>
+      <xs:element name="VideoEncoderConfiguration" type="tt:VideoEncoderConfiguration" minOccurs="0"/>
+      <xs:element name="AudioEncoderConfiguration" type="tt:AudioEncoderConfiguration" minOccurs="0"/>
+      <xs:element name="VideoAnalyticsConfiguration" type="tt:VideoAnalyticsConfiguration" minOccurs="0"/>
+      <xs:element name="PTZConfiguration" type="tt:PTZConfiguration" minOccurs="0"/>
+      <xs:element name="MetadataConfiguration" type="tt:MetadataConfiguration" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:ProfileExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="token" type="tt:ReferenceToken" use="required"/>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ProfileExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:element name="VideoSourceConfiguration" type="tt:VideoSourceConfiguration"/>
+  <xs:element name="AudioSourceConfiguration" type="tt:AudioSourceConfiguration"/>
+  <xs:element name="VideoEncoderConfiguration" type="tt:VideoEncoderConfiguration"/>
+  <xs:element name="AudioEncoderConfiguration" type="tt:AudioEncoderConfiguration"/>
+  <xs:element name="VideoAnalyticsConfiguration" type="tt:VideoAnalyticsConfiguration"/>
+  <xs:element name="PTZConfiguration" type="tt:PTZConfiguration"/>
+  <xs:element name="MetadataConfiguration" type="tt:MetadataConfiguration"/>
+  <!--===============================-->
+  <xs:complexType name="ConfigurationEntity">
+    <xs:sequence>
+      <xs:element name="Name" type="tt:Name"/>
+      <xs:element name="UseCount" type="xs:int"/>
+    </xs:sequence>
+    <xs:attribute name="token" type="tt:ReferenceToken" use="required"/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   VideoSourceConfiguration   -->
+  <!--===============================-->
+  <xs:complexType name="VideoSourceConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="SourceToken" type="tt:ReferenceToken"/>
+          <xs:element name="Bounds" type="tt:IntRectangle"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoSourceConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="BoundsRange" type="tt:IntRectangleRange"/>
+      <xs:element name="VideoSourceTokensAvailable" type="tt:ReferenceToken" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:VideoSourceConfigurationOptionsExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoSourceConfigurationOptionsExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   VideoEncoderConfiguration   -->
+  <!--===============================-->
+  <xs:complexType name="VideoEncoderConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="Encoding" type="tt:VideoEncoding"/>
+          <xs:element name="Resolution" type="tt:VideoResolution"/>
+          <xs:element name="Quality" type="xs:float"/>
+          <xs:element name="RateControl" type="tt:VideoRateControl" minOccurs="0"/>
+          <xs:element name="MPEG4" type="tt:Mpeg4Configuration" minOccurs="0"/>
+          <xs:element name="H264" type="tt:H264Configuration" minOccurs="0"/>
+          <xs:element name="Multicast" type="tt:MulticastConfiguration"/>
+          <xs:element name="SessionTimeout" type="xs:duration"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="VideoEncoding">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="JPEG"/>
+      <xs:enumeration value="MPEG4"/>
+      <xs:enumeration value="H264"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="Mpeg4Profile">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SP"/>
+      <xs:enumeration value="ASP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="H264Profile">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Baseline"/>
+      <xs:enumeration value="Main"/>
+      <xs:enumeration value="Extended"/>
+      <xs:enumeration value="High"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="VideoResolution">
+    <xs:sequence>
+      <xs:element name="Width" type="xs:int"/>
+      <xs:element name="Height" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoRateControl">
+    <xs:sequence>
+      <xs:element name="FrameRateLimit" type="xs:int"/>
+      <xs:element name="EncodingInterval" type="xs:int"/>
+      <xs:element name="BitrateLimit" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Mpeg4Configuration">
+    <xs:sequence>
+      <xs:element name="GovLength" type="xs:int"/>
+      <xs:element name="Mpeg4Profile" type="tt:Mpeg4Profile"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="H264Configuration">
+    <xs:sequence>
+      <xs:element name="GovLength" type="xs:int"/>
+      <xs:element name="H264Profile" type="tt:H264Profile"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoEncoderConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="QualityRange" type="tt:IntRange"/>
+      <xs:element name="JPEG" type="tt:JpegOptions" minOccurs="0"/>
+      <xs:element name="MPEG4" type="tt:Mpeg4Options" minOccurs="0"/>
+      <xs:element name="H264" type="tt:H264Options" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:VideoEncoderOptionsExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoEncoderOptionsExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="JpegOptions">
+    <xs:sequence>
+      <xs:element name="ResolutionsAvailable" type="tt:VideoResolution" maxOccurs="unbounded"/>
+      <xs:element name="FrameRateRange" type="tt:IntRange"/>
+      <xs:element name="EncodingIntervalRange" type="tt:IntRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Mpeg4Options">
+    <xs:sequence>
+      <xs:element name="ResolutionsAvailable" type="tt:VideoResolution" maxOccurs="unbounded"/>
+      <xs:element name="GovLengthRange" type="tt:IntRange"/>
+      <xs:element name="FrameRateRange" type="tt:IntRange"/>
+      <xs:element name="EncodingIntervalRange" type="tt:IntRange"/>
+      <xs:element name="Mpeg4ProfilesSupported" type="tt:Mpeg4Profile" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="H264Options">
+    <xs:sequence>
+      <xs:element name="ResolutionsAvailable" type="tt:VideoResolution" maxOccurs="unbounded"/>
+      <xs:element name="GovLengthRange" type="tt:IntRange"/>
+      <xs:element name="FrameRateRange" type="tt:IntRange"/>
+      <xs:element name="EncodingIntervalRange" type="tt:IntRange"/>
+      <xs:element name="H264ProfilesSupported" type="tt:H264Profile" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--    AudioSourceConfiguration   -->
+  <!--===============================-->
+  <xs:complexType name="AudioSourceConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="SourceToken" type="tt:ReferenceToken"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AudioSourceConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="InputTokensAvailable" type="tt:ReferenceToken" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:AudioSourceOptionsExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AudioSourceOptionsExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   AudioEncoderConfiguration   -->
+  <!--===============================-->
+  <xs:complexType name="AudioEncoderConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="Encoding" type="tt:AudioEncoding"/>
+          <xs:element name="Bitrate" type="xs:int"/>
+          <xs:element name="SampleRate" type="xs:int"/>
+          <xs:element name="Multicast" type="tt:MulticastConfiguration"/>
+          <xs:element name="SessionTimeout" type="xs:duration"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="AudioEncoding">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="G711"/>
+      <xs:enumeration value="G726"/>
+      <xs:enumeration value="AAC"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="AudioEncoderConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="Options" type="tt:AudioEncoderConfigurationOption" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AudioEncoderConfigurationOption">
+    <xs:sequence>
+      <xs:element name="Encoding" type="tt:AudioEncoding"/>
+      <xs:element name="BitrateList" type="tt:IntList"/>
+      <xs:element name="SampleRateList" type="tt:IntList"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--  VideoAnalyticsConfiguration  -->
+  <!--===============================-->
+  <xs:complexType name="VideoAnalyticsConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="AnalyticsEngineConfiguration" type="tt:AnalyticsEngineConfiguration"/>
+          <xs:element name="RuleEngineConfiguration" type="tt:RuleEngineConfiguration"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <!--    MetadataConfiguration      -->
+  <!--===============================-->
+  <xs:complexType name="MetadataConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="PTZStatus" type="tt:PTZFilter" minOccurs="0"/>
+          <xs:element name="Events" type="tt:EventSubscription" minOccurs="0"/>
+          <xs:element name="Analytics" type="xs:boolean" minOccurs="0"/>
+          <xs:element name="Multicast" type="tt:MulticastConfiguration"/>
+          <xs:element name="SessionTimeout" type="xs:duration"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZFilter">
+    <xs:sequence>
+      <xs:element name="Status" type="xs:boolean"/>
+      <xs:element name="Position" type="xs:boolean"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="EventSubscription">
+    <xs:annotation>
+      <xs:documentation>Subcription handling in the same way as base notification subscription.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Filter" type="wsnt:FilterType" minOccurs="0"/>
+      <xs:element name="SubscriptionPolicy" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="MetadataConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="PTZStatusFilterOptions" type="tt:PTZStatusFilterOptions"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZStatusFilterOptions">
+    <xs:sequence>
+      <xs:element name="PanTiltStatusSupported" type="xs:boolean"/>
+      <xs:element name="ZoomStatusSupported" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--          Streaming            -->
+  <!--===============================-->
+  <xs:complexType name="MulticastConfiguration">
+    <xs:sequence>
+      <xs:element name="Address" type="tt:IPAddress"/>
+      <xs:element name="Port" type="xs:int"/>
+      <xs:element name="TTL" type="xs:int"/>
+      <xs:element name="AutoStart" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="StreamSetup">
+    <xs:sequence>
+      <xs:element name="Stream" type="tt:StreamType"/>
+      <xs:element name="Transport" type="tt:Transport"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="StreamType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RTP-Unicast"/>
+      <xs:enumeration value="RTP-Multicast"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="Transport">
+    <xs:sequence>
+      <xs:element name="Protocol" type="tt:TransportProtocol"/>
+      <xs:element name="Tunnel" type="tt:Transport" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="TransportProtocol">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UDP"/>
+      <xs:enumeration value="TCP"/>
+      <xs:enumeration value="RTSP"/>
+      <xs:enumeration value="HTTP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="MediaUri">
+    <xs:sequence>
+      <xs:element name="Uri" type="xs:anyURI"/>
+      <xs:element name="InvalidAfterConnect" type="xs:boolean"/>
+      <xs:element name="InvalidAfterReboot" type="xs:boolean"/>
+      <xs:element name="Timeout" type="xs:duration"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   End, Media Related Types    -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--    Discovery Related Types    -->
+  <!--===============================-->
+  <xs:simpleType name="ScopeDefinition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Fixed"/>
+      <xs:enumeration value="Configurable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="Scope">
+    <xs:sequence>
+      <xs:element name="ScopeDef" type="tt:ScopeDefinition"/>
+      <xs:element name="ScopeItem" type="xs:anyURI"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="DiscoveryMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Discoverable"/>
+      <xs:enumeration value="NonDiscoverable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <!-- End, Discovery Related Types  -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--     Network Related Types     -->
+  <!--===============================-->
+  <xs:complexType name="NetworkInterface">
+    <xs:complexContent>
+      <xs:extension base="tt:DeviceEntity">
+        <xs:sequence>
+          <xs:element name="Enabled" type="xs:boolean"/>
+          <xs:element name="Info" type="tt:NetworkInterfaceInfo" minOccurs="0"/>
+          <xs:element name="Link" type="tt:NetworkInterfaceLink" minOccurs="0"/>
+          <xs:element name="IPv4" type="tt:IPv4NetworkInterface" minOccurs="0"/>
+          <xs:element name="IPv6" type="tt:IPv6NetworkInterface" minOccurs="0"/>
+          <xs:element name="Extension" type="tt:NetworkInterfaceExtension" minOccurs="0"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceLink">
+    <xs:sequence>
+      <xs:element name="AdminSettings" type="tt:NetworkInterfaceConnectionSetting"/>
+      <xs:element name="OperSettings" type="tt:NetworkInterfaceConnectionSetting"/>
+      <xs:element name="InterfaceType" type="tt:IANA-IfTypes"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceConnectionSetting">
+    <xs:sequence>
+      <xs:element name="AutoNegotiation" type="xs:boolean"/>
+      <xs:element name="Speed" type="xs:int"/>
+      <xs:element name="Duplex" type="tt:Duplex"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="Duplex">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Full"/>
+      <xs:enumeration value="Half"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="IANA-IfTypes">
+    <xs:restriction base="xs:int">
+      <xs:annotation>
+        <xs:documentation>
+          For valid numbers, please refer to http://www.iana.org/assignments/ianaiftype-mib.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceInfo">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="HwAddress" type="tt:HwAddress"/>
+      <xs:element name="MTU" type="xs:int" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv6NetworkInterface">
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean"/>
+      <xs:element name="Config" type="tt:IPv6Configuration" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv4NetworkInterface">
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean"/>
+      <xs:element name="Config" type="tt:IPv4Configuration"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv4Configuration">
+    <xs:sequence>
+      <xs:element name="Manual" type="tt:PrefixedIPv4Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="LinkLocal" type="tt:PrefixedIPv4Address" minOccurs="0"/>
+      <xs:element name="FromDHCP" type="tt:PrefixedIPv4Address" minOccurs="0"/>
+      <xs:element name="DHCP" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv6Configuration">
+    <xs:sequence>
+      <xs:element name="AcceptRouterAdvert" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="DHCP" type="tt:IPv6DHCPConfiguration"/>
+      <xs:element name="Manual" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="LinkLocal" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="FromDHCP" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="FromRA" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:IPv6ConfigurationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv6ConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="IPv6DHCPConfiguration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Auto"/>
+      <xs:enumeration value="Stateful"/>
+      <xs:enumeration value="Stateless"/>
+      <xs:enumeration value="Off"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="NetworkProtocol">
+    <xs:sequence>
+      <xs:element name="Name" type="tt:NetworkProtocolType"/>
+      <xs:element name="Enabled" type="xs:boolean"/>
+      <xs:element name="Port" type="xs:int" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:NetworkProtocolExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkProtocolExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="NetworkProtocolType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HTTP"/>
+      <xs:enumeration value="HTTPS"/>
+      <xs:enumeration value="RTSP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="NetworkHostType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IPv4"/>
+      <xs:enumeration value="IPv6"/>
+      <xs:enumeration value="DNS"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="NetworkHost">
+    <xs:sequence>
+      <xs:element name="Type" type="tt:NetworkHostType"/>
+      <xs:element name="IPv4Address" type="tt:IPv4Address" minOccurs="0"/>
+      <xs:element name="IPv6Address" type="tt:IPv6Address" minOccurs="0"/>
+      <xs:element name="DNSname" type="tt:DNSName" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:NetworkHostExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkHostExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPAddress">
+    <xs:sequence>
+      <xs:element name="Type" type="tt:IPType"/>
+      <xs:element name="IPv4Address" type="tt:IPv4Address" minOccurs="0"/>
+      <xs:element name="IPv6Address" type="tt:IPv6Address" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PrefixedIPv4Address">
+    <xs:sequence>
+      <xs:element name="Address" type="tt:IPv4Address"/>
+      <xs:element name="PrefixLength" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="IPv4Address">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="PrefixedIPv6Address">
+    <xs:sequence>
+      <xs:element name="Address" type="tt:IPv6Address"/>
+      <xs:element name="PrefixLength" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="IPv6Address">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="HwAddress">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="IPType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IPv4"/>
+      <xs:enumeration value="IPv6"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="DNSName">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="HostnameInformation">
+    <xs:sequence>
+      <xs:element name="FromDHCP" type="xs:boolean"/>
+      <xs:element name="Name" type="xs:token" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:HostnameInformationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="HostnameInformationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DNSInformation">
+    <xs:sequence>
+      <xs:element name="FromDHCP" type="xs:boolean"/>
+      <xs:element name="SearchDomain" type="xs:token" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DNSFromDHCP" type="tt:IPAddress" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DNSManual" type="tt:IPAddress" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:DNSInformationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DNSInformationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NTPInformation">
+    <xs:sequence>
+      <xs:element name="FromDHCP" type="xs:boolean"/>
+      <xs:element name="NTPFromDHCP" type="tt:NetworkHost" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="NTPManual" type="tt:NetworkHost" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:NTPInformationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NTPInformationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="Domain">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="IPAddressFilterType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Allow"/>
+      <xs:enumeration value="Deny"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="DynamicDNSInformation">
+    <xs:sequence>
+      <xs:element name="Type" type="tt:DynamicDNSType"/>
+      <xs:element name="Name" type="tt:DNSName" minOccurs="0"/>
+      <xs:element name="TTL" type="xs:duration" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:DynamicDNSInformationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DynamicDNSInformationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="DynamicDNSType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoUpdate"/>
+      <xs:enumeration value="ClientUpdates"/>
+      <xs:enumeration value="ServerUpdates"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceSetConfiguration">
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="Link" type="tt:NetworkInterfaceConnectionSetting" minOccurs="0"/>
+      <xs:element name="MTU" type="xs:int" minOccurs="0"/>
+      <xs:element name="IPv4" type="tt:IPv4NetworkInterfaceSetConfiguration" minOccurs="0"/>
+      <xs:element name="IPv6" type="tt:IPv6NetworkInterfaceSetConfiguration" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:NetworkInterfaceSetConfigurationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkInterfaceSetConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv6NetworkInterfaceSetConfiguration">
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="AcceptRouterAdvert" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="Manual" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DHCP" type="tt:IPv6DHCPConfiguration" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPv4NetworkInterfaceSetConfiguration">
+    <xs:sequence>
+      <xs:element name="Enabled" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="Manual" type="tt:PrefixedIPv4Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DHCP" type="xs:boolean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkGateway">
+    <xs:sequence>
+      <xs:element name="IPv4Address" type="tt:IPv4Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IPv6Address" type="tt:IPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkZeroConfiguration">
+    <xs:sequence>
+      <xs:element name="InterfaceToken" type="tt:ReferenceToken"/>
+      <xs:element name="Enabled" type="xs:boolean"/>
+      <xs:element name="Addresses" type="tt:IPv4Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:NetworkZeroConfigurationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkZeroConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPAddressFilter">
+    <xs:sequence>
+      <xs:element name="Type" type="tt:IPAddressFilterType"/>
+      <xs:element name="IPv4Address" type="tt:PrefixedIPv4Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IPv6Address" type="tt:PrefixedIPv6Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:IPAddressFilterExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IPAddressFilterExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--  End, network Related Types   -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--   Capabilities Related Types  -->
+  <!--===============================-->
+  <xs:simpleType name="CapabilityCategory">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="All"/>
+      <xs:enumeration value="Analytics"/>
+      <xs:enumeration value="Device"/>
+      <xs:enumeration value="Events"/>
+      <xs:enumeration value="Imaging"/>
+      <xs:enumeration value="Media"/>
+      <xs:enumeration value="PTZ"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="Capabilities">
+    <xs:sequence>
+      <xs:element name="Analytics" type="tt:AnalyticsCapabilities" minOccurs="0"/>
+      <xs:element name="Device" type="tt:DeviceCapabilities" minOccurs="0"/>
+      <xs:element name="Events" type="tt:EventCapabilities" minOccurs="0"/>
+      <xs:element name="Imaging" type="tt:ImagingCapabilities" minOccurs="0"/>
+      <xs:element name="Media" type="tt:MediaCapabilities" minOccurs="0"/>
+      <xs:element name="PTZ" type="tt:PTZCapabilities" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:CapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="CapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AnalyticsCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <xs:element name="RuleSupport" type="xs:boolean"/>
+      <xs:element name="AnalyticsModuleSupport" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DeviceCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <xs:element name="Network" type="tt:NetworkCapabilities" minOccurs="0"/>
+      <xs:element name="System" type="tt:SystemCapabilities" minOccurs="0"/>
+      <xs:element name="IO" type="tt:IOCapabilities" minOccurs="0"/>
+      <xs:element name="Security" type="tt:SecurityCapabilities" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:DeviceCapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DeviceCapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="EventCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <xs:element name="WSSubscriptionPolicySupport" type="xs:boolean"/>
+      <xs:element name="WSPullPointSupport" type="xs:boolean"/>
+      <xs:element name="WSPausableSubscriptionManagerInterfaceSupport" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IOCapabilities">
+    <xs:sequence>
+      <xs:element name="InputConnectors" type="xs:int" minOccurs="0"/>
+      <xs:element name="RelayOutputs" type="xs:int" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:IOCapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="IOCapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="MediaCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <xs:element name="StreamingCapabilities" type="tt:RealTimeStreamingCapabilities"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RealTimeStreamingCapabilities">
+    <xs:sequence>
+      <xs:element name="RTPMulticast" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="RTP_TCP" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="RTP_RTSP_TCP" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:RealTimeStreamingCapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RealTimeStreamingCapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkCapabilities">
+    <xs:sequence>
+      <xs:element name="IPFilter" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="ZeroConfiguration" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="IPVersion6" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="DynDNS" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:NetworkCapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="NetworkCapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SecurityCapabilities">
+    <xs:sequence>
+      <xs:element name="TLS1.1" type="xs:boolean"/>
+      <xs:element name="TLS1.2" type="xs:boolean"/>
+      <xs:element name="OnboardKeyGeneration" type="xs:boolean"/>
+      <xs:element name="AccessPolicyConfig" type="xs:boolean"/>
+      <xs:element name="X.509Token" type="xs:boolean"/>
+      <xs:element name="SAMLToken" type="xs:boolean"/>
+      <xs:element name="KerberosToken" type="xs:boolean"/>
+      <xs:element name="RELToken" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="StorageCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <!-- [Not Part of 1.0!] -->
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SystemCapabilities">
+    <xs:sequence>
+      <xs:element name="DiscoveryResolve" type="xs:boolean"/>
+      <xs:element name="DiscoveryBye" type="xs:boolean"/>
+      <xs:element name="RemoteDiscovery" type="xs:boolean"/>
+      <xs:element name="SystemBackup" type="xs:boolean"/>
+      <xs:element name="SystemLogging" type="xs:boolean"/>
+      <xs:element name="FirmwareUpgrade" type="xs:boolean"/>
+      <xs:element name="SupportedVersions" type="tt:OnvifVersion" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:SystemCapabilitiesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SystemCapabilitiesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="OnvifVersion">
+    <xs:sequence>
+      <xs:element name="Major" type="xs:int"/>
+      <xs:element name="Minor" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ImagingCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZCapabilities">
+    <xs:sequence>
+      <xs:element name="XAddr" type="xs:anyURI"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--End, Capabilities Related Types-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--    System Related Types       -->
+  <!--===============================-->
+  <xs:simpleType name="SystemLogType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="System"/>
+      <xs:enumeration value="Access"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="SystemLog">
+    <xs:sequence>
+      <xs:element name="Binary" type="tt:AttachmentData" minOccurs="0"/>
+      <xs:element name="String" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SupportInformation">
+    <xs:sequence>
+      <xs:element name="Binary" type="tt:AttachmentData" minOccurs="0"/>
+      <xs:element name="String" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="BinaryData">
+    <xs:sequence>
+      <xs:element name="Data" type="xs:base64Binary" nillable="false"/>
+    </xs:sequence>
+    <xs:attribute ref="xmime:contentType" use="optional"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AttachmentData">
+    <xs:sequence>
+      <xs:element name="Data" type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="BackupFile">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Data" type="tt:AttachmentData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="FactoryDefaultType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Hard"/>
+      <xs:enumeration value="Soft"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="SetDateTimeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Manual"/>
+      <xs:enumeration value="NTP"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="SystemDateTime">
+    <xs:sequence>
+      <xs:element name="DateTimeType" type="tt:SetDateTimeType"/>
+      <xs:element name="DaylightSavings" type="xs:boolean"/>
+      <xs:element name="TimeZone" type="tt:TimeZone" minOccurs="0"/>
+      <xs:element name="UTCDateTime" type="tt:DateTime" minOccurs="0"/>
+      <xs:element name="LocalDateTime" type="tt:DateTime" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:SystemDateTimeExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="SystemDateTimeExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="DateTime">
+    <xs:sequence>
+      <xs:element name="Time" type="tt:Time"/>
+      <xs:element name="Date" type="tt:Date"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Date">
+    <xs:sequence>
+      <xs:element name="Year" type="xs:int"/>
+      <xs:element name="Month" type="xs:int"/>
+      <xs:element name="Day" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Time">
+    <xs:sequence>
+      <xs:element name="Hour" type="xs:int"/>
+      <xs:element name="Minute" type="xs:int"/>
+      <xs:element name="Second" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="TimeZone">
+    <xs:sequence>
+      <xs:annotation>
+        <xs:documentation>
+        The TZ format is specified by POSIX, please refer to POSIX 1003.1 section 8.3
+        Example: Europe, Paris TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
+          CET = designation for standard time when daylight saving is not in force
+          -1 = offset in hours = negative so 1 hour east of Greenwich meridian
+          CEST = designation when daylight saving is in force ("Central European Summer Time")
+          , = no offset number between code and comma, so default to one hour ahead for daylight saving
+          M3.5.0 = when daylight saving starts = the last Sunday in March (the "5th" week means the last in the month)
+          /2, = the local time when the switch occurs = 2 a.m. in this case
+          M10.5.0 = when daylight saving ends = the last Sunday in October.
+          /3, = the local time when the switch occurs = 3 a.m. in this case
+        </xs:documentation>
+      </xs:annotation>
+      <xs:element name="TZ" type="xs:token"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   End, System Related Types   -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--   UserToken Handling Types    -->
+  <!--===============================-->
+  <xs:simpleType name="UserLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Administrator"/>
+      <xs:enumeration value="Operator"/>
+      <xs:enumeration value="User"/>
+      <xs:enumeration value="Anonymous"/>
+      <xs:enumeration value="Extended"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element name="Username" type="xs:string"/>
+      <xs:element name="Password" type="xs:string" minOccurs="0"/>
+      <xs:element name="UserLevel" type="tt:UserLevel"/>
+      <xs:element name="Extension" type="tt:UserExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="UserExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!-- End, UserToken Handling Types -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--   Security Management Types   -->
+  <!--===============================-->
+  <xs:complexType name="CertificateGenerationParameters">
+    <xs:sequence>
+      <xs:element name="CertificateID" type="xs:token" minOccurs="0"/>
+      <xs:element name="Subject" type="xs:string" minOccurs="0"/>
+      <xs:element name="ValidNotBefore" type="xs:token" minOccurs="0"/>
+      <xs:element name="ValidNotAfter" type="xs:token" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:CertificateGenerationParametersExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="CertificateGenerationParametersExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Certificate">
+    <xs:sequence>
+      <xs:element name="CertificateID" type="xs:token"/>
+      <xs:element name="Certificate" type="tt:BinaryData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="CertificateStatus">
+    <xs:sequence>
+      <xs:element name="CertificateID" type="xs:token"/>
+      <xs:element name="Status" type="xs:boolean"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--End, Security management Types -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--   Start IO management Types   -->
+  <!--===============================-->
+  <xs:simpleType name="RelayLogicalState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="active"/>
+      <xs:enumeration value="inactive"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="RelayIdleState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="closed"/>
+      <xs:enumeration value="open"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="RelayOutputSettings">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:RelayMode"/>
+      <xs:element name="DelayTime" type="xs:duration"/>
+      <xs:element name="IdleState" type="tt:RelayIdleState"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="RelayMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Monostable"/>
+      <xs:enumeration value="Bistable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="RelayOutput">
+    <xs:complexContent>
+      <xs:extension base="tt:DeviceEntity">
+        <xs:sequence>
+          <xs:element name="Properties" type="tt:RelayOutputSettings"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <!--   End, IO management Types    -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--    Start PTZ Related Types    -->
+  <!--===============================-->
+  <xs:complexType name="PTZNode">
+    <xs:complexContent>
+      <xs:extension base="tt:DeviceEntity">
+        <xs:sequence>
+          <xs:element name="Name" type="tt:Name" minOccurs="0"/>
+          <xs:element name="SupportedPTZSpaces" type="tt:PTZSpaces"/>
+          <xs:element name="MaximumNumberOfPresets" type="xs:int"/>
+          <xs:element name="HomeSupported" type="xs:boolean"/>
+          <xs:element name="AuxiliaryCommands" type="tt:AuxiliaryData" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="Extension" type="tt:PTZNodeExtension" minOccurs="0"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZNodeExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZConfiguration">
+    <xs:complexContent>
+      <xs:extension base="tt:ConfigurationEntity">
+        <xs:sequence>
+          <xs:element name="NodeToken" type="tt:ReferenceToken"/>
+          <xs:element name="DefaultAbsolutePantTiltPositionSpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultAbsoluteZoomPositionSpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultRelativePanTiltTranslationSpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultRelativeZoomTranslationSpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultContinuousPanTiltVelocitySpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultContinuousZoomVelocitySpace" type="xs:anyURI" minOccurs="0"/>
+          <xs:element name="DefaultPTZSpeed" type="tt:PTZSpeed" minOccurs="0"/>
+          <xs:element name="DefaultPTZTimeout" type="xs:duration" minOccurs="0"/>
+          <xs:element name="PanTiltLimits" type="tt:PanTiltLimits" minOccurs="0"/>
+          <xs:element name="ZoomLimits" type="tt:ZoomLimits" minOccurs="0"/>
+          <xs:element name="Extension" type="tt:PTZConfigurationExtension" minOccurs="0"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZConfigurationOptions">
+    <xs:sequence>
+      <xs:element name="Spaces" type="tt:PTZSpaces"/>
+      <xs:element name="PTZTimeout" type="tt:DurationRange"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PanTiltLimits">
+    <xs:sequence>
+      <xs:element name="Range" type="tt:Space2DDescription"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ZoomLimits">
+    <xs:sequence>
+      <xs:element name="Range" type="tt:Space1DDescription"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZSpaces">
+    <xs:sequence>
+      <xs:element name="AbsolutePanTiltPositionSpace" type="tt:Space2DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="AbsoluteZoomPositionSpace" type="tt:Space1DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="RelativePanTiltTranslationSpace" type="tt:Space2DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="RelativeZoomTranslationSpace" type="tt:Space1DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ContinuousPanTiltVelocitySpace" type="tt:Space2DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ContinuousZoomVelocitySpace" type="tt:Space1DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="PanTiltSpeedSpace" type="tt:Space1DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ZoomSpeedSpace" type="tt:Space1DDescription" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:PTZSpacesExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZSpacesExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Space2DDescription">
+    <xs:sequence>
+      <xs:element name="URI" type="xs:anyURI"/>
+      <xs:element name="XRange" type="tt:FloatRange"/>
+      <xs:element name="YRange" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Space1DDescription">
+    <xs:sequence>
+      <xs:element name="URI" type="xs:anyURI"/>
+      <xs:element name="XRange" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Vector2D">
+    <xs:attribute name="x" type="xs:float" use="required"/>
+    <xs:attribute name="y" type="xs:float" use="required"/>
+    <xs:attribute name="space" type="xs:anyURI" use="optional"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Vector1D">
+    <xs:attribute name="x" type="xs:float" use="required"/>
+    <xs:attribute name="space" type="xs:anyURI" use="optional"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZVector">
+    <xs:sequence>
+      <xs:element name="PanTilt" type="tt:Vector2D" minOccurs="0"/>
+      <xs:element name="Zoom" type="tt:Vector1D" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZSpeed">
+    <xs:sequence>
+      <xs:element name="PanTilt" type="tt:Vector2D" minOccurs="0"/>
+      <xs:element name="Zoom" type="tt:Vector1D" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZStatus">
+    <xs:sequence>
+      <xs:element name="Position" type="tt:PTZVector" minOccurs="0"/>
+      <xs:element name="MoveStatus" type="tt:PTZMoveStatus" minOccurs="0"/>
+      <xs:element name="Error" type="xs:string" minOccurs="0"/>
+      <xs:element name="UtcTime" type="xs:dateTime"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZPreset">
+    <xs:sequence>
+      <xs:element name="Name" type="tt:Name" minOccurs="0"/>
+      <xs:element name="PTZPosition" type="tt:PTZVector" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="token" type="tt:ReferenceToken"/>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZMoveStatus">
+    <xs:sequence>
+      <xs:element name="PanTilt" type="tt:MoveStatus" minOccurs="0"/>
+      <xs:element name="Zoom" type="tt:MoveStatus" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="AuxiliaryData">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="128"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="MoveStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IDLE"/>
+      <xs:enumeration value="MOVING"/>
+      <xs:enumeration value="UNKNOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <!--     End, PTZ Related Types    -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--      Imaging Related Types    -->
+  <!--===============================-->
+  <xs:complexType name="ImagingStatus">
+    <xs:sequence>
+      <xs:element name="FocusStatus" type="tt:FocusStatus"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FocusStatus">
+    <xs:sequence>
+      <xs:element name="Position" type="xs:float"/>
+      <xs:element name="MoveStatus" type="tt:MoveStatus"/>
+      <xs:element name="Error" type="xs:string"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FocusConfiguration">
+    <xs:sequence>
+      <xs:element name="AutoFocusMode" type="tt:AutoFocusMode"/>
+      <xs:element name="DefaultSpeed" type="xs:float"/>
+      <xs:element name="NearLimit" type="xs:float">
+        <xs:annotation>
+          <xs:documentation>Parameter to set autofocus near limit (unit: meter).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FarLimit" type="xs:float">
+        <xs:annotation>
+          <xs:documentation>Parameter to set autofocus far limit (unit: meter).
+If set to 0.0, infinity will be used.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="AutoFocusMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AUTO"/>
+      <xs:enumeration value="MANUAL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="ImagingSettings">
+    <xs:sequence>
+      <xs:element name="BacklightCompensation" type="tt:BacklightCompensation" minOccurs="0"/>
+      <xs:element name="Brightness" type="xs:float" minOccurs="0"/>
+      <xs:element name="ColorSaturation" type="xs:float" minOccurs="0"/>
+      <xs:element name="Contrast" type="xs:float" minOccurs="0"/>
+      <xs:element name="Exposure" type="tt:Exposure" minOccurs="0"/>
+      <xs:element name="Focus" type="tt:FocusConfiguration" minOccurs="0"/>
+      <xs:element name="IrCutFilter" type="tt:IrCutFilterMode" minOccurs="0"/>
+      <xs:element name="Sharpness" type="xs:float" minOccurs="0"/>
+      <xs:element name="WideDynamicRange" type="tt:WideDynamicRange" minOccurs="0"/>
+      <xs:element name="WhiteBalance" type="tt:WhiteBalance" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:ImagingSettingsExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ImagingSettingsExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Exposure">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:ExposureMode"/>
+      <xs:element name="Priority" type="tt:ExposurePriority"/>
+      <xs:element name="Window" type="tt:Rectangle"/>
+      <!-- check 0.9 -->
+      <xs:element name="MinExposureTime" type="xs:float"/>
+      <xs:element name="MaxExposureTime" type="xs:float"/>
+      <xs:element name="MinGain" type="xs:float"/>
+      <xs:element name="MaxGain" type="xs:float"/>
+      <xs:element name="MinIris" type="xs:float"/>
+      <xs:element name="MaxIris" type="xs:float"/>
+      <xs:element name="ExposureTime" type="xs:float"/>
+      <xs:element name="Gain" type="xs:float"/>
+      <xs:element name="Iris" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="WideDynamicMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="ON"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="WideDynamicRange">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:WideDynamicMode"/>
+      <xs:element name="Level" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="BacklightCompensationMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="ON"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="BacklightCompensation">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:BacklightCompensationMode"/>
+      <xs:element name="Level" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="ExposurePriority">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LowNoise"/>
+      <xs:enumeration value="FrameRate"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="ImagingOptions">
+    <xs:sequence>
+      <xs:element name="BacklightCompensation" type="tt:BacklightCompensationOptions"/>
+      <xs:element name="Brightness" type="tt:FloatRange"/>
+      <xs:element name="ColorSaturation" type="tt:FloatRange"/>
+      <xs:element name="Contrast" type="tt:FloatRange"/>
+      <xs:element name="Exposure" type="tt:ExposureOptions"/>
+      <xs:element name="Focus" type="tt:FocusOptions"/>
+      <xs:element name="IrCutFilterModes" type="tt:IrCutFilterMode" maxOccurs="unbounded"/>
+      <xs:element name="Sharpness" type="tt:FloatRange"/>
+      <xs:element name="WideDynamicRange" type="tt:WideDynamicRangeOptions"/>
+      <xs:element name="WhiteBalance" type="tt:WhiteBalanceOptions"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="WideDynamicRangeOptions">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:WideDynamicMode" maxOccurs="unbounded"/>
+      <xs:element name="Level" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="BacklightCompensationOptions">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:WideDynamicMode" maxOccurs="unbounded"/>
+      <xs:element name="Level" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FocusOptions">
+    <xs:sequence>
+      <xs:element name="AutoFocusModes" type="tt:AutoFocusMode" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DefaultSpeed" type="tt:FloatRange"/>
+      <xs:element name="NearLimit" type="tt:FloatRange"/>
+      <xs:element name="FarLimit" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ExposureOptions">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:ExposureMode" maxOccurs="unbounded"/>
+      <xs:element name="Priority" type="tt:ExposurePriority" maxOccurs="unbounded"/>
+      <xs:element name="MinExposureTime" type="tt:FloatRange"/>
+      <xs:element name="MaxExposureTime" type="tt:FloatRange"/>
+      <xs:element name="MinGain" type="tt:FloatRange"/>
+      <xs:element name="MaxGain" type="tt:FloatRange"/>
+      <xs:element name="MinIris" type="tt:FloatRange"/>
+      <xs:element name="MaxIris" type="tt:FloatRange"/>
+      <xs:element name="ExposureTime" type="tt:FloatRange"/>
+      <xs:element name="Gain" type="tt:FloatRange"/>
+      <xs:element name="Iris" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="WhiteBalanceOptions">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:WhiteBalanceMode" maxOccurs="unbounded"/>
+      <xs:element name="YrGain" type="tt:FloatRange"/>
+      <xs:element name="YbGain" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FocusMove">
+    <xs:sequence>
+      <xs:element name="Absolute" type="tt:AbsoluteFocus" minOccurs="0"/>
+      <xs:element name="Relative" type="tt:RelativeFocus" minOccurs="0"/>
+      <xs:element name="Continuous" type="tt:ContinuousFocus" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AbsoluteFocus">
+    <xs:sequence>
+      <xs:element name="Position" type="xs:float"/>
+      <xs:element name="Speed" type="xs:float" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RelativeFocus">
+    <xs:sequence>
+      <xs:element name="Distance" type="xs:float"/>
+      <xs:element name="Speed" type="xs:float" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ContinuousFocus">
+    <xs:sequence>
+      <xs:element name="Speed" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="MoveOptions">
+    <xs:sequence>
+      <xs:element name="Absolute" type="tt:AbsoluteFocusOptions" minOccurs="0"/>
+      <xs:element name="Relative" type="tt:RelativeFocusOptions" minOccurs="0"/>
+      <xs:element name="Continuous" type="tt:ContinuousFocusOptions" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AbsoluteFocusOptions">
+    <xs:sequence>
+      <xs:element name="Position" type="tt:FloatRange"/>
+      <xs:element name="Speed" type="tt:FloatRange" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RelativeFocusOptions">
+    <xs:sequence>
+      <xs:element name="Distance" type="tt:FloatRange"/>
+      <xs:element name="Speed" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ContinuousFocusOptions">
+    <xs:sequence>
+      <xs:element name="Speed" type="tt:FloatRange"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="ExposureMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AUTO"/>
+      <xs:enumeration value="MANUAL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="Enabled">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ENABLED"/>
+      <xs:enumeration value="DISABLED"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="WhiteBalanceMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AUTO"/>
+      <xs:enumeration value="MANUAL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="IrCutFilterMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ON"/>
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="AUTO"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="WhiteBalance">
+    <xs:sequence>
+      <xs:element name="Mode" type="tt:WhiteBalanceMode"/>
+      <xs:element name="CrGain" type="xs:float"/>
+      <xs:element name="CbGain" type="xs:float"/>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--  End, Imaging Related Types   -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--  Event and Analytics Types    -->
+  <!--===============================-->
+  <xs:simpleType name="TopicNamespaceLocation">
+    <xs:restriction base="xs:anyURI"/>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:simpleType name="PropertyOperation">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Initialized"/>
+      <xs:enumeration value="Deleted"/>
+      <xs:enumeration value="Changed"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:element name="Message">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Source" type="tt:ItemList" minOccurs="0"/>
+        <xs:element name="Key" type="tt:ItemList" minOccurs="0"/>
+        <xs:element name="Data" type="tt:ItemList" minOccurs="0"/>
+        <xs:element name="Extension" type="tt:MessageExtension" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="UtcTime" type="xs:dateTime" use="required"/>
+      <xs:attribute name="PropertyOperation" type="tt:PropertyOperation"/>
+      <xs:anyAttribute/>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:complexType name="MessageExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ItemList">
+    <xs:sequence>
+      <xs:element name="SimpleItem" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Name" type="xs:string" use="required"/>
+          <xs:attribute name="Value" type="xs:anySimpleType" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ElementItem" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any namespace="##any"/>
+          </xs:sequence>
+          <xs:attribute name="Name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:ItemListExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ItemListExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--       Message Description     -->
+  <!--===============================-->
+  <xs:complexType name="MessageDescription">
+    <xs:sequence>
+      <xs:element name="Source" type="tt:ItemListDescription" minOccurs="0"/>
+      <xs:element name="Key" type="tt:ItemListDescription" minOccurs="0"/>
+      <xs:element name="Data" type="tt:ItemListDescription" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:MessageDescriptionExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IsProperty" type="xs:boolean"/>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="MessageDescriptionExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ItemListDescription">
+    <xs:sequence>
+      <xs:element name="SimpleItemDescription" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Name" type="xs:string" use="required"/>
+          <xs:attribute name="Type" type="xs:QName" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ElementItemDescription" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Name" type="xs:string" use="required"/>
+          <xs:attribute name="Type" type="xs:QName" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:ItemListDescriptionExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ItemListDescriptionExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Vector">
+    <xs:attribute name="x" type="xs:float"/>
+    <xs:attribute name="y" type="xs:float"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Rectangle">
+    <xs:attribute name="bottom" type="xs:float"/>
+    <xs:attribute name="top" type="xs:float"/>
+    <xs:attribute name="right" type="xs:float"/>
+    <xs:attribute name="left" type="xs:float"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Polygon">
+    <xs:sequence>
+      <xs:element name="Point" type="tt:Vector" minOccurs="3" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Polyline">
+    <xs:sequence>
+      <xs:element name="Point" type="tt:Vector" minOccurs="2" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="Direction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left"/>
+      <xs:enumeration value="Right"/>
+      <xs:enumeration value="Any"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="Color">
+    <xs:attribute name="X" type="xs:float" use="required"/>
+    <xs:attribute name="Y" type="xs:float" use="required"/>
+    <xs:attribute name="Z" type="xs:float" use="required"/>
+    <xs:attribute name="Colorspace" type="xs:anyURI"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ColorCovariance">
+    <xs:attribute name="XX" type="xs:float" use="required"/>
+    <xs:attribute name="YY" type="xs:float" use="required"/>
+    <xs:attribute name="ZZ" type="xs:float" use="required"/>
+    <xs:attribute name="XY" type="xs:float"/>
+    <xs:attribute name="XZ" type="xs:float"/>
+    <xs:attribute name="YZ" type="xs:float"/>
+    <xs:attribute name="Colorspace" type="xs:anyURI"/>
+  </xs:complexType>
+  <!--===============================-->
+  <!--       Scene Description       -->
+  <!--===============================-->
+  <xs:complexType name="Appearance">
+    <xs:sequence>
+      <xs:element name="Transformation" type="tt:Transformation" minOccurs="0"/>
+      <xs:element name="Shape" type="tt:ShapeDescriptor" minOccurs="0"/>
+      <xs:element name="Color" type="tt:ColorDescriptor" minOccurs="0"/>
+      <xs:element name="Class" type="tt:ClassDescriptor" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:AppearanceExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AppearanceExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ShapeDescriptor">
+    <xs:sequence>
+      <xs:element name="BoundingBox" type="tt:Rectangle"/>
+      <xs:element name="CenterOfGravity" type="tt:Vector"/>
+      <xs:element name="Polygon" type="tt:Polygon" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:ShapeDescriptorExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ShapeDescriptorExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ColorDescriptor">
+    <xs:sequence>
+      <xs:element name="ColorCluster" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Color" type="tt:Color"/>
+            <xs:element name="Weight" type="xs:float" minOccurs="0"/>
+            <xs:element name="Covariance" type="tt:ColorCovariance" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:ColorDescriptorExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ColorDescriptorExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:simpleType name="ClassType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Animal"/>
+      <xs:enumeration value="Face"/>
+      <xs:enumeration value="Human"/>
+      <xs:enumeration value="Vehical"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--===============================-->
+  <xs:complexType name="ClassDescriptor">
+    <xs:sequence>
+      <xs:element name="ClassCandidate" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Type" type="tt:ClassType"/>
+            <xs:element name="Likelihood" type="xs:float"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:ClassDescriptorExtension" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ClassDescriptorExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Object">
+    <xs:complexContent>
+      <xs:extension base="tt:ObjectId">
+        <xs:sequence>
+          <xs:element name="Appearance" type="tt:Appearance" minOccurs="0"/>
+          <xs:element name="Behaviour" type="tt:Behaviour" minOccurs="0"/>
+          <xs:element name="Extension" type="tt:ObjectExtension" minOccurs="0"/>
+        </xs:sequence>
+        <xs:anyAttribute/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ObjectExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Transformation">
+    <xs:sequence>
+      <xs:element name="Translate" type="tt:Vector" minOccurs="0"/>
+      <xs:element name="Scale" type="tt:Vector" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:TransformationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="TransformationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Frame">
+    <xs:sequence>
+      <xs:element name="PTZStatus" type="tt:PTZStatus" minOccurs="0"/>
+      <xs:element name="Transformation" type="tt:Transformation" minOccurs="0"/>
+      <xs:element name="Object" type="tt:Object" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ObjectTree" type="tt:ObjectTree" minOccurs="0"/>
+      <xs:element name="Extension" type="tt:FrameExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="UtcTime" type="xs:dateTime" use="required"/>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="FrameExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Merge">
+    <xs:sequence>
+      <xs:element name="from" type="tt:ObjectId" minOccurs="2" maxOccurs="unbounded"/>
+      <xs:element name="to" type="tt:ObjectId"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Split">
+    <xs:sequence>
+      <xs:element name="from" type="tt:ObjectId"/>
+      <xs:element name="to" type="tt:ObjectId" minOccurs="2" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Rename">
+    <xs:sequence>
+      <xs:element name="from" type="tt:ObjectId"/>
+      <xs:element name="to" type="tt:ObjectId"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ObjectId">
+    <xs:attribute name="ObjectId" type="xs:integer"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Behaviour">
+    <xs:sequence>
+      <xs:element name="Removed" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Idle" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:BehaviourExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="BehaviourExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ObjectTree">
+    <xs:sequence>
+      <xs:element name="Rename" type="tt:Rename" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Split" type="tt:Split" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Merge" type="tt:Merge" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Delete" type="tt:ObjectId" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:ObjectTreeExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ObjectTreeExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--    Analytics Configuration    -->
+  <!--===============================-->
+  <xs:complexType name="AnalyticsEngineConfiguration">
+    <xs:sequence>
+      <xs:element name="AnalyticsModule" type="tt:Config" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:AnalyticsEngineConfigurationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="AnalyticsEngineConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RuleEngineConfiguration">
+    <xs:sequence>
+      <xs:element name="Rule" type="tt:Config" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extension" type="tt:RuleEngineConfigurationExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="RuleEngineConfigurationExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="Config">
+    <xs:sequence>
+      <xs:element name="Parameters" type="tt:ItemList"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+    <xs:attribute name="Type" type="xs:QName" use="required"/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ConfigDescription">
+    <xs:sequence>
+      <xs:element name="Parameters" type="tt:ItemListDescription"/>
+      <xs:element name="Messages" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="tt:MessageDescription">
+              <xs:sequence>
+                <xs:element name="ParentTopic" type="xs:string"/>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Extension" type="tt:ConfigDescriptionExtension" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="ConfigDescriptionExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!--End, Event and Analytics Types -->
+  <!--===============================-->
+  <!--===============================-->
+  <!--===============================-->
+  <!--   Metadata Streaming Types    -->
+  <!--===============================-->
+  <xs:complexType name="MetadataStream">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="VideoAnalytics" type="tt:VideoAnalyticsStream"/>
+        <xs:element name="PTZ" type="tt:PTZStream"/>
+        <xs:element name="Event" type="tt:EventStream"/>
+        <xs:element name="Extension" type="tt:MetadataStreamExtension"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:anyAttribute/>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="MetadataStreamExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoAnalyticsStream">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Frame" type="tt:Frame"/>
+      <xs:element name="Extension" type="tt:VideoAnalyticsStreamExtension"/>
+    </xs:choice>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="VideoAnalyticsStreamExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZStream">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="PTZStatus" type="tt:PTZStatus"/>
+      <xs:element name="Extension" type="tt:PTZStreamExtension"/>
+    </xs:choice>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="PTZStreamExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="EventStream">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="NotificationMessage" type="wsnt:NotificationMessageHolderType"/>
+      <xs:element name="Extension" type="tt:EventStreamExtension"/>
+    </xs:choice>
+  </xs:complexType>
+  <!--===============================-->
+  <xs:complexType name="EventStreamExtension">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--===============================-->
+  <!-- End, Metadata Streaming Types -->
+  <!--===============================-->
+</xs:schema>

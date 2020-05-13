@@ -1,0 +1,1037 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="IMAGING" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>IMAGING-1-1-1 IMAGING COMMAND GETIMAGINGSETTINGS</Name>
+    <Description>
+      Features file: IMAGING_FEATURES.xml
+      Features test: F.IMAGING.01
+      Features for autotest: Features Imaging.xml
+    </Description>
+  </Parameters>
+  <Test ID = "TC.IMAGING-1-1-1.18" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns correct response.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        STEP PASSED
+
+        STEP 5 - Get imaging settings
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Imaging20.GetImagingSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ImagingSettings20 xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl">
+          <BacklightCompensation xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </BacklightCompensation>
+          <Brightness xmlns="http://www.onvif.org/ver10/schema">1</Brightness>
+          <ColorSaturation xmlns="http://www.onvif.org/ver10/schema">1</ColorSaturation>
+          <Contrast xmlns="http://www.onvif.org/ver10/schema">1</Contrast>
+          <Exposure xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <Priority>LowNoise</Priority>
+            <Window bottom="1" top="1" right="1" left="1" />
+            <MinExposureTime>1</MinExposureTime>
+            <MaxExposureTime>1</MaxExposureTime>
+            <MinGain>1</MinGain>
+            <MaxGain>1</MaxGain>
+            <MinIris>1</MinIris>
+            <MaxIris>1</MaxIris>
+            <ExposureTime>1</ExposureTime>
+            <Gain>1</Gain>
+            <Iris>1</Iris>
+          </Exposure>
+          <Focus xmlns="http://www.onvif.org/ver10/schema">
+            <AutoFocusMode>AUTO</AutoFocusMode>
+            <DefaultSpeed>1</DefaultSpeed>
+            <NearLimit>1</NearLimit>
+            <FarLimit>1</FarLimit>
+            <Extension />
+          </Focus>
+          <IrCutFilter xmlns="http://www.onvif.org/ver10/schema">ON</IrCutFilter>
+          <Sharpness xmlns="http://www.onvif.org/ver10/schema">1</Sharpness>
+          <WideDynamicRange xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </WideDynamicRange>
+          <WhiteBalance xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <CrGain>1</CrGain>
+            <CbGain>1</CbGain>
+            <Extension />
+          </WhiteBalance>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </ImagingSettings20>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.19" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Correct response (several video sources)</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns correct response with several video sources.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        STEP PASSED
+
+        STEP 5 - Get imaging settings
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 6 - Get imaging settings
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 7 - Get imaging settings
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+          <VideoSource token="r" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+          <VideoSource token="0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Imaging20.GetImagingSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ImagingSettings20 xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl">
+          <BacklightCompensation xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </BacklightCompensation>
+          <Brightness xmlns="http://www.onvif.org/ver10/schema">1</Brightness>
+          <ColorSaturation xmlns="http://www.onvif.org/ver10/schema">1</ColorSaturation>
+          <Contrast xmlns="http://www.onvif.org/ver10/schema">1</Contrast>
+          <Exposure xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <Priority>LowNoise</Priority>
+            <Window bottom="1" top="1" right="1" left="1" />
+            <MinExposureTime>1</MinExposureTime>
+            <MaxExposureTime>1</MaxExposureTime>
+            <MinGain>1</MinGain>
+            <MaxGain>1</MaxGain>
+            <MinIris>1</MinIris>
+            <MaxIris>1</MaxIris>
+            <ExposureTime>1</ExposureTime>
+            <Gain>1</Gain>
+            <Iris>1</Iris>
+          </Exposure>
+          <Focus xmlns="http://www.onvif.org/ver10/schema">
+            <AutoFocusMode>AUTO</AutoFocusMode>
+            <DefaultSpeed>1</DefaultSpeed>
+            <NearLimit>1</NearLimit>
+            <FarLimit>1</FarLimit>
+            <Extension />
+          </Focus>
+          <IrCutFilter xmlns="http://www.onvif.org/ver10/schema">ON</IrCutFilter>
+          <Sharpness xmlns="http://www.onvif.org/ver10/schema">1</Sharpness>
+          <WideDynamicRange xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </WideDynamicRange>
+          <WhiteBalance xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <CrGain>1</CrGain>
+            <CbGain>1</CbGain>
+            <Extension />
+          </WhiteBalance>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </ImagingSettings20>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Imaging20.GetImagingSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>r</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ImagingSettings20 xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl">
+          <BacklightCompensation xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </BacklightCompensation>
+          <Brightness xmlns="http://www.onvif.org/ver10/schema">1</Brightness>
+          <ColorSaturation xmlns="http://www.onvif.org/ver10/schema">1</ColorSaturation>
+          <Contrast xmlns="http://www.onvif.org/ver10/schema">1</Contrast>
+          <Exposure xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <Priority>LowNoise</Priority>
+            <Window bottom="1" top="1" right="1" left="1" />
+            <MinExposureTime>1</MinExposureTime>
+            <MaxExposureTime>1</MaxExposureTime>
+            <MinGain>1</MinGain>
+            <MaxGain>1</MaxGain>
+            <MinIris>1</MinIris>
+            <MaxIris>1</MaxIris>
+            <ExposureTime>1</ExposureTime>
+            <Gain>1</Gain>
+            <Iris>1</Iris>
+          </Exposure>
+          <Focus xmlns="http://www.onvif.org/ver10/schema">
+            <AutoFocusMode>AUTO</AutoFocusMode>
+            <DefaultSpeed>1</DefaultSpeed>
+            <NearLimit>1</NearLimit>
+            <FarLimit>1</FarLimit>
+            <Extension />
+          </Focus>
+          <IrCutFilter xmlns="http://www.onvif.org/ver10/schema">ON</IrCutFilter>
+          <Sharpness xmlns="http://www.onvif.org/ver10/schema">1</Sharpness>
+          <WideDynamicRange xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </WideDynamicRange>
+          <WhiteBalance xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <CrGain>1</CrGain>
+            <CbGain>1</CbGain>
+            <Extension />
+          </WhiteBalance>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </ImagingSettings20>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Imaging20.GetImagingSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>0</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ImagingSettings20 xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl">
+          <BacklightCompensation xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </BacklightCompensation>
+          <Brightness xmlns="http://www.onvif.org/ver10/schema">1</Brightness>
+          <ColorSaturation xmlns="http://www.onvif.org/ver10/schema">1</ColorSaturation>
+          <Contrast xmlns="http://www.onvif.org/ver10/schema">1</Contrast>
+          <Exposure xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <Priority>LowNoise</Priority>
+            <Window bottom="1" top="1" right="1" left="1" />
+            <MinExposureTime>1</MinExposureTime>
+            <MaxExposureTime>1</MaxExposureTime>
+            <MinGain>1</MinGain>
+            <MaxGain>1</MaxGain>
+            <MinIris>1</MinIris>
+            <MaxIris>1</MaxIris>
+            <ExposureTime>1</ExposureTime>
+            <Gain>1</Gain>
+            <Iris>1</Iris>
+          </Exposure>
+          <Focus xmlns="http://www.onvif.org/ver10/schema">
+            <AutoFocusMode>AUTO</AutoFocusMode>
+            <DefaultSpeed>1</DefaultSpeed>
+            <NearLimit>1</NearLimit>
+            <FarLimit>1</FarLimit>
+            <Extension />
+          </Focus>
+          <IrCutFilter xmlns="http://www.onvif.org/ver10/schema">ON</IrCutFilter>
+          <Sharpness xmlns="http://www.onvif.org/ver10/schema">1</Sharpness>
+          <WideDynamicRange xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </WideDynamicRange>
+          <WhiteBalance xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <CrGain>1</CrGain>
+            <CbGain>1</CbGain>
+            <Extension />
+          </WhiteBalance>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </ImagingSettings20>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.20" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Fault on Imaging GetCapabilities</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns Fault on Imaging GetCapabilities.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Device10.DeviceServiceFake.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\PROJECTS\ONVIF\Source\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 61
+        at DUT.CameraWebService.Device10.DeviceServiceFake.GetCapabilities(CapabilityCategory[] Category) in D:\PROJECTS\ONVIF\Source\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 426
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.21" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>No response on Imaging GetCapabilities</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns No response on Imaging GetCapabilities.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        The HTTP request has exceeded the allotted timeout
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.22" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>No response on Media GetCapabilities</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns No response on Media GetCapabilities.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        The HTTP request has exceeded the allotted timeout
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.23" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Correct response - no media service</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns correct response (no media service).
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:3246/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Receiver
+        Subcode: ActionNotSupported
+        Subcode: NoSuchService
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Device10.DeviceServiceFake.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 61
+        at DUT.CameraWebService.Device10.DeviceServiceFake.GetCapabilities(CapabilityCategory[] Category) in D:\PROJECTS\ONVIF4\Sources\ON-0110\Version2\DUT\CameraWebService\ServiceDevice10\DeviceServiceFake.asmx.cs:line 426
+        STEP PASSED
+
+        STEP 3 - Get I/O service address
+        Transmit done
+        Receive done
+        http://localhost:3246/onvif/ServiceDeviceIO10/DeviceIOService10.asmx
+        STEP PASSED
+
+        STEP 4 - Check if media or I/O supported
+        Neither media, nor I/O supported.
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Fault</Response>
+      <Code>Receiver</Code>
+      <Subcode>ActionNotSupported</Subcode>
+      <Subcode>NoSuchService</Subcode>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>All</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Device>
+            <tt:XAddr>http://CAMERA_IP/onvif/device_service</tt:XAddr>
+            <tt:Network>
+              <tt:IPFilter>false</tt:IPFilter>
+              <tt:ZeroConfiguration>false</tt:ZeroConfiguration>
+              <tt:IPVersion6>false</tt:IPVersion6>
+              <tt:DynDNS>true</tt:DynDNS>
+            </tt:Network>
+            <tt:System>
+              <tt:DiscoveryResolve>true</tt:DiscoveryResolve>
+              <tt:DiscoveryBye>true</tt:DiscoveryBye>
+              <tt:RemoteDiscovery>false</tt:RemoteDiscovery>
+              <tt:SystemBackup>false</tt:SystemBackup>
+              <tt:SystemLogging>true</tt:SystemLogging>
+              <tt:FirmwareUpgrade>false</tt:FirmwareUpgrade>
+              <tt:SupportedVersions>
+                <tt:Major>1</tt:Major>
+                <tt:Minor>1</tt:Minor>
+              </tt:SupportedVersions>
+            </tt:System>
+            <tt:IO>
+              <tt:InputConnectors>0</tt:InputConnectors>
+              <tt:RelayOutputs>4</tt:RelayOutputs>
+            </tt:IO>
+            <tt:Security>
+              <tt:TLS1.1>false</tt:TLS1.1>
+              <tt:TLS1.2>false</tt:TLS1.2>
+              <tt:OnboardKeyGeneration>false</tt:OnboardKeyGeneration>
+              <tt:AccessPolicyConfig>false</tt:AccessPolicyConfig>
+              <tt:X.509Token>false</tt:X.509Token>
+              <tt:SAMLToken>false</tt:SAMLToken>
+              <tt:KerberosToken>false</tt:KerberosToken>
+              <tt:RELToken>false</tt:RELToken>
+            </tt:Security>
+          </tt:Device>
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/onvif/event</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging</tt:XAddr>
+          </tt:Imaging>
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>false</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>false</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+          </tt:Media>
+          <tt:Extension>
+            <tt:DeviceIO>
+              <tt:XAddr>http://CAMERA_IP/onvif/media</tt:XAddr>
+              <tt:VideoSources>1</tt:VideoSources>
+              <tt:VideoOutputs>1</tt:VideoOutputs>
+              <tt:AudioSources>1</tt:AudioSources>
+              <tt:AudioOutputs>1</tt:AudioOutputs>
+              <tt:RelayOutputs>4</tt:RelayOutputs>
+            </tt:DeviceIO>
+          </tt:Extension>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>DeviceIO10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Imaging20.GetImagingSettings</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <VideoSourceToken>1</VideoSourceToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ImagingSettings20 xmlns:p2="http://www.onvif.org/ver20/imaging/wsdl">
+          <BacklightCompensation xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </BacklightCompensation>
+          <Brightness xmlns="http://www.onvif.org/ver10/schema">1</Brightness>
+          <ColorSaturation xmlns="http://www.onvif.org/ver10/schema">1</ColorSaturation>
+          <Contrast xmlns="http://www.onvif.org/ver10/schema">1</Contrast>
+          <Exposure xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <Priority>LowNoise</Priority>
+            <Window bottom="1" top="1" right="1" left="1" />
+            <MinExposureTime>1</MinExposureTime>
+            <MaxExposureTime>1</MaxExposureTime>
+            <MinGain>1</MinGain>
+            <MaxGain>1</MaxGain>
+            <MinIris>1</MinIris>
+            <MaxIris>1</MaxIris>
+            <ExposureTime>1</ExposureTime>
+            <Gain>1</Gain>
+            <Iris>1</Iris>
+          </Exposure>
+          <Focus xmlns="http://www.onvif.org/ver10/schema">
+            <AutoFocusMode>AUTO</AutoFocusMode>
+            <DefaultSpeed>1</DefaultSpeed>
+            <NearLimit>1</NearLimit>
+            <FarLimit>1</FarLimit>
+            <Extension />
+          </Focus>
+          <IrCutFilter xmlns="http://www.onvif.org/ver10/schema">ON</IrCutFilter>
+          <Sharpness xmlns="http://www.onvif.org/ver10/schema">1</Sharpness>
+          <WideDynamicRange xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>OFF</Mode>
+            <Level>1</Level>
+          </WideDynamicRange>
+          <WhiteBalance xmlns="http://www.onvif.org/ver10/schema">
+            <Mode>AUTO</Mode>
+            <CrGain>1</CrGain>
+            <CbGain>1</CbGain>
+            <Extension />
+          </WhiteBalance>
+          <Extension xmlns="http://www.onvif.org/ver10/schema" />
+        </ImagingSettings20>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.24" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Fault on GetVideoSources</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns Fault on GetVideoSources.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        SOAP fault returned
+        Code: Sender
+        Reason: System.Web.Services.Protocols.SoapException: MESSAGE
+        at DUT.CameraWebService.Media10.MediaService.StepTypeProcessing(StepType stepType, SoapException ex, Int32 timeOut) in D:\PROJECTS\ONVIF\Source\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 62
+        at DUT.CameraWebService.Media10.MediaService.GetVideoSources() in D:\PROJECTS\ONVIF\Source\Version2\DUT\CameraWebService\ServiceMedia10\MediaService.asmx.cs:line 93
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <RequestParameters/>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.25" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>No response on GetVideoSources</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns No response on GetVideoSources.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        The HTTP request has exceeded the allotted timeout
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource>
+          <VideoSource token="1" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Framerate>30.000000</tt:Framerate>
+            <tt:Resolution>
+              <tt:Width>640</tt:Width>
+              <tt:Height>480</tt:Height>
+            </tt:Resolution>
+          </VideoSource>
+        </ArrayOfVideoSource>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.IMAGING-1-1-1.26" ONVIFTestID="IMAGING-1-1-1" Enabled="true">
+    <TestName>IMAGING COMMAND GETIMAGESETTINGS</TestName>
+    <Name>Empty Video Sources list</Name>
+    <Description>
+      Check IMAGING COMMAND GETIMAGESETTINGS test
+      when DUT returns Empty Video Sources list.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+        IMAGING-1-1-1 IMAGING COMMAND GETIMAGESETTINGS
+
+        STEP 1 - Get imaging service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceImaging20/ImagingService20.asmx
+        STEP PASSED
+
+        STEP 2 - Get media service address
+        Transmit done
+        Receive done
+        http://localhost:22467/onvif/ServiceMedia10/MediaService.asmx
+        STEP PASSED
+
+        STEP 3 - Get video sources
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 4 - Check that the DUT returned video sources
+        No video sources received from the DUT
+        STEP FAILED
+
+        TEST FAILED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Imaging</Category>
+      </RequestParameters>
+      <ResponseParameters special="2">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Imaging>
+            <tt:XAddr>http://CAMERA_IP/onvif/imaging_service</tt:XAddr>
+          </tt:Imaging>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Media</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Media>
+            <tt:XAddr>http://CAMERA_IP/onvif/media_service</tt:XAddr>
+            <tt:StreamingCapabilities>
+              <tt:RTPMulticast>true</tt:RTPMulticast>
+              <tt:RTP_TCP>true</tt:RTP_TCP>
+              <tt:RTP_RTSP_TCP>true</tt:RTP_RTSP_TCP>
+            </tt:StreamingCapabilities>
+            <tt:Extension>
+              <tt:ProfileCapabilities>
+                <tt:MaximumNumberOfProfiles>32</tt:MaximumNumberOfProfiles>
+              </tt:ProfileCapabilities>
+            </tt:Extension>
+          </tt:Media>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media10.GetVideoSources</Command>
+      <Response>Normal</Response>
+      <RequestParameters/>
+      <ResponseParameters>
+        <ArrayOfVideoSource/>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+</TestSuit>

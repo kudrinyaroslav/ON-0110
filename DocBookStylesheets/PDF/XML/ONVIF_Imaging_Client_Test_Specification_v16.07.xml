@@ -1,0 +1,3366 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+
+<!--For PDF version (standard)-->
+<!--<?xml-stylesheet href="../docbook/xsl/fo/docbook.xsl" type="text/xsl" ?>-->
+<!--For PDF version - ONVIF-->
+<!--<?xml-stylesheet href="../ONVIF-stylesheets/onvif-specification-fo-us.xsl" type="text/xsl" ?>-->
+<!--For PDF version - Astrosoft-->
+<?xml-stylesheet href="../Astro-stylesheets/onvif-specification-fo-us.xsl" type="text/xsl" ?>
+<!--For online version-->
+<!--<?xml-stylesheet href="docbook-css/docbook.xsl" type="text/xsl" ?>-->
+<book xmlns="http://docbook.org/ns/docbook"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xsi:schemaLocation="http://docbook.org/ns/docbook http://docbook.org/xml/5.0/xsd/docbook.xsd"
+   version="0.1"
+   xml:id="ONVIF_Profile_Imaging_Client_TS">
+  <info>
+    <orgname>
+      <phrase>
+        <trademark class='trade'>ONVIF</trademark>
+      </phrase>
+    </orgname>
+    <title>Imaging Client Test Specification</title>
+    <subtitle>Version 16.07</subtitle>
+    <date>July 2016</date>
+    <copyright>
+      <year>2016</year>
+      <holder>ONVIF, Inc. All rights reserved. www.onvif.org</holder>
+    </copyright>
+    <address>
+      <uri>www.onvif.org</uri>
+    </address>
+    <legalnotice role="notices">
+      <para>
+        Recipients of this document may copy, distribute, publish, or display this
+        document so long as this copyright notice, license and disclaimer are retained with
+Sudtirol
+all copies of the document. No license is granted to modify this document.
+      </para>
+      <para>
+        THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR
+        AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT
+        NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+        NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY
+        PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+        COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+      </para>
+      <para>
+        IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR
+        ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES,
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR
+        NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT. THE
+        FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR
+        LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE
+        AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE
+        CORPORATION.
+      </para>
+    </legalnotice>
+    <revhistory>
+      <revision>
+        <revnumber>16.01</revnumber>
+        <date>December 18, 2016</date>
+        <revdescription>
+          <para>Focus Control Test Cases was splitted on two parts (Focus Move Capabilities Test Cases and Focus Control Test Cases) to handle Device capabilities issue.</para>
+        </revdescription>
+      </revision>
+      <revision>
+        <revnumber>16.01</revnumber>
+        <date>December 18, 2016</date>
+        <revdescription>
+          <para>Get Imaging Capabilities Test Cases feature definition was updated</para>
+        </revdescription>
+      </revision>
+      <revision>
+        <revnumber>15.10</revnumber>
+        <date>October 20, 2016</date>
+        <revdescription>
+          <itemizedlist>
+            <listitem>
+              <para>Initial version:</para>
+            </listitem>
+            <listitem>
+              <para>General parts added</para>
+            </listitem>
+            <listitem>
+              <para>Get Imaging Capabilities Test Cases added</para>
+            </listitem>
+            <listitem>
+              <para>Video Sources List Test Cases added</para>
+            </listitem>
+            <listitem>
+              <para>Get Imaging Settings Test Cases added</para>
+            </listitem>
+            <listitem>
+              <para>Imaging Settings Configuration Test Cases added</para>
+            </listitem>
+            <listitem>
+              <para>Focus Control Test Cases added</para>
+            </listitem>
+          </itemizedlist>
+        </revdescription>
+      </revision>
+    </revhistory>
+  </info>
+
+  <chapter xml:id="s.intro">
+    <title>Introduction</title>
+    <para>
+      The goal of the ONVIF Test Specification set is to make it possible to realize fully
+      interoperable IP physical security implementations from different vendors. This
+      specification also acts as an input document to the development of a test tool which
+      will be used to test the ONVIF Client implementation conformance towards ONVIF standard.
+      This Client Test Tool analyzes network communications between ONVIF Devices and Clients
+      being tested and determines whether a specific Client is ONVIF conformant
+      (see <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">ONVIF Conformance Process Specification</link>).
+    </para>
+    <para>
+      This particular document defines test cases required for testing Imaging Service features of a
+      Client application e.g. Get Imaging Capabilities, Video Sources List, Get Imaging Settings, Imaging Settings Configuration, Focus Control.
+      It also describes the test framework, test setup, prerequisites, test policies needed
+      for the execution of the described test cases.
+    </para>
+    <section xml:id="s.intro.scope">
+      <title>Scope</title>
+      <para>
+        This ONVIF Imaging Client Test Specification defines and regulates the conformance
+        testing procedure for the ONVIF conformant Clients in the scope of Imaging Service
+        features. Conformance testing is meant to be black-box network traces analysis and
+        verification. The objective of this specification is to provide the test cases to
+        test individual requirements of ONVIF Clients in the scope of Imaging Service
+        features according to ONVIF Imaging Service Specification.
+      </para>
+      <para>
+        The principal intended purposes are:<itemizedlist>
+          <listitem>
+            <para>Provide self-assessment tool for implementations.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Provide comprehensive test suite coverage for Imaging Service features.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        This specification <emphasis role="bold">does not</emphasis> address the following:<itemizedlist>
+          <listitem>
+            <para>3rd parties Client use cases</para>
+          </listitem>
+          <listitem>
+            <para>
+              Non-functional (performance and regression) testing and
+              analysis.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              SOAP Implementation Interoperability test i.e. Web Services
+              Interoperability Basic Profile version 2.0 (WS-I BP2.0).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Network protocol implementation Conformance test for HTTPS and HTTP
+              protocols.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        The following sections cover test cases needed for the verification of relevant
+        features as mentioned in the ONVIF Profile Specifications.
+      </para>
+    </section>
+    <section xml:id="s.intro.get_imaging_capabilities">
+      <title>Get Imaging Capabilities</title>
+      <para>
+        Get Imaging Capabilities section specifies Client ability to request imaging capabilities from Device.
+      </para>
+    </section>
+    <section xml:id="s.intro.get_imaging_settings">
+      <title>Get Imaging Settings</title>
+      <para>
+        Get Imaging Settings section specifies Client ability to request imaging settings from Device.
+      </para>
+    </section>
+    <section xml:id="s.intro.set_imaging_settings">
+      <title>Imaging Settings Configuration</title>
+      <para>
+        Imaging Settings Configuration section specifies Client ability to change imaging settings on Device.
+      </para>
+    </section>
+    <section xml:id="s.intro.get_move_options">
+      <title>Focus Move Capabilities</title>
+      <para>
+        Focus Move Capabilities section specifies Client ability to retrieve focus move capabilities from Device.
+      </para>
+    </section>
+    <section xml:id="s.intro.focus_control">
+      <title>Focus Control</title>
+      <para>
+        Focus Control section specifies Client ability to control focus on Device.
+      </para>
+    </section>
+  </chapter>
+  <chapter xml:id="s.docbook">
+    <title>Normative references</title>
+    <itemizedlist>
+      <listitem>
+        <para>ONVIF Conformance Process Specification:</para>
+        <para>
+          <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">http://www.onvif.org/Documents/Specifications.aspx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ONVIF Profile Policy:</para>
+        <para>
+          <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">http://www.onvif.org/Documents/Specifications.aspx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ONVIF Core Specifications:</para>
+        <para>
+          <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">http://www.onvif.org/Documents/Specifications.aspx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ONVIF Core Client Test Specification:</para>
+        <para>
+          <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">http://www.onvif.org/Documents/Specifications.aspx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ONVIF Imaging Specification:</para>
+        <para>
+          <link xlink:href="http://www.onvif.org/Documents/Specifications.aspx">http://www.onvif.org/Documents/Specifications.aspx</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ISO/IEC Directives, Part 2:</para>
+        <para>
+          <link xlink:href="http://www.iso.org/directives">http://www.iso.org/directives</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>ISO 16484-5:2014-09 Annex P:</para>
+        <para>
+          <link xlink:href="https://www.iso.org/obp/ui/#!iso:std:63753:en">https://www.iso.org/obp/ui/#!iso:std:63753:en</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>W3C SOAP 1.2, Part 1, Messaging Framework:</para>
+        <para>
+          <link xlink:href="http://www.w3.org/TR/soap12-part1/">http://www.w3.org/TR/soap12-part1/</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>W3C XML Schema Part 1: Structures Second Edition:</para>
+        <para>
+          <link xlink:href="http://www.w3.org/TR/xmlschema-1/">http://www.w3.org/TR/xmlschema-1/</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>W3C XML Schema Part 2: Datatypes Second Edition:</para>
+        <para>
+          <link xlink:href="http://www.w3.org/TR/xmlschema-2/">"http://www.w3.org/TR/xmlschema-2/</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+      Rules for the structure and drafting of International Standards, Annex H: Verbal forms
+      for the expression of provisions.
+    </para>
+      </listitem>
+    </itemizedlist>
+  </chapter>
+  <chapter xml:id="additions">
+    <title>Terms and Definitions</title>
+    <section xml:id="additions.conventions">
+      <title>Conventions</title>
+      <para>
+        The key words "shall", "shall not", "should", "should not", "may", "need not",
+        "can", "cannot" in this specification are to be interpreted as described in [ISO/IEC
+        Directives Part 2].
+      </para>
+    </section>
+    <section xml:id="additions.definitions">
+      <title>Definitions</title>
+      <para>This section describes terms and definitions used in this document.</para>
+      <variablelist>
+        <varlistentry>
+          <term>Profile</term>
+          <listitem>
+            <para>See ONVIF Profile Policy.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ONVIF Device</term>
+          <listitem>
+            <para>
+              Computer appliance or software program that exposes one or multiple
+              ONVIF Web Services.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ONVIF Client</term>
+          <listitem>
+            <para>
+              Computer appliance or software program that uses ONVIF Web
+              Services.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Conversation</term>
+          <listitem>
+            <para>
+              A Conversation is all exchanges between two MAC addresses that
+              contains SOAP request and response.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Network</term>
+          <listitem>
+            <para>
+              A network is an interconnected group of devices communicating using
+              the Internet protocol.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Network Trace Capture file</term>
+          <listitem>
+            <para>
+              Data file created by a network protocol analyzer software (such as
+              Wireshark). Contains network packets data recorded during a live network
+              communications.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>SOAP</term>
+          <listitem>
+            <para>
+              SOAP is a lightweight protocol intended for exchanging structured
+              information in a decentralized, distributed environment. It uses XML
+              technologies to define an extensible messaging framework providing a
+              message construct that can be exchanged over a variety of underlying
+              protocols.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Client Test Tool</term>
+          <listitem>
+            <para>
+              ONVIF Client Test Tool that tests ONVIF Client implementation towards
+              the ONVIF Test Specification set.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Imaging Service</term>
+          <listitem>
+            <para>
+              Services for exposure time, gain and white balance parameters among others.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Image Stabilization</term>
+          <listitem>
+            <para>
+              Functionality used to avoid blurring of images due to movement of the device or its objects.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Tone Compensation</term>
+          <listitem>
+            <para>
+              Functionality used to make the image with dark or bright areas to be more visible.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Defogging</term>
+          <listitem>
+            <para>
+              Functionality used to make the image more detailed in presence of fog.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Valid Device Response</term>
+          <listitem>
+            <para>
+              Device has responded to specific request with code HTTP or RTSP 200 OK
+              and SOAP fault message has not appeared.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section xml:id="additions.abbreviations">
+      <title>Abbreviations</title>
+      <para>This section describes abbreviations used in this document.</para>
+      <variablelist>
+        <varlistentry>
+          <term>HTTP</term>
+          <listitem>
+            <para>Hyper Text Transport Protocol.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>HTTPS</term>
+          <listitem>
+            <para>Hyper Text Transport Protocol over Secure Socket Layer.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>URI</term>
+          <listitem>
+            <para>Uniform Resource Identifier.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WSDL</term>
+          <listitem>
+            <para>Web Services Description Language.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>XML</term>
+          <listitem>
+            <para>eXtensible Markup Language.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section xml:id="additions.namespaces">
+      <title>Namespaces</title>
+      <para>
+        Prefix and namespaces used in this test specification are listed in Table 1.
+        These prefixes are not part of the standard and an implementation can use any prefix.
+      </para>
+      <table>
+        <title>Defined namespaces in this specification</title>
+        <tgroup cols="3">
+          <colspec colwidth="109*"/>
+          <colspec colwidth="403*"/>
+          <colspec colwidth="488*"/>
+          <thead>
+            <row>
+              <entry>Prefix</entry>
+              <entry>Namespace URI</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>soapenv</entry>
+              <entry>http://www.w3.org/2003/05/soap-envelope</entry>
+              <entry>Envelope namespace as defined by SOAP 1.2 [SOAP 1.2, Part 1]</entry>
+            </row>
+            <row>
+              <entry>xs</entry>
+              <entry>http://www.w3.org/2001/XMLSchema</entry>
+              <entry>Instance namespace as defined by XS [XML-Schema, Part1] and [XMLSchema,Part 2]</entry>
+            </row>
+            <row>
+              <entry>xsi</entry>
+              <entry>http://www.w3.org/2001/XMLSchema-instance</entry>
+              <entry>XML schema instance namespace</entry>
+            </row>
+            <row>
+              <entry>tns1</entry>
+              <entry>http://www.onvif.org/ver10/topics</entry>
+              <entry>The namespace for the ONVIF topic namespace</entry>
+            </row>
+            <row>
+              <entry>tt</entry>
+              <entry>http://www.onvif.org/ver10/schema</entry>
+              <entry>ONVIF XML schema descriptions</entry>
+            </row>
+            <row>
+              <entry>tds</entry>
+              <entry>http://www.onvif.org/ver10/device/wsdl</entry>
+              <entry>The namespace for the WSDL device service</entry>
+            </row>
+            <row>
+              <entry>trt</entry>
+              <entry>http://www.onvif.org/ver10/media/wsdl</entry>
+              <entry>The namespace for the WSDL media service</entry>
+            </row>
+            <row>
+              <entry>timg</entry>
+              <entry>http://www.onvif.org/ver20/imaging/wsd</entry>
+              <entry>The namespace for the WSDL imaging service</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </chapter>
+  <chapter xml:id="overview">
+    <title>Test Overview</title>
+    <para>
+      This section provides information for the test setup procedure and required
+      prerequisites that should be followed during test case execution.
+    </para>
+    <para>
+      An ONVIF client with Imaging features support can provide image settings configuration and focus control.
+    </para>
+    <para>
+      An ONVIF Profile is described by a fixed set of functionalities through a number of
+      services that are provided by the ONVIF standard. A number of services and
+      functionalities are mandatory for each type of ONVIF Profile. An ONVIF Device and ONVIF
+      Client may support any combination of Profiles and other optional services and
+      functionalities.
+    </para>
+    <section xml:id="overview.test_setup">
+      <title>Test Setup</title>
+      <para>Collect Network Traces files required by the test cases.</para>
+      <para>
+        Collect Feature List XML files for Devices detected in the Network Trace
+        files.
+      </para>
+      <para>
+        Client shall support all mandatory and conditional features listed in the Device
+        Feature List XML file supplied for the Profiles supported by the Client.
+      </para>
+      <para>
+        For ONVIF compatibility, the ONVIF Client shall follow the
+        requirements of the conformance process. For details please see the latest ONVIF
+        Conformance Process Specification.
+      </para>
+    </section>
+    <section xml:id="overview.prerequisites">
+      <title>Prerequisites</title>
+      <para>
+        The pre-requisites for executing the test cases described in this Test
+        Specification include:
+      </para>
+      <para>The Device shall be configured with an IPv4 address.</para>
+      <para>The Device shall be able to be discovered by the Client.</para>
+    </section>
+  </chapter>
+  <chapter xml:id="tc.get_imaging_capabilities">
+    <title>Get Imaging Capabilities Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> get_imaging_capabilities
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.get_imaging_capabilities.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to retrieve a imaging capabilities.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Get Imaging Capabilities if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve a imaging capabilities using
+                    <emphasis role="bold">GetCapabilities</emphasis> operation OR <emphasis role="bold">GetServiceCapabilities</emphasis> operation (Imaging Service) OR supports get_services_capabilities.get_services feature.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Get Imaging Capabilities if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetCapabilities</emphasis> request if detected AND Device supportes GetCapabilities feature OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetServiceCapabilities</emphasis> request (Imaging Service) if detected AND Device supportes GetServices feature
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetCapabilities</emphasis> request AND no valid responses for <emphasis role="bold">GetServiceCapabilities</emphasis> request (Imaging Service)
+                    AND get_services_capabilities.get_services feature is not supported by Client.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_imaging_capabilities.GETIMAGINGCAPABILITIES-1">
+      <title>
+        GET CAPABILITIES
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Imaging Capabilities -
+        Get Capabilities
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETIMAGINGCAPABILITIES-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Capabilities
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that imaging capabilities provided by Device is received by Client using the
+        <emphasis role="bold">GetCapabilities</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetCapabilities</emphasis> operation
+              with <emphasis role="bold">tds:Category</emphasis> element equal to "All" OR "Imaging" OR without any <emphasis role="bold">tds:Category</emphasis> element present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetCapabilities</emphasis> request message with <emphasis role="bold">tds:Category</emphasis> element equal to "All" OR "Imaging" OR
+              without any <emphasis role="bold">tds:Category</emphasis> element to retrieve imaging capabilities
+              from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetCapabilitiesResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetCapabilities</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetCapabilities</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetCapabilities</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] IF it contains any <emphasis role="bold">tds:Category</emphasis> element THEN it contains <emphasis role="bold">tds:Category</emphasis> element equal to "All" OR "Imaging" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetCapabilities</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetCapabilitiesResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_imaging_capabilities.get_capabilities
+      </para>
+    </section>
+    <section xml:id="tc.get_imaging_capabilities.GETIMAGINGCAPABILITIES-2">
+      <title>
+        GET SERVICE CAPABILITIES
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Imaging Capabilities -
+        Get Service Capabilities
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETIMAGINGCAPABILITIES-2
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Services
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that imaging capabilities provided by Device is received by Client using the
+        <emphasis role="bold">GetServiceCapabilities</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetServiceCapabilities</emphasis> operation for Imaging Service present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetServiceCapabilities</emphasis> request message to retrieve imaging capabilities
+              from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetServiceCapabilitiesResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetServiceCapabilities</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetServiceCapabilities</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetServiceCapabilities</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetServiceCapabilities</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetServiceCapabilitiesResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_imaging_capabilities.get_service_capabilities
+      </para>
+    </section>
+  </chapter>
+  <chapter xml:id="tc.get_imaging_settings">
+    <title>Get Imaging Settings Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> get_imaging_settings
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.get_imaging_settings.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to retrieve a current imaging settings.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Get Imaging Settings if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve a current imaging settings using
+                    <emphasis role="bold">GetImagingSettings</emphasis> operation.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Get Imaging Settings if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetImagingSettings</emphasis> request.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_imaging_settings.GETIMAGINGSETTINGS-1">
+      <title>
+        GET IMAGING SETTINGS
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Imaging Settings -
+        Get Imaging Settings
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETIMAGINGSETTINGS-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Imaging Settings
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that imaging settings for Device is received by Client using the
+        <emphasis role="bold">GetImagingSettings</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetImagingSettings</emphasis> operation
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetImagingSettings</emphasis> request message to retrieve imaging settings
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetImagingSettingsResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetImagingSettings</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetImagingSettings</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetImagingSettings</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetImagingSettings</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetImagingSettingsResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_imaging_settings.get_imaging_settings
+      </para>
+    </section>
+  </chapter>
+  <chapter xml:id="tc.set_imaging_settings">
+    <title>Imaging Settings Configuration Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> set_imaging_settings
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.set_imaging_settings.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to change imaging settings.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Imaging Settings Configuration if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve a imaging options using
+                    <emphasis role="bold">GetOptions</emphasis> operation AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to change a imaging settings using
+                    <emphasis role="bold">SetImagingSettings</emphasis> operation.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Imaging Settings Configuration if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetOptions</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">SetImagingSettings</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">SetImagingSettings</emphasis> request contains settings which does not correspong to <emphasis role="bold">GetOptionsResponse</emphasis> message
+                    for the same video source token.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.set_imaging_settings.SETIMAGINGSETTINGS-1">
+      <title>
+        GET OPTIONS
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Imaging Settings -
+        Get Options
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> SETIMAGINGSETTINGS-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Options
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that imaging options for Device is received by Client using the
+        <emphasis role="bold">GetOptions</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetOptions</emphasis> operation
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetOptions</emphasis> request message to retrieve imaging options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetOptions</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetOptions</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetOptionsResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_imaging_settings.get_options
+      </para>
+    </section>
+    <section xml:id="tc.set_imaging_settings.SETIMAGINGSETTINGS-2">
+      <title>
+        SET IMAGING SETTINGS
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Set Imaging Settings -
+        Set Imaging Settings
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> SETIMAGINGSETTINGS-2
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Set Imaging Settings
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to change
+        imaging settings on Device using the <emphasis role="bold">SetImagingSettings</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">SetImagingSettings</emphasis> operation
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetOptions</emphasis> request message to retrieve imaging options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">SetImagingSettings</emphasis> request message to change imaging settings
+              for specified video source which are correspond to the resieved options on the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">SetImagingSettingsResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetImagingSettings</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetImagingSettings</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:SetImagingSettings</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">SetImagingSettings</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:SetImagingSettingsResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Client <emphasis role="bold">GetOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S4] It invoked for the same Device as for the Client <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S5] It invoked before the Client <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] <emphasis role="bold">timg:VideoSourceToken</emphasis> element value is equal to
+                    <emphasis role="bold">timg:VideoSourceToken</emphasis> element from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S7] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem> 
+          <listitem>
+            <para>
+              Settings from the <emphasis role="bold">SetImagingSettings</emphasis> request corresponds options recieved in the <emphasis role="bold">GetOptionsResponse</emphasis> message:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S8] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:BacklightCompensation</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:BacklightCompensation</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:BacklightCompensation/tt:Mode</emphasis> element value equal to <emphasis role="bold">tt:BacklightCompensation/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:BacklightCompensation/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:BacklightCompensation/tt:Level</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:BacklightCompensation/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:BacklightCompensation/tt:Level/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:BacklightCompensation/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:BacklightCompensation/tt:Level/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S10] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Brightness</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Brightness</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Brightness</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:Brightness/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Brightness</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:Brightness/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S11] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:ColorSaturation</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:ColorSaturation</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:ColorSaturation</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:ColorSaturation/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:ColorSaturation</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:ColorSaturation/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S12] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Contrast</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Contrast</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Contrast</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:Contrast/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Contrast</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:Contrast/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S13] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:Mode</emphasis> element value equal to <emphasis role="bold">tt:Exposure/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S14] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:Priority</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:Priority</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:Priority</emphasis> element value equal to <emphasis role="bold">tt:Exposure/tt:Priority</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S15] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MinExposureTime</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MinExposureTime</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:Exposure/tt:MinExposureTime/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:Exposure/tt:MinExposureTime/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S16] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MaxExposureTime</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MaxExposureTime</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:MaxExposureTime/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                       <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:MaxExposureTime/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              <listitem>
+                  <para>
+                    [S17] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MinGain</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MinGain</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:MinGain/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:MinGain/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                     <listitem>
+                  <para>
+                    [S18] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MaxGain</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MaxGain</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:MaxGain/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:MaxGain/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                <para>
+                    [S19] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MinIris</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MinIris</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinIris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:MinIris/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MinIris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:MinIris/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S20] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:MaxIris</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:MaxIris</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxIris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:MaxIris/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:MaxIris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:MaxIris/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S21] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:ExposureTime</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:ExposureTime</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:ExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:ExposureTime/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:ExposureTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:ExposureTime/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S22] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:Gain</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:Gain</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:Gain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:Gain/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:Gain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:Gain/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S23] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Exposure/tt:Iris</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Exposure/tt:Iris</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:Iris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Exposure/tt:Iris/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Exposure/tt:Iris</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Exposure/tt:Iris/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S24] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Focus</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Focus</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Focus/tt:AutoFocusModes</emphasis> element value equal to <emphasis role="bold">tt:Focus/tt:AutoFocusMode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S25] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Focus/tt:DefaultSpeed</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Focus/tt:DefaultSpeed</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:DefaultSpeed</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Focus/tt:DefaultSpeed/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:DefaultSpeed</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Focus/tt:DefaultSpeed/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S26] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Focus/tt:NearLimit</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Focus/tt:NearLimit</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:NearLimit</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Focus/tt:NearLimit/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:NearLimit</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Focus/tt:NearLimit/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S27] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Focus/tt:FarLimit</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Focus/tt:FarLimit</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:FarLimit</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Focus/tt:FarLimit/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Focus/tt:FarLimit</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Focus/tt:FarLimit/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S28] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:IrCutFilter</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:IrCutFilterModes</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:IrCutFilterModes</emphasis> element value equal to <emphasis role="bold">tt:IrCutFilter</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S29] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Sharpness</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Sharpness</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Sharpness</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is less or equal to <emphasis role="bold">tt:Sharpness/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Sharpness</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request is greater or equal to <emphasis role="bold">tt:Sharpness/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S30] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:WideDynamicRange</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WideDynamicRange</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WideDynamicRange/tt:Mode</emphasis> element value
+                          equal to <emphasis role="bold">tt:WideDynamicRange/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S31] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:WideDynamicRange/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WideDynamicRange/tt:Level</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WideDynamicRange/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:WideDynamicRange/tt:Level/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WideDynamicRange/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:WideDynamicRange/tt:Level/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S32] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:WhiteBalance</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WhiteBalance</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WhiteBalance/tt:Mode</emphasis> element value
+                          equal to <emphasis role="bold">tt:WhiteBalance/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S33] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:WhiteBalance/tt:CrGain</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WhiteBalance/tt:YrGain</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WhiteBalance/tt:CrGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:WhiteBalance/tt:YrGain/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WhiteBalance/tt:CrGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:WhiteBalance/tt:YrGain/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S34] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:WhiteBalance/tt:CbGain</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:WhiteBalance/tt:YbGain</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WhiteBalance/tt:CbGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:WhiteBalance/tt:YbGain/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:WhiteBalance/tt:CbGain</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:WhiteBalance/tt:YbGain/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S35] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:ImageStabilization</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:ImageStabilization</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Mode</emphasis> element value
+                          equal to <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S36] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level/tt:Max</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Extension/tt:ImageStabilization/tt:Level/tt:Min</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S37] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryType</emphasis> element value
+                          equal to each <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryType</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S38] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryOffset</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryOffset</emphasis> element with value equal to true AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryOffset</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to +1.0 AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:BoundaryOffset</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to -1.0 AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S39] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTime</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTimeRange</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTimeRange</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTime</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to <emphasis role="bold">tt:Extension/tt:Extension/tt:IrCutFilterAutoAdjustment/tt:ResponseTimeRange</emphasis> from the the <emphasis role="bold">GetOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S40] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensation</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensationOptions</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensationOptions/tt:Mode</emphasis> element value
+                          equal to <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensation/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S41] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensation/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">>tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensationOptions/tt:Level</emphasis> element with value equal to true AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensation/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to +1.0 AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:ToneCompensation/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to 0.0 AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S42] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:Defogging</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:DefoggingOptions</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:DefoggingOptions/tt:Mode</emphasis> element value
+                          equal to <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:Defogging/tt:Mode</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S43] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:Defogging/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">>tt:Extension/tt:Extension/tt:Extension/tt:DefoggingOptions/tt:Level</emphasis> element with value equal to true AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:Defogging/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to +1.0 AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:Defogging/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to 0.0 AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S44] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:NoiseReduction</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:NoiseReductionOptions</emphasis> element AND
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S45] IF the <emphasis role="bold">SetImagingSettings</emphasis> request contains <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:NoiseReduction/tt:Level</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetOptionsResponse</emphasis> message contains <emphasis role="bold">>tt:Extension/tt:Extension/tt:Extension/tt:NoiseReductionOptions/tt:Level</emphasis> element with value equal to true AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:NoiseReduction/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is less or equal to +1.0 AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">tt:Extension/tt:Extension/tt:Extension/tt:NoiseReduction/tt:Level</emphasis> element value from the <emphasis role="bold">SetImagingSettings</emphasis> request
+                          is greater or equal to 0.0.
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem> 
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_imaging_settings.get_imaging_settings
+      </para>
+    </section>
+  </chapter>
+  <chapter xml:id="tc.get_move_options">
+    <title>Focus Move Capabilities Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> get_move_options
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.get_move_options.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to get focus move capabilities.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Focus Move Capabilities if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve a focus move options using
+                    <emphasis role="bold">GetMoveOptions</emphasis> operation AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Focus Move Capabilities if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetMoveOptions</emphasis> request OR
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_move_options.GETMOVEOPTIONS-1">
+      <title>
+        GET FOCUS MOVE OPTIONS
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Move Options
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETMOVEOPTIONS-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Move Options
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able retrive focus move capabilities from Device using the <emphasis role="bold">GetMoveOptions</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetMoveOptions</emphasis> operation
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetMoveOptions</emphasis> request message to retrieve focus move options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetMoveOptions</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetMoveOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetMoveOptions</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetMoveOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetMoveOptionsResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_move_options.get_move_options
+      </para>
+    </section>
+  </chapter>
+  <chapter xml:id="tc.focus_control">
+    <title>Focus Control Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> focus_control
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.focus_control.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to control focus.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Focus Control if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client supports get_move_options feature AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to invoke Absolute OR Relative OR Continuous focus move using
+                    <emphasis role="bold">Move</emphasis> operation AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    If Client is able to invoke Continuous focus move Client is able to invoke stop focus move using
+                    <emphasis role="bold">Stop</emphasis> operation.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Focus Control if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client does not support get_move_options feature OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">Move</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">Move</emphasis> request contains settings which does not correspong to <emphasis role="bold">GetMoveOptions</emphasis> message
+                    for the same video source token OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">Stop</emphasis> request if <emphasis role="bold">Stop</emphasis> request is supported by the Client OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">Stop</emphasis> request is not supported, in the case Continuous focus move is supported by the Client.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.focus_control.FOCUSCONTROL-1">
+      <title>
+        ABSOLUTE FOCUS MOVE
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Focus Control -
+        Absolute Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> FOCUSCONTROL-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Absolute Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able retrive absolute focus move on Device using the <emphasis role="bold">Move</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">Move</emphasis> operation with <emphasis role="bold">tt:Absolute</emphasis> element
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetMoveOptions</emphasis> request message to retrieve focus move options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If <emphasis role="bold">GetMoveOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Absolute</emphasis> element Client invokes <emphasis role="bold">Move</emphasis> request message
+              for specified video source with <emphasis role="bold">tt:Absolute</emphasis> element with parameters which are correspond to the resieved focus move options to start absolute focus movement on the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">MoveResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:Move</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">timg:Focus/tt:Absolute</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Move</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:MoveResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Client <emphasis role="bold">GetMoveOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It invoked for the same Device as for the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It invoked before the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] <emphasis role="bold">timg:VideoSourceToken</emphasis> element value is equal to
+                    <emphasis role="bold">timg:VideoSourceToken</emphasis> element from the <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetMoveOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S8] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetMoveOptionsResponse</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S10] It contains <emphasis role="bold">timg:MoveOptions\tt:Absolute</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Settings from the <emphasis role="bold">Move</emphasis> request corresponds options recieved in the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S11] <emphasis role="bold">timg:Focus/tt:Absolute/tt:Position</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is less or equal to <emphasis role="bold">timg:MoveOptions/tt:Absolute/tt:Position/tt:Max</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S12] <emphasis role="bold">timg:Focus/tt:Absolute/tt:Position</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is greater or equal to <emphasis role="bold">timg:MoveOptions/tt:Absolute/tt:Position/tt:Min</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S13] IF the <emphasis role="bold">Move</emphasis> request contains <emphasis role="bold">timg:Focus/tt:Absolute/tt:Speed</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetMoveOptionsResponse</emphasis> message contains <emphasis role="bold">timg:MoveOptions/tt:Absolute/tt:Speed</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">timg:Focus/tt:Absolute/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is less or equal to <emphasis role="bold">timg:MoveOptions/tt:Absolute/tt:Speed/tt:Max</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">timg:Focus/tt:Absolute/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is greater or equal to <emphasis role="bold">timg:MoveOptions/tt:Absolute/tt:Speed/tt:Min</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>focus_control.absolute_focus_move
+      </para>
+    </section>
+    <section xml:id="tc.focus_control.FOCUSCONTROL-2">
+      <title>
+        RELATIVE FOCUS MOVE
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Focus Control -
+        Relative Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> FOCUSCONTROL-2
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Relative Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able retrive relative focus move on Device using the <emphasis role="bold">Move</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">Move</emphasis> operation with <emphasis role="bold">tt:Relative</emphasis> element
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetMoveOptions</emphasis> request message to retrieve focus move options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If <emphasis role="bold">GetMoveOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Relative</emphasis> element Client invokes <emphasis role="bold">Move</emphasis> request message
+              for specified video source with <emphasis role="bold">tt:Relative</emphasis> element with parameters which are correspond to the resieved focus move options to start relative focus movement on the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">MoveResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:Move</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">timg:Focus/tt:Relative</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Move</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:MoveResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Client <emphasis role="bold">GetMoveOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It invoked for the same Device as for the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It invoked before the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] <emphasis role="bold">timg:VideoSourceToken</emphasis> element value is equal to
+                    <emphasis role="bold">timg:VideoSourceToken</emphasis> element from the <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetMoveOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S8] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetMoveOptionsResponse</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S10] It contains <emphasis role="bold">timg:MoveOptions\tt:Relative</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Settings from the <emphasis role="bold">Move</emphasis> request corresponds options recieved in the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S11] <emphasis role="bold">timg:Focus/tt:Relative/tt:Distance</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is less or equal to <emphasis role="bold">timg:MoveOptions/tt:Relative/tt:Distance/tt:Max</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S12] <emphasis role="bold">timg:Focus/tt:Relative/tt:Distance</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is greater or equal to <emphasis role="bold">timg:MoveOptions/tt:Relative/tt:Distance/tt:Min</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S13] IF the <emphasis role="bold">Move</emphasis> request contains <emphasis role="bold">timg:Focus/tt:Relative/tt:Speed</emphasis> element
+                    THEN:
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <para>
+                          The <emphasis role="bold">GetMoveOptionsResponse</emphasis> message contains <emphasis role="bold">timg:MoveOptions/tt:Relative/tt:Speed</emphasis> element AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">timg:Focus/tt:Relative/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is less or equal to <emphasis role="bold">timg:MoveOptions/tt:Relative/tt:Speed/tt:Max</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          <emphasis role="bold">timg:Focus/tt:Relative/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is greater or equal to <emphasis role="bold">timg:MoveOptions/tt:Relative/tt:Speed/tt:Min</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>focus_control.relative_focus_move
+      </para>
+    </section>
+    <section xml:id="tc.focus_control.FOCUSCONTROL-3">
+      <title>
+        CONTINUOUS FOCUS MOVE
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Focus Control -
+        Continuous Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> FOCUSCONTROL-3
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Continuous Focus Move
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able retrive continuous focus move on Device using the <emphasis role="bold">Move</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">Move</emphasis> operation with <emphasis role="bold">tt:Continuous</emphasis> element
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetMoveOptions</emphasis> request message to retrieve focus move options
+              for specified video source from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If <emphasis role="bold">GetMoveOptionsResponse</emphasis> message contains <emphasis role="bold">tt:Continuous</emphasis> element Client invokes <emphasis role="bold">Move</emphasis> request message
+              for specified video source with <emphasis role="bold">tt:Relative</emphasis> element with parameters which are correspond to the resieved focus move options to start continuous focus movement on the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">MoveResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Move</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:Move</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">timg:Focus/tt:Continuous</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Move</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:MoveResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Client <emphasis role="bold">GetMoveOptions</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It invoked for the same Device as for the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It invoked before the Client <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] <emphasis role="bold">timg:VideoSourceToken</emphasis> element value is equal to
+                    <emphasis role="bold">timg:VideoSourceToken</emphasis> element from the <emphasis role="bold">Move</emphasis> request AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetMoveOptions</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S8] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:GetMoveOptionsResponse</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S10] It contains <emphasis role="bold">timg:MoveOptions\tt:Continuous</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Settings from the <emphasis role="bold">Move</emphasis> request corresponds options recieved in the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S11] <emphasis role="bold">timg:Focus/tt:Continuous/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is less or equal to <emphasis role="bold">timg:MoveOptions/tt:Continuous/tt:Speed/tt:Max</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S12] <emphasis role="bold">timg:Focus/tt:Continuous/tt:Speed</emphasis> element value from the <emphasis role="bold">Move</emphasis> request is greater or equal to <emphasis role="bold">timg:MoveOptions/tt:Continuous/tt:Speed/tt:Min</emphasis> from the the <emphasis role="bold">GetMoveOptionsResponse</emphasis> message.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>focus_control.continuous_focus_move
+      </para>
+    </section>
+    <section xml:id="tc.focus_control.FOCUSCONTROL-4">
+      <title>
+        STOP
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Focus Control -
+        Stop
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> FOCUSCONTROL-4
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Stop
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able retrivefocus move options fromon Device using the <emphasis role="bold">Stop</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">Stop</emphasis> operation
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">Stop</emphasis> request message to stop focus move
+              for specified video source for the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">StopResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Stop</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Stop</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:Stop</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Stop</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">timg:StopResponse</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>focus_control.stop
+      </para>
+    </section>
+  </chapter>
+
+
+
+
+</book>

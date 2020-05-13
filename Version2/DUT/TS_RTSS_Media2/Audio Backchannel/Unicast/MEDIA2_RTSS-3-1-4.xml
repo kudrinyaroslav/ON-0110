@@ -1,0 +1,4587 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>Unicast BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</Name>
+    <Description>
+      Use root/1 user name and password on Discovery tab
+    </Description>
+  </Parameters>
+  
+  <!-- Positive -->
+  <Test ID = "MEDIA2_RTSS-3-1-4.100" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6.Enabled!=true, DHCP = Off, NetworkInterfaces.IPv6.Config.Manual element is present and not empty</Name>
+    <Description>
+      Needed configuration recived in GetProfiles, without restoring for annex 20
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address>192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="5">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="8">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.101" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6 - skipped, DHCP = Off, NetworkInterfaces.IPv6.Config.Manual element is present and not empty</Name>
+    <Description>
+      Needed configuration recived in GetProfiles, without restoring for annex 20
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="5">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="8">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.102" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6 - skipped, DHCP = ON, NetworkInterfaces.IPv6.Config.Manual element is present and not empty</Name>
+    <Description>
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 11-->
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 15-->
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>On</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 8-->
+    <Step id ="5">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Config>
+              <DHCP>Off</DHCP>
+            </Config>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 10 and step 6 pass-->
+    <Step id ="6">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+  
+    
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="10">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.103" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6 - skipped, DHCP = ON, NetworkInterfaces.IPv6.Config.LinkLocal element is present and not empty</Name>
+    <Description>
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 11-->
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 15-->
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>On</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 8-->
+    <Step id ="5">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Config>
+              <DHCP>Off</DHCP>
+            </Config>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 10 and step 6 pass-->
+    <Step id ="6">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A4-->
+
+
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="10">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.104" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6.Enabled==true, DHCP = Off, NetworkInterfaces.IPv6.Config.Manual element is present and not empty</Name>
+    <Description>
+      Needed configuration recived in GetProfiles, without restoring for annex 20
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A4 end-->
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="3">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="6">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.105" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6.Enabled==true, DHCP = Off, NetworkInterfaces.IPv6.Config.LinkLocal element is present and not empty</Name>
+    <Description>
+      Needed configuration recived in GetProfiles, without restoring for annex 20
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A4 end-->
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="3">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="6">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.106" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct: NetworkInterfaces.IPv6 - skipped, DHCP = ON, NetworkInterfaces.IPv6.Config.manual is empty, NetworkInterfaces.IPv6.Config.LinkLocal element is present and not empty</Name>
+    <Description>
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 11-->
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 15-->
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>On</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 8-->
+    <Step id ="5">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Config>
+              <DHCP>Off</DHCP>
+            </Config>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 10 and step 6 pass-->
+    <Step id ="6">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A4-->
+
+
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="10">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.107" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Correct response. Test Annex 4 and Annex 20 together.</Name>
+    <Description>
+      Two media profiles (second with AudioOutput and AudioDecoder)
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="0">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="1">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A4 end-->
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="DifferentADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H256</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--Start step 4 in Annex 20-->
+    <!--step 4 for first mediaProfile, first media profile support needed output, but not support needed decoder (with encoding=PCMU)-->
+    <Step id ="5">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="7">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="DifferentADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="10">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile1-->
+
+
+    <!--loop for media_Profile2, correct profile-->
+    <Step id ="12">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="14">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Auto</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="16">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="ADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="17">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="18">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="19">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioDecoder</Type>
+          <Token>ADC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile2 go to step 6-->
+    <!--if SendPrimacy = server-->
+    <Step id ="20">
+      <Command>Media210.SetAudioOutputConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <AudioOutputConfiguration token="AOC2" >
+          <Name>TestNameConfig2</Name>
+          <UseCount>1</UseCount>
+          <OutputToken>AO2</OutputToken>
+          <!--Optional:-->
+          <SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</SendPrimacy>
+          <OutputLevel>12</OutputLevel>
+        </AudioOutputConfiguration>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="21">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+    <!--restoring media_profile1 configuration-->
+    <Step id="22">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id="23">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+
+    <!--second MediaProfile restoring-->
+    <Step id="24">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC2">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id="25">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioDecoder</Type>
+          <Token>DifferentADC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <Step id="26">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+  </Test>
+
+  <!-- Negative -->
+  <Test ID = "MEDIA2_RTSS-3-1-4.201" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>NetworkInterfaces.IPv6.Config.LinkLocal element is present but empty</Name>
+    <Description>
+      NetworkInterfaces.IPv6 - skipped, DHCP = ON, NetworkInterfaces.IPv6.Config.manual is empty, NetworkInterfaces.IPv6.Config.LinkLocal element is present but empty
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <!--<tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>-->
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 11-->
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 15-->
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>On</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <!--<tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>-->
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 8-->
+    <Step id ="5">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Config>
+              <DHCP>Off</DHCP>
+            </Config>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 10 and step 6 pass-->
+    <Step id ="6">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+                <tt:LinkLocal>
+                  <!--<tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>-->
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A4-->
+
+
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="10">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.202" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>NetworkInterfaces.IPv6.Config.LinkLocal element is not present</Name>
+    <Description>
+      NetworkInterfaces.IPv6 - skipped, DHCP = ON, NetworkInterfaces.IPv6.Config.manual is empty, NetworkInterfaces.IPv6.Config.LinkLocal element is present but empty
+      Use service/1 login and password on Discovery Tab
+      DUT simulator returns uri from 229 camera
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="2">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>false</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+              
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 11-->
+    <Step id ="3">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Enabled>true</Enabled>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 15-->
+    <Step id ="4">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>On</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+               
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--step 8-->
+    <Step id ="5">
+      <Command>SetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InterfaceToken>eth0</InterfaceToken>
+        <NetworkInterface token="eth0">
+          <IPv6>
+            <Config>
+              <DHCP>Off</DHCP>
+            </Config>
+          </IPv6>
+        </NetworkInterface>
+      </RequestParameters>
+      <ResponseParameters>
+        <NeedReboot>false</NeedReboot>
+      </ResponseParameters>
+    </Step>
+    <!--step 10 and step 6 pass-->
+    <Step id ="6">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:Manual>
+                  <!--<tt:Address>fe80::101:9dd1:1142:a540%8</tt:Address>
+                  <tt:PrefixLength>0</tt:PrefixLength>-->
+                </tt:Manual>
+               
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--End Annex A4-->
+
+
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="7">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>ADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>PCMU</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--GetAudioOutputConfigurations ,AddConfiguration,GetAudioDecoderConfigurationOptions,AddConfiguration  - missed -->
+    <!--if SendPrimacy = server then need set-->
+    <Step id="10">
+      <Command>Media210.GetStreamUri</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Protocol>RtspUnicast</Protocol>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile12&amp;sessiontimeout=60&amp;streamtype=multicast</string>-->
+        <!--<string>rtsp://192.168.10.227/onvif-media/media.amp?profile=profile9&amp;sessiontimeout=60&amp;streamtype=unicast</string>-->
+        <string>rtsp://192.168.10.229/rtsp_tunnel?h26x=4&amp;line=1&amp;inst=1&amp;enableaudio=1&amp;audio_mode=1</string>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.203" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Incorrect: There is no media profile with ADC supporting no step 3</Name>
+    <Description>
+      AOC was Added, restore it. Fail after step 4
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="1">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A4 end-->
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+
+    <!--Start step 4 in Annex 20-->
+    <!--step 4 for first mediaProfile, first media profile support needed output, but not support needed decoder (with encoding=PCMU)-->
+    <Step id ="3">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="5">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="6">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="7">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="DifferentADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="8">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile1-->
+
+
+    <!--loop for media_Profile2, profile is not supports ADC-->
+    <Step id ="10">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="12">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Auto</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="13">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="14">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="DifferentADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="15">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="16">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile2 Fail the test-->
+
+    <!--restoring media_profile1 configuration-->
+    <Step id="17">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id="18">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--second MediaProfile restoring-->
+    <Step id="19">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC2">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="20">
+      <Command>Media210.RemoveConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <!--<ArrayOfConfiguration>-->
+        <Configuration>
+          <Type>AudioDecoder</Type>
+          <!--Optional-->
+          <Token>ADC2</Token>
+        </Configuration>
+        <!--</ArrayOfConfiguration>-->
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+    <Step id="21">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "MEDIA2_RTSS-3-1-4.204" ONVIFTestID="MEDIA2_RTSS-3-1-4" Enabled="true">
+    <TestName>BACKCHANNEL – G.711 (RTP-Unicast/UDP, IPv6)</TestName>
+    <Name>Incorrect: There is no media profile with ADC supporting with step 3</Name>
+    <Description>
+      AOC was Added, restore it. Fail after step 4 
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver20/media/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceMedia20/Media2Service.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <!--start Annex A4-->
+    <Step id ="1">
+      <Command>GetNetworkInterfaces</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfNetworkInterface>
+          <NetworkInterface token="eth0" xmlns:tt="http://www.onvif.org/ver10/schema">
+            <tt:Enabled>true</tt:Enabled>
+            <tt:Info>
+              <tt:Name>eth0</tt:Name>
+              <tt:HwAddress>00:40:8C:A6:81:CB</tt:HwAddress>
+              <tt:MTU>1500</tt:MTU>
+            </tt:Info>
+            <tt:Link>
+              <tt:AdminSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:AdminSettings>
+              <tt:OperSettings>
+                <tt:AutoNegotiation>true</tt:AutoNegotiation>
+                <tt:Speed>100</tt:Speed>
+                <tt:Duplex>Full</tt:Duplex>
+              </tt:OperSettings>
+              <tt:InterfaceType>6</tt:InterfaceType>
+            </tt:Link>
+            <tt:IPv4>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:Manual>
+                  <tt:Address> 192.168.44.177</tt:Address>
+                  <tt:PrefixLength>16</tt:PrefixLength>
+                </tt:Manual>
+                <tt:DHCP>false</tt:DHCP>
+              </tt:Config>
+            </tt:IPv4>
+            <tt:IPv6>
+              <tt:Enabled>true</tt:Enabled>
+              <tt:Config>
+                <tt:AcceptRouterAdvert>true</tt:AcceptRouterAdvert>
+                <tt:DHCP>Off</tt:DHCP>
+                <tt:LinkLocal>
+                  <tt:Address>fe80::240:8cff:fea6:81cb</tt:Address>
+                  <tt:PrefixLength>64</tt:PrefixLength>
+                </tt:LinkLocal>
+              </tt:Config>
+            </tt:IPv6>
+          </NetworkInterface>
+        </ArrayOfNetworkInterface>
+      </ResponseParameters>
+    </Step>
+    <!--Annex A4 end-->
+    <!--Start Annex A.20 Media2 Service – Media Profile Configuration for Audio Backchannel Streaming-->
+    <Step id="2">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC1">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO1</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="DifferentADC1">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id ="3">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H256</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--Start step 4 in Annex 20-->
+    <!--step 4 for first mediaProfile, first media profile support needed output, but not support needed decoder (with encoding=PCMU)-->
+    <Step id ="5">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="DifferentAOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="7">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentAOC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="8">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="9">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile1</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="DifferentADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="10">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="11">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC2</ConfigurationToken>
+        <ProfileToken>media_profile1</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H265</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile1-->
+
+
+    <!--loop for media_Profile2, profile is not supports ADC-->
+    <Step id ="12">
+      <Command>Media210.GetAudioOutputConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>VSC1</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC1" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig</sch:Name>
+            <sch:OutputToken>AO1</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>10</sch:OutputLevel>
+          </AudioOutputConfiguration>
+          <AudioOutputConfiguration token="AOC2" xmlns:sch="http://www.onvif.org/ver10/schema">
+            <sch:Name>TestNameConfig2</sch:Name>
+            <sch:OutputToken>AO2</sch:OutputToken>
+            <!--Optional:-->
+            <sch:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</sch:SendPrimacy>
+            <sch:OutputLevel>12</sch:OutputLevel>
+          </AudioOutputConfiguration>
+        </ArrayOfAudioOutputConfiguration>
+      </ResponseParameters>
+    </Step>
+    <Step id ="13">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <!--<tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>-->
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--4.3.3. go to 4.3-->
+    <Step id ="14">
+      <Command>Media210.GetAudioOutputConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>AOC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <AudioOutputConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+          <!--1 or more repetitions:-->
+          <tt:OutputTokensAvailable>AO1</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO2</tt:OutputTokensAvailable>
+          <tt:OutputTokensAvailable>AO3</tt:OutputTokensAvailable>
+          <!--Zero or more repetitions:-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacyOptions>
+          <!--if only Server, invoke next GetAOCOptions-->
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacyOptions>
+          <tt:SendPrimacyOptions>www.onvif.org/ver20/HalfDuplex/Auto</tt:SendPrimacyOptions>
+          <tt:OutputLevelRange>
+            <tt:Min>10</tt:Min>
+            <tt:Max>22</tt:Max>
+          </tt:OutputLevelRange>
+          <!--You may enter ANY elements at this point-->
+        </AudioOutputConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id="15">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC2</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--needed AOC was add-->
+    <!--branch for decoder-->
+    <Step id ="16">
+      <Command>Media210.GetAudioDecoderConfigurations</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <!--<ConfigurationToken>token</ConfigurationToken>-->
+        <ProfileToken>media_profile2</ProfileToken >
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfAudioDecoderConfiguration  xmlns:sch="http://www.onvif.org/ver10/schema">
+          <!--Zero or more repetitions:-->
+          <AudioDecoderConfiguration token="DifferentADC1">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+          <AudioDecoderConfiguration token="DifferentADC2">
+            <sch:Name>AudioDecoder1</sch:Name>
+            <sch:UseCount>1</sch:UseCount>
+            <!--You may enter ANY elements at this point-->
+          </AudioDecoderConfiguration>
+        </ArrayOfAudioDecoderConfiguration>
+      </ResponseParameters>
+    </Step>
+    <!--loop for decoder-->
+    <!--If adcOptionsList list contains item with Encoding = requiredAudioDecoding: no such decoder-->
+    <Step id ="17">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC1</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <Step id ="18">
+      <Command>Media210.GetAudioDecoderConfigurationOptions</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ConfigurationToken>DifferentADC2</ConfigurationToken>
+        <ProfileToken>media_profile2</ProfileToken>
+      </RequestParameters>
+      <ResponseParameters>
+        <!--1 or more repetitions:-->
+        <ArrayOfAudioEncoder2ConfigurationOptions>
+          <AudioEncoder2ConfigurationOptions xmlns:tt="http://www.onvif.org/ver10/schema">
+            <!--required audio decoding PCMU-->
+            <tt:Encoding>H264</tt:Encoding>
+            <tt:BitrateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>256</tt:Items>
+            </tt:BitrateList>
+            <tt:SampleRateList>
+              <!--Zero or more repetitions:-->
+              <tt:Items>16</tt:Items>
+            </tt:SampleRateList>
+            <!--You may enter ANY elements at this point-->
+          </AudioEncoder2ConfigurationOptions>
+        </ArrayOfAudioEncoder2ConfigurationOptions>
+      </ResponseParameters>
+    </Step>
+    <!--end media_profile2 Fail the test-->
+
+    <!--restoring media_profile1 configuration-->
+    <Step id="19">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile1</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile1">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile1</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="DifferentAOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Client</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id="20">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile1</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>DifferentAOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <!--second MediaProfile restoring-->
+    <Step id="21">
+      <Command>Media210.GetProfiles</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Token>media_profile2</Token>
+        <Type>AudioOutput</Type>
+        <Type>AudioDecoder</Type>
+      </RequestParameters>
+      <ResponseParameters>
+        <ArrayOfMediaProfile>
+          <MediaProfile token="media_profile2">
+            <Name xmlns="http://www.onvif.org/ver20/media/wsdl">media_profile2</Name>
+            <Configurations xmlns="http://www.onvif.org/ver20/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+              <AudioOutput token="AOC2">
+                <tt:Name>TestName1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+                <tt:OutputToken>AO2</tt:OutputToken>
+                <!--Optional:-->
+                <tt:SendPrimacy>www.onvif.org/ver20/HalfDuplex/Server</tt:SendPrimacy>
+                <tt:OutputLevel>10</tt:OutputLevel>
+              </AudioOutput>
+              <AudioDecoder token="ADC2">
+                <tt:Name>AudioDecoder1</tt:Name>
+                <tt:UseCount>1</tt:UseCount>
+              </AudioDecoder>
+            </Configurations>
+          </MediaProfile>
+        </ArrayOfMediaProfile>
+      </ResponseParameters>
+    </Step>
+    <Step id="22">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioDecoder</Type>
+          <Token>DifferentADC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+    <Step id="23">
+      <Command>Media210.AddConfiguration</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <ProfileToken>media_profile2</ProfileToken>
+        <Configuration>
+          <Type>AudioOutput</Type>
+          <Token>AOC1</Token>
+        </Configuration>
+      </RequestParameters>
+      <ResponseParameters>
+        <AddConfigurationResponse>
+        </AddConfigurationResponse>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

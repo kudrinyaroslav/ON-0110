@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.7</ProductVersion>
+    <ProjectGuid>{53e27e3f-da60-4e65-a378-bb6ce8260a30}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>TestTool.Installer</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <RunWixToolsOutOfProc>True</RunWixToolsOutOfProc>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressIces>ICE03</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <SuppressIces>ICE03</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Features.wxs" />
+    <Compile Include="Directories.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="Registry.wxs" />
+    <Compile Include="UI\BouncyCastleInstallDlg.wxs" />
+    <Compile Include="UI\OnvifExitDlg.wxs" />
+    <Compile Include="UI\OnvifInstallDirDlg.wxs" />
+    <Compile Include="UI\ReadmeDlg.wxs" />
+    <Compile Include="UI\WixUI_Onvif.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="!How to build.txt" />
+    <Content Include="Files\BouncyCastle.rtf" />
+    <Content Include="Files\jpeg.exe" />
+    <Content Include="Files\License.rtf" />
+    <Content Include="Files\ONVIF Device Test Tool Help.chm" />
+    <Content Include="Files\readme.rtf" />
+    <Content Include="Files\Requests.exe" />
+    <Content Include="Files\test.711" />
+    <Content Include="Files\test.aac" />
+    <Content Include="Files\video_480x360_fps30.264" />
+    <Content Include="Files\video_480x360_fps30.m4e" />
+    <Content Include="Files\video_640x480_fps15.264" />
+    <Content Include="Files\video_640x480_fps15.m4e" />
+    <Content Include="Resources\dialog_banner.bmp" />
+    <Content Include="Resources\top_banner.bmp" />
+    <Content Include="Variables.wxi" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestTool.GUI\TestTool.GUI.csproj">
+      <Name>TestTool.GUI</Name>
+      <Project>{e867c701-fe40-4dfe-bf36-0a9d3ab75056}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Files" />
+    <Folder Include="UI" />
+    <Folder Include="Resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings.wxl" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <ItemGroup>
+    <BootstrapperFile Include=".NETFramework,Version=v4.5">
+      <ProductName>.NET Framework 4.5</ProductName>
+    </BootstrapperFile>
+    <BootstrapperFile Include="Microsoft.Windows.Installer.3.1">
+      <ProductName>Windows Installer 3.1</ProductName>
+    </BootstrapperFile>
+  </ItemGroup>
+  <Target Name="AfterBuild">
+    <GenerateBootstrapper ApplicationFile="$(OutputName).msi" ApplicationName="$(OutputName)" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="HomeSite" CopyComponents="True" OutputPath="$(TargetDir)" Path="$(ProgramFiles)\Microsoft SDKs\Windows\v8.0A\Bootstrapper\" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent />
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
+  </PropertyGroup>
+</Project>

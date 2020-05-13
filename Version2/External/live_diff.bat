@@ -1,0 +1,1 @@
+bin\diff -Naur original\live live > live.patch

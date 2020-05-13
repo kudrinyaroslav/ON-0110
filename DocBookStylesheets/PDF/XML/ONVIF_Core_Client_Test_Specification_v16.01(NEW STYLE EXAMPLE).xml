@@ -1,0 +1,1163 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet href="docbook-css/docbook.xsl" type="text/xsl" ?>
+<article xmlns="http://docbook.org/ns/docbook"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xsi:schemaLocation="http://docbook.org/ns/docbook http://docbook.org/xml/5.0/xsd/docbook.xsd"
+   version="0.1"
+   xml:id="ONVIF_Core_Client_TS">
+  <info>
+    <title>ONVIF Core Client Test Specification</title>
+    <subtitle>Version 16.01 January, 2016</subtitle>
+    <copyright>
+      <year>2016</year>
+      <holder>ONVIF, Inc. All rights reserved. www.onvif.org</holder>
+    </copyright>
+    <legalnotice role="notices">
+      <para>
+        Recipients of this document may copy, distribute, publish, or display this
+        document so long as this copyright notice, license and disclaimer are retained with
+        all copies of the document. No license is granted to modify this document.
+      </para>
+      <para>
+        THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR
+        AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT
+        NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+        NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY
+        PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+        COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+      </para>
+      <para>
+        IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR
+        ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES,
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR
+        NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT. THE
+        FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR
+        LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE
+        AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE
+        CORPORATION.
+      </para>
+    </legalnotice>
+  </info>
+  <section xml:id="additions">
+    <title>Terms and Definitions</title>
+    <section xml:id="additions.namespaces">
+      <title>Namespaces</title>
+      <para>
+        Prefix and namespaces used in this test specification are listed in Table 1.
+        These prefixes are not part of the standard and an implementation can use any prefix.
+      </para>
+      <table>
+        <title>Defined namespaces in this specification</title>
+        <tgroup cols="3">
+          <colspec colwidth="109*"/>
+          <colspec colwidth="403*"/>
+          <colspec colwidth="488*"/>
+          <thead>
+            <row>
+              <entry>Prefix</entry>
+              <entry>Namespace URI</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>soapenv</entry>
+              <entry>http://www.w3.org/2003/05/soap-envelope</entry>
+              <entry>Envelope namespace as defined by SOAP 1.2 [SOAP 1.2, Part 1]</entry>
+            </row>
+            <row>
+              <entry>xs</entry>
+              <entry>http://www.w3.org/2001/XMLSchema</entry>
+              <entry>Instance namespace as defined by XS [XML-Schema, Part1] and [XMLSchema,Part 2]</entry>
+            </row>
+            <row>
+              <entry>xsi</entry>
+              <entry>http://www.w3.org/2001/XMLSchema-instance</entry>
+              <entry>XML schema instance namespace</entry>
+            </row>
+            <row>
+              <entry>tns1</entry>
+              <entry>http://www.onvif.org/ver10/topics</entry>
+              <entry>The namespace for the ONVIF topic namespace</entry>
+            </row>
+            <row>
+              <entry>tt</entry>
+              <entry>http://www.onvif.org/ver10/schema</entry>
+              <entry>ONVIF XML schema descriptions</entry>
+            </row>
+            <row>
+              <entry>tds</entry>
+              <entry>http://www.onvif.org/ver10/device/wsdl</entry>
+              <entry>The namespace for the WSDL device service</entry>
+            </row>
+            <row>
+              <entry>trt</entry>
+              <entry>http://www.onvif.org/ver10/media/wsdl</entry>
+              <entry>The namespace for the WSDL media service</entry>
+            </row>
+            <row>
+              <entry>tev</entry>
+              <entry>http://www.onvif.org/ver10/events/wsdl</entry>
+              <entry>The namespace for the WSDL event service</entry>
+            </row>
+            <row>
+              <entry>tptz</entry>
+              <entry>http://www.onvif.org/ver20/ptz/wsdl</entry>
+              <entry>The namespace for the WSDL PTZ service</entry>
+            </row>
+            <row>
+              <entry>trv</entry>
+              <entry>http://www.onvif.org/ver10/receiver/wsdl</entry>
+              <entry>The namespace for the WSDL receiver service</entry>
+            </row>
+            <row>
+              <entry>trc</entry>
+              <entry>http://www.onvif.org/ver10/recording/wsdl</entry>
+              <entry>The namespace for the WSDL recording service</entry>
+            </row>
+            <row>
+              <entry>tse</entry>
+              <entry>http://www.onvif.org/ver10/search/wsdl</entry>
+              <entry>The namespace for the WSDL search service</entry>
+            </row>
+            <row>
+              <entry>trp</entry>
+              <entry>http://www.onvif.org/ver10/replay/wsdl</entry>
+              <entry>The namespace for the WSDL replay service</entry>
+            </row>
+            <row>
+              <entry>tac</entry>
+              <entry>http://www.onvif.org/ver10/accesscontrol/wsdl</entry>
+              <entry>The namespace for the WSDL access control service</entry>
+            </row>
+            <row>
+              <entry>tdc</entry>
+              <entry>http://www.onvif.org/ver10/doorcontrol/wsdl</entry>
+              <entry>The namespace for the WSDL door control service</entry>
+            </row>
+            <row>
+              <entry>tas</entry>
+              <entry>http://www.onvif.org/ver10/advancedsecurity/wsdl</entry>
+              <entry>The namespace for the WSDL advanced security service</entry>
+            </row>
+            <row>
+              <entry>tar</entry>
+              <entry>http://www.onvif.org/ver10/accessrules/wsdl</entry>
+              <entry>The namespace for the WSDL access rules service</entry>
+            </row>
+            <row>
+              <entry>tcr</entry>
+              <entry>http://www.onvif.org/ver10/credential/wsdl</entry>
+              <entry>The namespace for the WSDL credential service</entry>
+            </row>
+            <row>
+              <entry>tsc</entry>
+              <entry>http://www.onvif.org/ver10/schedule/wsdl</entry>
+              <entry>The namespace for the WSDL schedule service</entry>
+            </row>
+            <row>
+              <entry>wsnt</entry>
+              <entry>http://docs.oasis-open.org/wsn/b-2</entry>
+              <entry>Schema namespace of the [WS-BaseNotification] specification.</entry>
+            </row>
+            <row>
+              <entry>wsa</entry>
+              <entry>http://www.w3.org/2005/08/addressing</entry>
+              <entry>Device addressing namespace as defined by [WS-Addressing].</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+  <section xml:id="tc.get_services_list">
+    <title>[NEW STYLE]Get Services List Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> get_services_list
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> Mandatory
+    </para>
+    <section xml:id="tc.get_services_list.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connect to Device to get list of supported services.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Get Services List if the following
+              conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    If Client supports only Profile S, Device returns a valid response to GetServices request OR GetCapabilities request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    If Client supports at least one profile other than Profile S, Device returns a valid response to GetServices request.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Get Services List if the following
+              is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid Device response to GetServices request if Client supports at least one profile other than Profile S AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid Device response to GetServices request OR to GetCapabilities request if Client supports only Profile S
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_services_list.GETSERVICESLIST-1">
+      <title>
+        GET SERVICES
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Services List - Get Services
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETSERVICESLIST-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Services
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that list of services
+        is received using GetServices request.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with GetServices command present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports GetServices command.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes GetServices request message to retrieve all services of
+              the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Verify that GetServicesResponse message from the Device contains code
+              HTTP 200 OK without SOAP Fault.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetServices</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetServices</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetServices</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetServices</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetServicesResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_services_list.GETSERVICESLIST-2">
+      <title>
+        <emphasis role="italic">GET CAPABILITIES</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Get Services List - Get Capabilities
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETSERVICESLIST-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Capabilities
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Device Capabilities
+        is received using GetCapabilities request.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with GetCapabilities command present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes GetCapabilities request message to retrieve Device
+              Capabilities of the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Verify that GetCapabilitiesResponse response message from the Device
+              contains code HTTP 200 OK without SOAP Fault.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetCapabilities</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetCapabilities</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetCapabilities</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetCapabilities</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetCapabilitiesResponse</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>Capabilities_GetCapabilities
+      </para>
+    </section>
+  </section>
+  <section xml:id="tc.event_handling">
+    <title>[NEW STYLE]Event Handling Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> event_handling
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> Mandatory
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> Conditional
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> Conditional
+    </para>
+    <section xml:id="tc.event_handling.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>Client connects to Device to initiate Event Handling.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Event Handling if the following
+              conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to handle the Pull Point Event mechanism OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to handle the Base Notification Event
+                    mechanism OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to handle the Metadata Streaming.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Event Handling if the following
+              is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    All detected Pull Point attempts have failed AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    All detected Base Notification attempts have failed AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    All detected Metadata Streaming attempts have failed.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.event_handling.EVENTHANDLING-1">
+      <title>
+        CREATE PULL POINT SUBSCRIBTION
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Event Handling - Create Pull Pint Subscribtion
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Pull Point Event Handling
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to create Pull Point Subscribtion.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with CreatePullPointSubscription command present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">CreatePullPointSubscription</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">CreatePullPointSubscription</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tev:CreatePullPointSubscription</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">wsa:Action</emphasis> element in header equal to "http://www.onvif.org/ver10/events/wsdl/EventPortType/CreatePullPointSubscriptionRequest" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">CreatePullPointSubscription</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tev:CreatePullPointSubscriptionResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>EventHandling_CreatePullPointSubscribtion
+      </para>
+    </section>
+    <section xml:id="tc.event_handling.EVENTHANDLING-2">
+      <title>
+        PULL MESSAGES
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Event Handling - Pull Point
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-2
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Pull Point Event Handling
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to retrieve events using Pull Point.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with Pull Point event type.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes PullMessages command.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and PullMessagesResponse
+              message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">PullMessages</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">PullMessages</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tev:PullMessages</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">wsa:Action</emphasis> element in header equal to "http://www.onvif.org/ver10/events/wsdl/PullPointSubscription/PullMessagesRequest" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">PullMessages</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tev:PullMessagesResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Device response on a <emphasis role="bold">CreatePullPointSubscription</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It received for the same Device as for the Client <emphasis role="bold">PullMessages</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] It received before the Client <emphasis role="bold">PullMessages</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S8] It contains <emphasis role="bold">tev:SubscriptionReference\wsa:Address</emphasis> element
+                    which is equal to HTTP address that was used to send the <emphasis role="bold">PullMessages</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] All reference parameters listed in <emphasis role="bold">tev:SubscriptionReference\wsa:ReferenceParameters</emphasis> element
+                    was send in <emphasis role="bold">PullMessages</emphasis> request header with the same values and namespaces
+                    as in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message and with <emphasis role="bold">@wsa:IsReferenceParameter</emphasis> attribute equal to true
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>EventHandling_PullPoint
+      </para>
+    </section>
+    <section xml:id="tc.event_handling.EVENTHANDLING-3">
+      <title>
+        BASE NOTIFICATION
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Event Handling - Basic
+        Notification
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-3
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Event Handling
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to retrieve events using WS-Base Notification.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with Basic Notification event type.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Basic Notification.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes Subscribe message with ConsumerReference
+              element.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and SubscribeResponse
+              message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Subscribe</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Subscribe</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:Subscribe</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">wsa:Action</emphasis> element in header equal to "http://www.onvif.org/ver10/events/wsdl/NotificationProducer/SubscribeRequest" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Subscribe</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:SubscribeResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>EventHandling_WS-BaseNotification
+      </para>
+    </section>
+    <section xml:id="tc.event_handling.EVENTHANDLING-4">
+      <title>
+        <emphasis role="italic">METADATA STREAMING</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Event Handling - Metadata
+        Streaming
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> EVENTHANDLING-4
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Event Handling
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to retrieve the Metadata Streaming.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with Metadata Streaming event type.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports real-time streaming.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">[THE REST PART OF THE TEST IS IN OLD STYLE]</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes GetProfiles request message to retrieve complete
+              profiles list from Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and GetProfilesResponse
+              message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes GetStreamUri request message with the Stream Setup
+              element (contains two parts: Stream Type and Transport protocol) and
+              Profile Token element (indicates the media profile selected).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and GetStreamUriResponse
+              message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes RTSP DESCRIBE request to retrieve media stream
+              description.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code RTSP 200 OK and SDP information with Media
+              Type: "application" and MIME Type: "vnd.onvif.metadata".
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes RTSP SETUP request with transport parameter element to
+              to set media session parameters.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Device responses with code RTSP 200 OK.</para>
+          </listitem>
+          <listitem>
+            <para>Client invokes RTSP PLAY request to start media stream.</para>
+          </listitem>
+          <listitem>
+            <para>Device responses with code RTSP 200 OK.</para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">NOTE:</emphasis> If Device RTSP DESCRIBE response message
+        does not contain Media Type: "application" OR MIME Type: "vnd.onvif.metadata" inside
+        SDP information then Test shall be deemed as "NOT DETECTED".
+      </para>
+      <literallayout class="normal">
+        <emphasis role="bold">PASS -</emphasis>
+        Client GetProfiles request message is a well-formed SOAP request (refer to onvif.xsd) AND
+        Client GetProfiles request message has a proper hierarchy (refer to media.wsdl) AND
+        &#009;[S1] Client request contains "&lt;GetProfiles>" tag after the "&lt;Body>" tag  AND
+        &#009;[S2] Device response contains "HTTP/* 200 OK" AND
+        &#009;[S3] Device response contains "&lt;GetProfilesResponse>" tag
+        AND
+        Client GetStreamUri request message is a well-formed SOAP request (refer to onvif.xsd) AND
+        Client GetStreamUri request message has a proper hierarchy (refer to media.wsdl) AND
+        &#009;[S4] Client request contains "&lt;GetStreamUri>" tag after the "&lt;Body>" tag AND
+        &#009;[S5] "&lt;GetStreamUri>" includes tag: "&lt;StreamSetup>" AND
+        &#009;[S6] "&lt;StreamSetup>" includes tag: "&lt;Stream>" with ("RTP-unicast" OR "RTP-multicast") value
+        AND
+        &#009;[S7] "&lt;StreamSetup>" includes tag: "&lt;Transport>" AND
+        &#009;[S8] "&lt;Transport>" includes tag: "&lt;Protocol>" with ("UDP" OR "HTTP" OR "RTSP") value
+        AND
+        &#009;[S9] "&lt;GetStreamUri>" includes tag: "&lt;ProfileToken>" with non-empty string value of specific profile token AND
+        &#009;[S10] Device response contains "HTTP/* 200 OK" AND
+        &#009;[S11] Device response contains "&lt;GetStreamUriResponse>" tag AND
+        &#009;[S12] "&lt;GetStreamUriResponse>" includes tag: "&lt;MediaUri>" AND
+        &#009;[S13] "&lt;MediaUri>" includes tag: "&lt;Uri>" with valid URI address
+        AND
+        &#009;[S14] Client request introduces RTSP DESCRIBE command AND
+        Client RTSP DESCRIBE request command has a proper hierarchy (refer to RFC2326 Specification) AND
+        &#009;[S15] RTSP DESCRIBE includes: URI address obtained from GetStreamUriResponse AND
+        &#009;[S16] RTSP DESCRIBE includes: "RTSP/*" identifier AND
+        &#009;[S17] RTSP DESCRIBE includes: "CSeq" identifier AND
+        &#009;[S18] Device response contains "RTSP/* 200 OK" AND
+        &#009;[S19] Device response SDP information contains Media Type: "application" and MIME Type: "vnd.onvif.metadata"
+        AND
+        &#009;[S20] Client request introduces RTSP SETUP command AND
+        Client RTSP SETUP request command has a proper hierarchy (refer to RFC2326 Specification) AND
+        &#009;[S21] RTSP SETUP includes: URI address AND
+        &#009;[S22] RTSP SETUP includes: "RTSP/*" identifier AND
+        &#009;[S23] RTSP SETUP includes: "CSeq" identifier AND
+        &#009;[S24] RTSP SETUP includes: "Transport" parameter AND
+        &#009;[S25] Device response contains "RTSP/* 200 OK"
+        AND
+        &#009;[S26] Client request introduces RTSP PLAY command AND
+        Client RTSP PLAY request command has a proper hierarchy (refer to RFC2326 Specification) AND
+        &#009;[S27] RTSP PLAY includes: the same URI address as in RTSP DESCRIBE request command AND
+        &#009;[S28] RTSP PLAY includes: "RTSP/*" identifier AND
+        &#009;[S29] RTSP PLAY includes: "CSeq" identifier AND
+        &#009;[S30] RTSP PLAY includes: "Session" parameter AND
+        &#009;[S31] Device response contains "RTSP/* 200 OK"
+      </literallayout>
+      <literallayout class="normal">
+        <emphasis role="bold">FAIL -</emphasis>
+        The Client failed PASS criteria.
+      </literallayout>
+      <para>
+        <emphasis role="bold">Validated Feature List: </emphasis>EventHandling
+        _MetadataStreaming
+      </para>
+    </section>
+  </section>
+</article>

@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.onvif.org/ver10/events/wsdl" 
+           xmlns:tt="http://www.onvif.org/ver10/schema" 
+           xmlns:wstop="http://docs.oasis-open.org/wsn/t-1" 
+           xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2"
+           xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+           xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" 
+           xmlns:wsa="http://www.w3.org/2005/08/addressing" 
+           xmlns:wsntw="http://docs.oasis-open.org/wsn/bw-2" 
+           xmlns:tev="http://www.onvif.org/ver10/events/wsdl" 
+           xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2" 
+           elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/2005/08/addressing" schemaLocation="http://www.w3.org/2005/08/addressing/ws-addr.xsd"/>
+  <xs:import namespace="http://docs.oasis-open.org/wsn/t-1" schemaLocation="http://docs.oasis-open.org/wsn/t-1.xsd"/>
+  <xs:import namespace="http://docs.oasis-open.org/wsn/b-2" schemaLocation="http://docs.oasis-open.org/wsn/b-2.xsd"/>
+  <xs:import namespace="http://www.onvif.org/ver10/schema" schemaLocation="http://www.onvif.org/onvif/ver10/schema/onvif.xsd"/>
+  <!--  Message Request/Responses elements  -->
+  <!--===============================-->
+  <xs:element name="GetServiceCapabilities">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServiceCapabilitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Capabilities" type="tev:Capabilities">
+          <xs:annotation>
+            <xs:documentation>The capabilities for the event service is returned in the Capabilities element.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:complexType name="Capabilities">
+    <xs:sequence>
+      <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="WSSubscriptionPolicySupport" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the WS Subscription policy is supported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="WSPullPointSupport" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the WS Pull Point is supported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="WSPausableSubscriptionManagerInterfaceSupport" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation>Indicates that the WS Pausable Subscription Manager Interface is supported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:anyAttribute processContents="lax"/>
+  </xs:complexType>
+  <xs:element name="Capabilities" type="tev:Capabilities"/>
+  <!--===============================-->
+  <xs:element name="CreatePullPointSubscription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Filter" type="wsnt:FilterType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Optional XPATH expression to select specific topics.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="InitialTerminationTime" type="wsnt:AbsoluteOrRelativeTimeType" nillable="true" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Initial termination time.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="SubscriptionPolicy" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>
+              Refer to <a href="http://docs.oasis-open.org/wsn/wsn-ws_base_notification-1.3-spec-os.htm">Web Services Base Notification 1.3 (WS-BaseNotification)</a>.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreatePullPointSubscriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SubscriptionReference" type="wsa:EndpointReferenceType">
+          <xs:annotation>
+            <xs:documentation>Endpoint reference of the subscription to be used for pulling the messages.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wsnt:CurrentTime">
+          <xs:annotation>
+            <xs:documentation>Current time of the server for synchronization purposes.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wsnt:TerminationTime">
+          <xs:annotation>
+            <xs:documentation>Date time when the PullPoint will be shut down without further pull requests.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="PullMessages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Timeout" type="xs:duration">
+          <xs:annotation>
+            <xs:documentation>Maximum time to block until this method returns.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="MessageLimit" type="xs:int">
+          <xs:annotation>
+            <xs:documentation>Upper limit for the number of messages to return at once. A server implementation may decide to return less messages.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PullMessagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CurrentTime" type="xs:dateTime">
+          <xs:annotation>
+            <xs:documentation>The date and time when the messages have been delivered by the web server to the client.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="TerminationTime" type="xs:dateTime">
+          <xs:annotation>
+            <xs:documentation>Date time when the PullPoint will be shut down without further pull requests.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wsnt:NotificationMessage" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of messages. This list shall be empty in case of a timeout.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!--
+			<xs:element name="PullMessagesFaultResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MaxTimeout" type="xs:duration">
+							<xs:annotation>
+								<xs:documentation>Maximum timeout supported by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="MaxMessageLimit" type="xs:int">
+							<xs:annotation>
+								<xs:documentation>Maximum message limit supported by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+      -->
+
+  <!-- fixing events.wsdl-->
+  <xs:complexType name="PullMessagesFaultResponseType">
+    <xs:sequence>
+      <xs:element name="MaxTimeout" type="xs:duration">
+        <xs:annotation>
+          <xs:documentation>Maximum timeout supported by the device.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="MaxMessageLimit" type="xs:int">
+        <xs:annotation>
+          <xs:documentation>Maximum message limit supported by the device.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PullMessagesFaultResponse"
+             type="tev:PullMessagesFaultResponseType"/>
+
+  <!-- end of fix-->
+
+  <!--===============================-->
+  <xs:element name="SetSynchronizationPoint">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSynchronizationPointResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+  <xs:element name="GetEventProperties">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEventPropertiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TopicNamespaceLocation" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>List of topic namespaces supported.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wsnt:FixedTopicSet">
+          <xs:annotation>
+            <xs:documentation>True when topicset is fixed for all times.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wstop:TopicSet">
+          <xs:annotation>
+            <xs:documentation>Set of topics supported.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="wsnt:TopicExpressionDialect" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Defines the XPath expression syntax supported for matching topic expressions. <br/>
+              The following TopicExpressionDialects are mandatory for an ONVIF compliant device (see Section 15.7.3):
+              <ul type="disc">
+                <li>http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete</li>
+                <li>http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet.</li>
+              </ul>
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="MessageContentFilterDialect" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Defines the XPath function set supported for message content filtering.<br/>
+              The following MessageContentFilterDialects are mandatory for an ONVIF compliant device(see Section 15.5.5):
+              <ul type="disc">
+                <li>http://www.onvif.org/ver10/tev/messageContentFilter/ItemFilter.</li>
+              </ul>
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ProducerPropertiesFilterDialect" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              Optional ProducerPropertiesDialects. Refer to <a href="http://docs.oasis-open.org/wsn/wsn-ws_base_notification-1.3-spec-os.htm">Web Services Base Notification 1.3 (WS-BaseNotification)</a> for advanced filtering.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="MessageContentSchemaLocation" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              The Message Content Description Language, introduced in Section 15.5.4, allows referencing
+              of vendor-specific types. In order to ease the integration of such types into a client application,
+              the GetEventPropertiesResponse shall list all URI locations to schema files whose types are
+              used in the description of notifications, with MessageContentSchemaLocation elements.<br/>
+              This list shall at least contain the URI of the ONVIF schema file.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation/>
+          </xs:annotation>
+        </xs:any>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--===============================-->
+</xs:schema>
+

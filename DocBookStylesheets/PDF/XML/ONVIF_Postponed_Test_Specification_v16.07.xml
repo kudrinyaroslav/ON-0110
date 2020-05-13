@@ -1,0 +1,2185 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet href="docbook-css/docbook.xsl" type="text/xsl" ?>
+<article xmlns="http://docbook.org/ns/docbook"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xsi:schemaLocation="http://docbook.org/ns/docbook http://docbook.org/xml/5.0/xsd/docbook.xsd"
+   version="0.1"
+   xml:id="ONVIF_Core_Client_TS">
+  <info>
+    <title>ONVIF Core Client Test Specification</title>
+    <subtitle>Version 16.01 January, 2016</subtitle>
+    <copyright>
+      <year>2016</year>
+      <holder>ONVIF, Inc. All rights reserved. www.onvif.org</holder>
+    </copyright>
+    <legalnotice role="notices">
+      <para>
+        Recipients of this document may copy, distribute, publish, or display this
+        document so long as this copyright notice, license and disclaimer are retained with
+        all copies of the document. No license is granted to modify this document.
+      </para>
+      <para>
+        THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR
+        AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT
+        NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+        NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY
+        PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+        COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+      </para>
+      <para>
+        IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR
+        ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES,
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR
+        NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND
+        ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT. THE
+        FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR
+        LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE
+        AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE
+        CORPORATION.
+      </para>
+    </legalnotice>
+  </info>
+  <section xml:id="additions">
+    <title>Terms and Definitions</title>
+    <section xml:id="additions.conventions">
+      <title>Conventions</title>
+      <para>
+        The key words "shall", "shall not", "should", "should not", "may", "need not",
+        "can", "cannot" in this specification are to be interpreted as described in [ISO/IEC
+        Directives Part 2].
+      </para>
+    </section>
+    <section xml:id="additions.definitions">
+      <title>Definitions</title>
+      <para>This section describes terms and definitions used in this document.</para>
+      <variablelist>
+        <varlistentry>
+          <term>Profile</term>
+          <listitem>
+            <para>See ONVIF Profile Policy.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <variablelist>
+        <varlistentry>
+          <term>Profile A</term>
+          <listitem>
+            <para>The Profile A Specification.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <variablelist>
+        <varlistentry>
+          <term>ONVIF Device</term>
+          <listitem>
+            <para>
+              Computer appliance or software program that exposes one or multiple
+              ONVIF Web Services.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ONVIF Client</term>
+          <listitem>
+            <para>
+              Computer appliance or software program that uses ONVIF Web
+              Services.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Conversation</term>
+          <listitem>
+            <para>
+              A Conversation is all exchanges between two MAC addresses that
+              contains SOAP request and response.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Network</term>
+          <listitem>
+            <para>
+              A network is an interconnected group of devices communicating using
+              the Internet protocol.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Network Trace Capture file</term>
+          <listitem>
+            <para>
+              Data file created by a network protocol analyzer software (such as
+              Wireshark). Contains network packets data recorded during a live network
+              communications.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>SOAP</term>
+          <listitem>
+            <para>
+              SOAP is a lightweight protocol intended for exchanging structured
+              information in a decentralized, distributed environment. It uses XML
+              technologies to define an extensible messaging framework providing a
+              message construct that can be exchanged over a variety of underlying
+              protocols.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Client Test Tool</term>
+          <listitem>
+            <para>
+              ONVIF Client Test Tool that tests ONVIF Client implementation towards
+              the ONVIF Test Specification set.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Access Policy</term>
+          <listitem>
+            <para>
+              An association of an access point and a schedule. An access policy defines when
+              an access point can be accessed using an access profile which contains this
+              access policy.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Access Profile</term>
+          <listitem>
+            <para>
+              A collection of access policies, used to define role based access.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Access Point</term>
+          <listitem>
+            <para>
+              A logical composition of a physical door and ID point(s)
+              controlling access in one direction.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential</term>
+          <listitem>
+            <para>
+              A physical/tangible object, a piece of knowledge, or a facet
+              of a person's physical being, that enables an individual access
+              to a given physical facility or computer-based information system.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Validity Period</term>
+          <listitem>
+            <para>
+              From a certain point in time, to a later point in time.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Schedule</term>
+          <listitem>
+            <para>
+              A set of time periods, for example: working hours (weekdays from 08:00 AM to 06:00 PM). It may also include one or more special days schedule.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ID Point</term>
+          <listitem>
+            <para>
+              A device that converts reader signals to protocols recognized by an
+              authorization engine. It can be card reader, REX, biometric reader
+              etc.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Anti-Passback</term>
+          <listitem>
+            <para>
+              Operating mode which requires user validation when leaving a security controlled area in order to be able to re-enter and vice versa.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Anti-Passback Violation State</term>
+          <listitem>
+            <para>
+              A signal stating if the anti-passback rules have been violated for a credential.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential Format</term>
+          <listitem>
+            <para>
+              The credential data can be formatted in many different ways. ONVIF supports the BACnet format types in [ISO 16484-5:2014-09 Annex P].
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential Holder</term>
+          <listitem>
+            <para>
+              Associates a credential with a user. Typically it holds a reference to a credential and a reference to a user.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential Identifier</term>
+          <listitem>
+            <para>
+              Card number, unique card information, PIN, fingerprint, or other biometric information, etc., that can be validated in an access point.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential Number</term>
+          <listitem>
+            <para>
+              A sequence of bytes uniquely identifying a credential at an access point.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Credential State</term>
+          <listitem>
+            <para>
+              The credential state indicates if a credential is enabled or disabled. The state also indicates if anti-passback has been violated or not. The state may also contain a reason why the credential was disabled.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Duress</term>
+          <listitem>
+            <para>
+              Forcing a person to provide access to a secure area against that person's wishes.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Format Type</term>
+          <listitem>
+            <para>
+              See Credential Format.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>iCalendar</term>
+          <listitem>
+            <para>
+              An industry standard format for exchanging scheduling and activity-recording information electronically.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Special Days</term>
+          <listitem>
+            <para>
+              A set of dates that require the regular Schedule to be overridden, e.g. holidays, half-days or working Sundays.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Special Days Schedule</term>
+          <listitem>
+            <para>
+              A schedule that defines time periods for a Special Day List.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Time Period</term>
+          <listitem>
+            <para>
+              A time period has a start time and an end time, e.g. 8 AM to 6 PM.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>vEvent</term>
+          <listitem>
+            <para>
+              A component in iCalendar, specifying the properties of an event.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Valid Device Response</term>
+          <listitem>
+            <para>
+              Device has responded to specific request with code HTTP or RTSP 200 OK
+              and SOAP fault message has not appeared.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section xml:id="additions.abbreviations">
+      <title>Abbreviations</title>
+      <para>This section describes abbreviations used in this document.</para>
+      <variablelist>
+        <varlistentry>
+          <term>PACS</term>
+          <listitem>
+            <para>Physical Access Control System.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>HTTP</term>
+          <listitem>
+            <para>Hyper Text Transport Protocol.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>HTTPS</term>
+          <listitem>
+            <para>Hyper Text Transport Protocol over Secure Socket Layer.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>URI</term>
+          <listitem>
+            <para>Uniform Resource Identifier.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WSDL</term>
+          <listitem>
+            <para>Web Services Description Language.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>XML</term>
+          <listitem>
+            <para>eXtensible Markup Language.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section xml:id="additions.namespaces">
+      <title>Namespaces</title>
+      <para>
+        Prefix and namespaces used in this test specification are listed in Table 1.
+        These prefixes are not part of the standard and an implementation can use any prefix.
+      </para>
+      <table>
+        <title>Defined namespaces in this specification</title>
+        <tgroup cols="3">
+          <colspec colwidth="109*"/>
+          <colspec colwidth="403*"/>
+          <colspec colwidth="488*"/>
+          <thead>
+            <row>
+              <entry>Prefix</entry>
+              <entry>Namespace URI</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>soapenv</entry>
+              <entry>http://www.w3.org/2003/05/soap-envelope</entry>
+              <entry>Envelope namespace as defined by SOAP 1.2 [SOAP 1.2, Part 1]</entry>
+            </row>
+            <row>
+              <entry>xs</entry>
+              <entry>http://www.w3.org/2001/XMLSchema</entry>
+              <entry>Instance namespace as defined by XS [XML-Schema, Part1] and [XMLSchema,Part 2]</entry>
+            </row>
+            <row>
+              <entry>xsi</entry>
+              <entry>http://www.w3.org/2001/XMLSchema-instance</entry>
+              <entry>XML schema instance namespace</entry>
+            </row>
+            <row>
+              <entry>tns1</entry>
+              <entry>http://www.onvif.org/ver10/topics</entry>
+              <entry>The namespace for the ONVIF topic namespace</entry>
+            </row>
+            <row>
+              <entry>tt</entry>
+              <entry>http://www.onvif.org/ver10/schema</entry>
+              <entry>ONVIF XML schema descriptions</entry>
+            </row>
+            <row>
+              <entry>tds</entry>
+              <entry>http://www.onvif.org/ver10/device/wsdl</entry>
+              <entry>The namespace for the WSDL device service</entry>
+            </row>
+            <row>
+              <entry>tev</entry>
+              <entry>http://www.onvif.org/ver10/events/wsdl</entry>
+              <entry>The namespace for the WSDL event service</entry>
+            </row>
+            <row>
+              <entry>tac</entry>
+              <entry>http://www.onvif.org/ver10/accesscontrol/wsdl</entry>
+              <entry>The namespace for the WSDL access control service</entry>
+            </row>
+            <row>
+              <entry>tdc</entry>
+              <entry>http://www.onvif.org/ver10/doorcontrol/wsdl</entry>
+              <entry>The namespace for the WSDL door control service</entry>
+            </row>
+            <row>
+              <entry>tas</entry>
+              <entry>http://www.onvif.org/ver10/advancedsecurity/wsdl</entry>
+              <entry>The namespace for the WSDL advanced security service</entry>
+            </row>
+            <row>
+              <entry>tar</entry>
+              <entry>http://www.onvif.org/ver10/accessrules/wsdl</entry>
+              <entry>The namespace for the WSDL access rules service</entry>
+            </row>
+            <row>
+              <entry>tcr</entry>
+              <entry>http://www.onvif.org/ver10/credential/wsdl</entry>
+              <entry>The namespace for the WSDL credential service</entry>
+            </row>
+            <row>
+              <entry>tsc</entry>
+              <entry>http://www.onvif.org/ver10/schedule/wsdl</entry>
+              <entry>The namespace for the WSDL schedule service</entry>
+            </row>
+            <row>
+              <entry>wsnt</entry>
+              <entry>http://docs.oasis-open.org/wsn/b-2</entry>
+              <entry>Schema namespace of the [WS-BaseNotification] specification.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+  <section xml:id="tc.advanced_pp_event_handling">
+    <title>Advanced Pull Point Event Handling Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> advanced_pp_event_handling
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> Optional
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> Optional
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> Optional
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> Optional
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> Optional
+    </para>
+    <section xml:id="tc.advanced_pp_event_handling.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>Client connects to Device to initiate Pull Point Event Handling.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Advanced Pull Point Event Handling if the following
+              conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to synchronize property states using <emphasis role="bold">SetSynchronizationPoint</emphasis> operation for pull point subscribtions AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to unsubscribe pull point subscribtions using <emphasis role="bold">Unsubscribe</emphasis> operation.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Advanced Pull Point Event Handling if the following
+              is TRUE:<itemizedlist>
+                <listitem>
+                  <para>Client supports EventHandling_Pullpoint feature AND</para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">SetSynchronizationPoint</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">SetSynchronizationPoint</emphasis> request does not contains valid <emphasis role="bold">wsa:Action</emphasis> header OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">SetSynchronizationPoint</emphasis> request contains valid reference parameters IF reference parameters was specified
+                    in <emphasis role="bold">tev:SubscriptionReference\wsa:ReferenceParameters</emphasis> element
+                    of corresponding <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">SetSynchronizationPoint</emphasis> request was invoked to valid address
+                    which was specified in <emphasis role="bold">tev:SubscriptionReference\wsa:Address</emphasis> element
+                    of corresponding <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">Unsubscribe</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">Unsubscribe</emphasis> request does not contains valid <emphasis role="bold">wsa:Action</emphasis> header OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">Unsubscribe</emphasis> request contains valid reference parameters IF reference parameters was specified
+                    in <emphasis role="bold">tev:SubscriptionReference\wsa:ReferenceParameters</emphasis> element
+                    of corresponding <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <emphasis role="bold">Unsubscribe</emphasis> request was invoked to valif address which was specified
+                    in <emphasis role="bold">tev:SubscriptionReference\wsa:Address</emphasis> element
+                    of corresponding <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.advanced_pp_event_handling.ADVANCEDPPEVENTHANDLING-3">
+      <title>
+        SET SYNCHRONIZATION POINT
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Advanced Pull Point Event Handling - Set Synchronization Point
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> ADVANCEDPPEVENTHANDLING-3
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Requirement:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Requirement:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Requirement:</emphasis> Optional
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> SetSynchronizationPoint
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to use <emphasis role="bold">SetSynchronizationPoint</emphasis> operation for Pull Point subscribtion.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with <emphasis role="bold">SetSynchronizationPoint</emphasis> operations present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">CreatePullPointSubscription</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">SetSynchronizationPoint</emphasis> message to valid address recieved in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message
+              for the created Pull Point subscribtion with valid <emphasis role="bold">wsa:Action</emphasis> header
+              and valid reference parameters recieved in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">SetSynchronizationPointResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetSynchronizationPoint</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetSynchronizationPoint</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:SetSynchronizationPoint</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">wsa:Action</emphasis> element in header equal to "http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/SetSynchronizationPointRequest" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">SetSynchronizationPoint</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:SetSynchronizationPointResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Device response on the <emphasis role="bold">CreatePullPointSubscription</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It received for the same Device as for the Client <emphasis role="bold">SetSynchronizationPoint</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] It received before the Client <emphasis role="bold">SetSynchronizationPoint</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S8] It contains <emphasis role="bold">tev:SubscriptionReference\wsa:Address</emphasis> element
+                    which is equal to HTTP address that was used to send the <emphasis role="bold">SetSynchronizationPoint</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] All reference parameters listed in <emphasis role="bold">tev:SubscriptionReference\wsa:ReferenceParameters</emphasis> element
+                    was send in <emphasis role="bold">SetSynchronizationPoint</emphasis> request header with the same values and namespaces
+                    as in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message and with <emphasis role="bold">@wsa:IsReferenceParameter</emphasis> attribute equal to true
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>advanced_pp_event_handling.set_synchronization_point
+      </para>
+    </section>
+    <section xml:id="tc.advanced_pp_event_handling.ADVANCEDPPEVENTHANDLING-4">
+      <title>
+        UNSUBSCRIBE
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Advanced Pull Point Event Handling - Unsubscribe
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> ADVANCEDPPEVENTHANDLING-4
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Requirement:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Requirement:</emphasis> Mandatory
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Requirement:</emphasis> Optional
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Unsubscribe
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that the Client is able
+        to use <emphasis role="bold">Unsubscribe</emphasis> operation as keep alive for Pull Point subscribtion.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation between
+              Client and Device with <emphasis role="bold">Unsubscribe</emphasis> operations present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">CreatePullPointSubscription</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">Unsubscribe</emphasis> message to valid address recieved in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message
+              for the created Pull Point subscribtion with valid <emphasis role="bold">wsa:Action</emphasis> header
+              and valid reference parameters recieved in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">UnsubscribeResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Unsubscribe</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">Unsubscribe</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:Unsubscribe</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">wsa:Action</emphasis> element in header equal to "http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/UnsubscribeRequest" AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">Unsubscribe</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">wsnt:UnsubscribeResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              There is a Device response on the <emphasis role="bold">CreatePullPointSubscription</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S5] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S6] It received for the same Device as for the Client <emphasis role="bold">Unsubscribe</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S7] It received before the Client <emphasis role="bold">Unsubscribe</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S8] It contains <emphasis role="bold">tev:SubscriptionReference\wsa:Address</emphasis> element
+                    which is equal to HTTP address that was used to send the <emphasis role="bold">Unsubscribe</emphasis> request AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S9] All reference parameters listed in <emphasis role="bold">tev:SubscriptionReference\wsa:ReferenceParameters</emphasis> element
+                    was send in <emphasis role="bold">Unsubscribe</emphasis> request header with the same values and namespaces
+                    as in <emphasis role="bold">CreatePullPointSubscriptionResponse</emphasis> message and with <emphasis role="bold">@wsa:IsReferenceParameter</emphasis> attribute equal to true
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>advanced_pp_event_handling.unsubscribe
+      </para>
+    </section>
+  </section>
+  <section xml:id="tc.dynamic_recording">
+    <title>Recording Control – Dynamic Recording Configurations Test Cases</title>
+    <section xml:id="tc.dynamic_recording.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client subscribes to device messages using CreatePullPointSubscription
+              operation to get notifications about created and deleted recordings.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Client creates new Recording.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client uses Pull Point event mechanism to retrieve notification events
+              from Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Client delete Recording.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client uses Pull Point event mechanism to retrieve notification events
+              from Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Dynamic Recording Configurations if the
+              following conditions are met:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    When Device supports DynamicRecordings feature and Client supports  Dynamic Recordings Configurations capability:
+                    <itemizedlist>
+                      <listitem>
+                        <para>
+                          Client is able to create a recording using the
+                          CreateRecording operation
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client is able to delete a recording using the
+                          DeleteRecording operation
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>Client supports EventHandling_Pullpoint feature AND</para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client is able to retrieve notifications about created recordings
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>Client is able to retrieve notifications about deleted recordings.</para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Dynamic Recording Configurations if
+              ANY of the following is TRUE:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    When Device supports DynamicRecordings feature and Client supports Dynamic Recordings Configurations capability:
+                    <itemizedlist>
+                      <listitem>
+                        <para>
+                          No Valid Device Response to CreateRecording request (except
+                          soap fault: MaxRecordings)
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          No Valid Device Response to DeleteRecording request (except
+                          soap fault: CannotDelete)
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client does not support EventHandling_Pullpoint feature
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client unable to retrieve notifications about created recordings
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client unable to retrieve notifications about deleted recordings
+                          OR
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.dynamic_recording.DYNAMICRECORDINGCONFIGURATION-3">
+      <title>
+        <emphasis role="italic">RETRIEVE CREATE RECORDING NOTIFICATION</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Dynamic Recording Configurations - Retrieve
+        Notifications about created recordings
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> DYNAMICRECORDINGCONFIGURATION-3
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Dynamic Recording
+        Configurations
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+        retrieve notifications about created recordings from Device using the Pull Point event
+        mechanism.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with CreatePullPointSubscription operation present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message to retrieve notification about created recording.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link>AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscription&gt; AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete
+                    THEN &lt;wsnt:TopicExpression&gt; element is equal to tns1:RecordingConfig/CreateRecording AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet
+                    THEN &lt;wsnt:TopicExpression&gt; element contains tns1:RecordingConfig/CreateRecording OR
+                    tns1:RecordingConfig//. in expression AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the CreatePullPointSubscription request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S4] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S5] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscriptionResponse&gt;
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>DynamicRecordingConfigurations_RetrieveCreateRecordingNotifications
+      </para>
+    </section>
+    <section xml:id="tc.dynamic_recording.DYNAMICRECORDINGCONFIGURATION-4">
+      <title>
+        <emphasis role="italic">RETRIEVE DELETE RECORDING NOTIFICATION</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Dynamic Recording Configurations - Retrieve
+        Notifications about deleted recordings
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> DYNAMICRECORDINGCONFIGURATION-4
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Dynamic Recording
+        Configurations
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+        retrieve notifications about deleted recordings from Device using the Pull Point event
+        mechanism.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with CreatePullPointSubscription operation present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message to retrieve notification about deleted recording.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link>AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscription&gt; AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete
+                    THEN &lt;wsnt:TopicExpression&gt; element is equal to tns1:RecordingConfig/DeleteRecording AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet
+                    THEN &lt;wsnt:TopicExpression&gt; element contains tns1:RecordingConfig/DeleteRecording OR
+                    tns1:RecordingConfig//. in expression AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the CreatePullPointSubscription request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S4] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S5] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscriptionResponse&gt;
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>DynamicRecordingConfigurations_RetrieveDeleteRecordingNotifications
+      </para>
+    </section>
+  </section>
+  <section xml:id="tc.dynamic_track">
+    <title>Recording Control – Dynamic Track Configurations Test Cases</title>
+    <section xml:id="tc.dynamic_track.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client subscribes to device messages using CreatePullPointSubscription
+              operation to get notifications about created and deleted tracks.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Client creates new Track.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client uses Pull Point event mechanism to retrieve notification events about created tracks
+              from Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>Client delete Track.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Client uses Pull Point event mechanism to retrieve notification events about deleted tracks
+              from Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Dynamic Tracks Configurations if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    When Device supports DynamicTracks feature and Client supports  Dynamic Tracks Configurations capability:<itemizedlist>
+                      <listitem>
+                        <para>
+                          Client is able to create a track using the
+                          CreateTrack operation
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client is able to delete a track using the
+                          DeleteTrack operation
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>Client supports EventHandling_Pullpoint feature AND</para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client is able to retrieve notifications about created tracks
+                          AND
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>Client is able to retrieve notifications about deleted tracks.</para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Dynamic Tracks Configurations if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    When Device supports DynamicTracks feature and Client supports Dynamic Tracks Configurations capability:
+                    <itemizedlist>
+                      <listitem>
+                        <para>
+                          No Valid Device Response to CreateTrack request (except
+                          soap fault: MaxTracks)
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          No Valid Device Response to DeleteTrack request (except
+                          soap fault: CannotDelete)
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client does not support EventHandling_Pullpoint feature
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client unable to retrieve notifications about created tracks
+                          OR
+                        </para>
+                      </listitem>
+                      <listitem>
+                        <para>
+                          Client unable to retrieve notifications about deleted tracks
+                          OR
+                        </para>
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.dynamic_track.DYNAMICTRACKSCONFIGURATION-3">
+      <title>
+        <emphasis role="italic">RETRIEVE CREATE TRACK NOTIFICATION</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Dynamic Track Configurations - Retrieve
+        Notifications about created tracks
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> DYNAMICTRACKSCONFIGURATION-3
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Dynamic Track
+        Configurations
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+        retrieve notifications about created tracks from Device using the Pull Point event
+        mechanism.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with CreatePullPointSubscription operation present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message to retrieve notification about created tracks.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link>AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscription&gt; AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete
+                    THEN &lt;wsnt:TopicExpression&gt; element is equal to tns1:RecordingConfig/CreateTrack AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet
+                    THEN &lt;wsnt:TopicExpression&gt; element contains tns1:RecordingConfig/CreateTrack OR
+                    tns1:RecordingConfig//. in expression AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the CreatePullPointSubscription request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S4] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S5] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscriptionResponse&gt;
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>DynamicRecordingConfigurations_RetrieveCreateTrackNotifications
+      </para>
+    </section>
+    <section xml:id="tc.dynamic_track.DYNAMICTRACKSCONFIGURATION-4">
+      <title>
+        <emphasis role="italic">RETRIEVE DELETE TRACK NOTIFICATION</emphasis>
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Dynamic Track Configurations - Retrieve
+        Notifications about deleted tracks
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> DYNAMICTRACKSCONFIGURATION-4
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> Conditional
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Dynamic Track
+        Configurations
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to
+        retrieve notifications about deleted tracks from Device using the Pull Point event
+        mechanism.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with CreatePullPointSubscription operation present.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>Client invokes CreatePullPointSubscription message to retrieve notification about deleted tracks.</para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and
+              CreatePullPointSubscriptionResponse message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link>AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client CreatePullPointSubscription request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscription&gt; AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete
+                    THEN &lt;wsnt:TopicExpression&gt; element is equal to tns1:RecordingConfig/DeleteTrack AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] IF it contains &lt;tcr:Filter&gt; element with child element &lt;wsnt:TopicExpression&gt;
+                    with Dialect attribute equal to http://www.onvif.org/ver10/tev/topicExpression/ConcreteSet
+                    THEN &lt;wsnt:TopicExpression&gt; element contains tns1:RecordingConfig/DeleteTrack OR
+                    tns1:RecordingConfig//. in expression AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the CreatePullPointSubscription request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S4] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S5] &lt;soapenv:Body&gt; element has child element &lt;tev:CreatePullPointSubscriptionResponse&gt;
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>DynamicRecordingConfigurations_RetrieveDeleteTrackNotifications
+      </para>
+    </section>
+  </section>
+  <section xml:id="tc.get_video_sources">
+    <title>Video Sources List Test Cases</title>
+    <para>
+      <emphasis role="bold">Validated Feature:</emphasis> get_video_sources
+    </para>
+    <para>
+      <emphasis role="bold">Profile A Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile C Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile G Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile Q Requirement:</emphasis> None
+    </para>
+    <para>
+      <emphasis role="bold">Profile S Requirement:</emphasis> None
+    </para>
+    <section xml:id="tc.get_video_sources.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to retrieve a video sources list.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Video Sources List if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve a Video Sources List using <emphasis role="bold">GetVideoSources</emphasis> operation (Device IO Service OR Media Service).
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Video Sources List if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetVideoSources</emphasis> request (Device IO Service OR Media Service)
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.get_video_sources.GETVIDEOSOURCES-1">
+      <title>
+        GET VIDEO SOURCES
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Video Sources List -
+        Get Video Sources
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> GETVIDEOSOURCES-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Video Sources
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that video sources for Device is received by Client using the
+        <emphasis role="bold">GetVideoSources</emphasis> operation (Device IO Service OR Media Service).
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetVideoSources</emphasis> operation (Device IO Service OR Media Service)
+              present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Imaging Service.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetVideoSources</emphasis> request message (Device IO Service OR Media Service) to retrieve list of video sources
+              from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetVideoSourcesResponse</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetVideoSources</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetVideoSources</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">trt:GetVideoSources</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetVideoSources</emphasis> request fulfills the following requirements:
+              <itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">trt:GetVideoSourcesResponse</emphasis>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>get_video_sources.get_video_sources
+      </para>
+    </section>
+  </section>
+  <section xml:id="tc.remote_user_handling">
+    <title>Remote User Handling Test Cases</title>
+    <section xml:id="tc.remote_user_handling.feature">
+      <title>Feature Level Requirement:</title>
+      <para>
+        <emphasis role="bold">Validated Feature:</emphasis> remote_user_handling
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Requirement:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Requirement:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Requirement:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Requirement:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Requirement:</emphasis> None
+      </para>
+    </section>
+    <section xml:id="tc.remote_user_handling.scenario">
+      <title>Expected Scenarios Under Test:</title>
+      <para>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client connects to Device to configure the credentials of a remote user.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as supporting Remote User Handling if the
+              following conditions are met:<itemizedlist>
+                <listitem>
+                  <para>
+                    Client is able to retrieve configured remote user using
+                    <emphasis role="bold">GetRemoteUser</emphasis> operation AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Client is able to set the remote user using <emphasis role="bold">SetRemoteUser</emphasis> operation.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client is considered as NOT supporting Remote User Handling if
+              ANY of the following is TRUE:<itemizedlist>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">GetRemoteUser</emphasis> request OR
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    No valid responses for <emphasis role="bold">SetRemoteUser</emphasis> request.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+    </section>
+    <section xml:id="tc.remote_user_handling.REMOTEUSERHANDLING-1">
+      <title>
+        GET REMOTE USER
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Remote User Handling -
+        Get Remote User
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> REMOTEUSERHANDLING-1
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Get Remote User
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to retrieve configured remote user of Device
+        using the <emphasis role="bold">GetRemoteUser</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">GetRemoteUser</emphasis> operation present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Remote User Handling.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">GetRemoteUser</emphasis> request message to retrieve
+              configured remote user from the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">GetRemoteUser</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetRemoteUser</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">GetRemoteUser</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetRemoteUser</emphasis> AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">GetRemoteUser</emphasis> request fulfills the following requirements:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    [S2] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S3] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:GetRemoteUser</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>remote_user_handling.get_remote_user
+      </para>
+    </section>
+    <section xml:id="tc.remote_user_handling.REMOTEUSERHANDLING-2">
+      <title>
+        SET REMOTE USER
+      </title>
+      <para>
+        <emphasis role="bold">Test Label:</emphasis> Remote User Handling -
+        Set Remote User
+      </para>
+      <para>
+        <emphasis role="bold">Test Case ID:</emphasis> REMOTEUSERHANDLING-2
+      </para>
+      <para>
+        <emphasis role="bold">Profile A Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile C Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile G Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile Q Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Profile S Normative Reference:</emphasis> None
+      </para>
+      <para>
+        <emphasis role="bold">Feature Under Test:</emphasis> Set Remote User
+      </para>
+      <para>
+        <emphasis role="bold">Test Purpose:</emphasis> To verify that Client is able to set the remote user
+        using the <emphasis role="bold">SetRemoteUser</emphasis> operation.
+      </para>
+      <para>
+        <emphasis role="bold">Pre-Requisite:</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Network Trace Capture files contains at least one Conversation
+              between Client and Device with <emphasis role="bold">SetRemoteUser</emphasis> operation with <emphasis role="bold">RemoteUser</emphasis> element present.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device supports Remote User Handling.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Test Procedure (expected to be reflected in network trace
+          file):
+        </emphasis>
+        <orderedlist>
+          <listitem>
+            <para>
+              Client invokes <emphasis role="bold">SetRemoteUser</emphasis> request message with <emphasis role="bold">RemoteUser</emphasis> element to configure remote user on the Device.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device responses with code HTTP 200 OK and <emphasis role="bold">SetRemoteUser</emphasis> message.
+            </para>
+          </listitem>
+        </orderedlist>
+      </para>
+      <para>
+        <emphasis role="bold">Test Result:</emphasis>
+      </para>
+      <para>
+        <emphasis role="bold">PASS -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetRemoteUser</emphasis> request messages are valid according to XML Schemas listed in <link linkend="additions.namespaces">Namespaces</link> AND
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Client <emphasis role="bold">SetRemoteUser</emphasis> request in Test Procedure fulfills the following requirements:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    [S1] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:SetRemoteUser</emphasis> AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S2] It contains <emphasis role="bold">tds:RemoteUser</emphasis> element AND
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Device response on the <emphasis role="bold">SetRemoteUser</emphasis> request fulfills the following requirements:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    [S3] It has HTTP 200 response code AND
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    [S4] <emphasis role="bold">soapenv:Body</emphasis> element has child element <emphasis role="bold">tds:SetRemoteUser</emphasis>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">FAIL -</emphasis>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The Client failed PASS criteria.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        <emphasis role="bold">
+          Validated Feature List:
+        </emphasis>remote_user_handling.set_remote_user
+      </para>
+    </section>
+  </section>
+  
+  <appendix xml:id="changes">
+    <title>Revision History</title>
+    <para>
+      <emphasis role="bold">January 27, 2016 Version 1.0</emphasis>
+      <itemizedlist>
+        <listitem>
+          <para>Remote User Handling Test Cases were moved from Core Client test spec since this functionality was removed from Profile Q</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      <emphasis role="bold">June 11, 2014 Version 1.0</emphasis>
+      <itemizedlist>
+        <listitem>
+          <para>Initial version</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </appendix>
+</article>

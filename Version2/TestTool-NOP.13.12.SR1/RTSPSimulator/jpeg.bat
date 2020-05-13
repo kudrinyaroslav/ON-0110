@@ -1,0 +1,1 @@
+ffmpeg -y -i test.m4e -vcodec mjpeg -an -f image2 test-%03d.jpeg

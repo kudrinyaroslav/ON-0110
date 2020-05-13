@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href=",../ver20/util/onvif-wsdl-viewer.xsl"?>
+<!--
+Copyright (c) 2010-2011 by ONVIF: Open Network Video Interface Forum. All rights reserved.
+PRELIMINARY and CONFIDENTIAL - under NDA (Non-Disclosure Agreement) or subject to ONVIF PACS license.
+
+THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND
+THEIR AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE;
+THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY PURPOSE;
+OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS,
+COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE
+FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL
+DAMAGES, ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS
+DOCUMENT, WHETHER OR NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES
+HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES
+WERE REASONABLY FORESEEABLE, AND ARISING OUT OF OR RELATING TO ANY USE OR
+DISTRIBUTION OF THIS DOCUMENT.
+THE FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO,
+INVALIDATE, OR LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS
+AND THEIR RESPECTIVE AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN
+CERTAIN WRITTEN POLICIES OF THE CORPORATION.
+-->
+<wsdl:definitions 
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:tar="http://www.onvif.org/ver10/accessrules/wsdl" name="AccessRulesService" targetNamespace="http://www.onvif.org/ver10/accessrules/wsdl">
+	<!-- The data types definition for the 'Access Rules Service' -->
+	<wsdl:types>
+		<xs:schema targetNamespace="http://www.onvif.org/ver10/accessrules/wsdl" 
+		xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pt="http://www.onvif.org/ver10/pacs" 
+		xmlns:tar="http://www.onvif.org/ver10/accessrules/wsdl" elementFormDefault="qualified" version="1.0">
+			<xs:import namespace="http://www.onvif.org/ver10/pacs" schemaLocation="types.xsd"/>			
+			<!--ServiceCapabilities definitions-->
+			<xs:complexType name="ServiceCapabilities">
+				<xs:annotation>
+					<xs:documentation>
+						The service capabilities reflect optional functionality of a service.
+						The information is static and does not change during device operation.
+						The following capabilities are available:
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+				</xs:sequence>
+				<xs:attribute name="MaxLimit" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum number of entries returned by a single GetList request. 
+							The device shall never return more than this number of entities in a single response.
+						</xs:documentation>
+				  </xs:annotation>
+				  <xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				  </xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="MaxAccessProfiles" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum number of access profiles supported by the device.
+						</xs:documentation>
+				  </xs:annotation>
+				  <xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				  </xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="MaxAccessPoliciesPerAccessProfile" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							The maximum number of access policies per access profile supported by the device.
+						</xs:documentation>
+				  </xs:annotation>
+				  <xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				  </xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="MultipleSchedulesPerAccessPointSupported" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>
+							True if an access profile with several access policies can refer to the same access point.
+						</xs:documentation>
+				  </xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--AccessPolicy definitions-->
+			<xs:complexType name="AccessPolicy">
+				<xs:annotation>
+					<xs:documentation>
+						An association of an access point and a schedule.
+						It defines when an access point can be accessed using an access profile which contains this access policy.
+						Several access policies specifying different schedules for the same access point will result in a union of the schedules.
+					</xs:documentation>
+				</xs:annotation>			
+				<xs:sequence>
+					<xs:element name="ScheduleToken" type="pt:ReferenceToken">
+						<xs:annotation>
+							<xs:documentation>Reference to the Schedule</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Entity" type="pt:ReferenceToken">
+						<xs:annotation>
+							<xs:documentation>
+								Reference to the entity used by rule engine; the entity type may be 
+								specified by the optional EntityType field explained below but is typically an access point. 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="EntityType" type="xs:QName" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+							Optional entity type; if missing, an access point as defined by the ONVIF AccessControl service should be assumed. 
+							This can also be represented by the QName value "tac:AccessPointInfo" - where tac is the namespace of the access rules service: &quot;http://www.onvif.org/ver10/accesscontrol/wsdl&quot;. 
+							This field is provided for future extensions; it will allow an access policy being extended to cover entity types other than access points as well.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Extension" type="tar:AccessPolicyExtension" minOccurs="0"/>		
+				</xs:sequence>
+				<xs:anyAttribute processContents="lax"/>				
+			</xs:complexType>
+			<xs:complexType name="AccessPolicyExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--AccessProfileInfo definitions-->
+			<xs:complexType name="AccessProfileInfo">
+				<xs:annotation>
+					<xs:documentation>
+						A subset of access profile details. Used as extension base for AccessProfile.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="pt:DataEntity">
+						<xs:sequence>
+							<xs:element name="Name" type="pt:Name">
+								<xs:annotation>
+									<xs:documentation>A user readable name. It shall be up to 64 characters.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Description" type="pt:Description" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Optional user readable description for the AccessProfile. It shall be up to 1024 characters.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<!-- End of definition -->
+			<!--AccessProfileInfo definitions-->
+			<xs:complexType name="AccessProfile">
+				<xs:annotation>
+					<xs:documentation>
+						A collection of access policies. It is used to define role based access.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tar:AccessProfileInfo">
+						<xs:sequence>
+							<xs:element name="AccessPolicy" type="tar:AccessPolicy" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>List of AccessPolicy items.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Extension" type="tar:AccessProfileExtension" minOccurs="0"/>		
+						</xs:sequence>
+						<xs:anyAttribute processContents="lax"/>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AccessProfileExtension"> 
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<!-- End of data types definition -->
+			<!-- #################-->
+			<!-- Message request / response elements-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tar:ServiceCapabilities">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the access rules service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of AccessProfileInfo items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileInfoResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AccessProfileInfo" type="tar:AccessProfileInfo" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileInfoList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileInfoListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AccessProfileInfo" type="tar:AccessProfileInfo" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of AccessProfileInfo items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfiles">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Tokens of AccessProfile items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfilesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AccessProfile" type="tar:AccessProfile" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Limit" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Maximum number of entries to return. If not specified, less than one or higher than what the device supports, the number of items is determined by the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="StartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Start returning entries from this start reference. If not specified, entries shall start from the beginning of the dataset.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="GetAccessProfileListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NextStartReference" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>StartReference to use in next call to get the following items. If absent, no more items to get.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AccessProfile" type="tar:AccessProfile" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>List of AccessProfile items.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="CreateAccessProfile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AccessProfile" type="tar:AccessProfile">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="CreateAccessProfileResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of an AccessProfile item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>	
+			<!--===============================-->
+			<xs:element name="ModifyAccessProfile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AccessProfile" type="tar:AccessProfile">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="ModifyAccessProfileResponse">
+				<xs:complexType>
+					<xs:sequence>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<!--===============================-->
+			<xs:element name="DeleteAccessProfile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="pt:ReferenceToken">
+							<xs:annotation>
+								<xs:documentation>Token of an AccessProfile item</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:element name="DeleteAccessProfileResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!-- #################-->
+		</xs:schema>
+	</wsdl:types>
+	<!--Definition of 'GetServiceCapabilities' message-->
+	<wsdl:message name="GetServiceCapabilitiesRequest">
+		<wsdl:part name="parameters" element="tar:GetServiceCapabilities"/>
+	</wsdl:message>
+	<wsdl:message name="GetServiceCapabilitiesResponse">
+		<wsdl:part name="parameters" element="tar:GetServiceCapabilitiesResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetAccessProfileInfo' message-->
+	<wsdl:message name="GetAccessProfileInfoRequest">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileInfo"/>
+	</wsdl:message>
+	<wsdl:message name="GetAccessProfileInfoResponse">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileInfoResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetAccessProfileInfoList' message-->
+	<wsdl:message name="GetAccessProfileInfoListRequest">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileInfoList"/>
+	</wsdl:message>
+	<wsdl:message name="GetAccessProfileInfoListResponse">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileInfoListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetAccessProfiles' message-->
+	<wsdl:message name="GetAccessProfilesRequest">
+		<wsdl:part name="parameters" element="tar:GetAccessProfiles"/>
+	</wsdl:message>
+	<wsdl:message name="GetAccessProfilesResponse">
+		<wsdl:part name="parameters" element="tar:GetAccessProfilesResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'GetAccessProfileList' message-->
+	<wsdl:message name="GetAccessProfileListRequest">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileList"/>
+	</wsdl:message>
+	<wsdl:message name="GetAccessProfileListResponse">
+		<wsdl:part name="parameters" element="tar:GetAccessProfileListResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'CreateAccessProfile' message-->
+	<wsdl:message name="CreateAccessProfileRequest">
+		<wsdl:part name="parameters" element="tar:CreateAccessProfile"/>
+	</wsdl:message>
+	<wsdl:message name="CreateAccessProfileResponse">
+		<wsdl:part name="parameters" element="tar:CreateAccessProfileResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'ModifyAccessProfile' message-->
+	<wsdl:message name="ModifyAccessProfileRequest">
+		<wsdl:part name="parameters" element="tar:ModifyAccessProfile"/>
+	</wsdl:message>
+	<wsdl:message name="ModifyAccessProfileResponse">
+		<wsdl:part name="parameters" element="tar:ModifyAccessProfileResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<!--Definition of 'DeleteAccessProfile' message-->
+	<wsdl:message name="DeleteAccessProfileRequest">
+		<wsdl:part name="parameters" element="tar:DeleteAccessProfile"/>
+	</wsdl:message>
+	<wsdl:message name="DeleteAccessProfileResponse">
+		<wsdl:part name="parameters" element="tar:DeleteAccessProfileResponse"/>
+	</wsdl:message>
+	<!--===============================-->
+	<wsdl:portType name="AccessRulesPort">
+		<wsdl:operation name="GetServiceCapabilities">
+			<wsdl:documentation>Returns the capabilities of the access rules service. The result is returned in a typed answer.</wsdl:documentation>
+			<wsdl:input message="tar:GetServiceCapabilitiesRequest"/>
+			<wsdl:output message="tar:GetServiceCapabilitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileInfo">
+			<wsdl:documentation>
+				This method returns a list of access profile info items, specified in the request 
+				Only found access profile shall be returned. i.e, returned number of elements can differ from the requested element. 
+				This operation returns a list of access profile info items matching the given tokens.  
+				An ONVIF-compliant device that provides the access rules service shall implement this method.  
+				The device shall ignore tokens it cannot resolve and may return an empty list 
+				if there are no  access profiles matching specified tokens. 
+				If the number of requested items is greater than MaxLimit, a TooManyItems fault shall be returned. 
+			</wsdl:documentation>
+			<wsdl:input message="tar:GetAccessProfileInfoRequest"/>
+			<wsdl:output message="tar:GetAccessProfileInfoResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileInfoList">
+			<wsdl:documentation>
+				This method returns a list of access profile info items, specified in the request 
+				Used for pagination, refer to Profile C. 
+				A call to this method shall return a StartReference when not all data is returned and more data is available.  
+				The reference shall be valid for retrieving the next set of data. 
+			</wsdl:documentation>
+			<wsdl:input message="tar:GetAccessProfileInfoListRequest"/>
+			<wsdl:output message="tar:GetAccessProfileInfoListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfiles">
+			<wsdl:documentation>
+				This method returns a list of access profile items, specified in the request 
+				Only found access profile shall be returned. i.e, returned number of elements can differ from the requested element. 
+				This operation returns a list of access profile items matching the given tokens.  
+				An ONVIF-compliant device that provides the access rules service shall implement this method.  
+				The device shall ignore tokens it cannot resolve and may return an empty list 
+				if there are no  access profiles matching specified tokens. 
+				If the number of requested items is greater than MaxLimit, a TooManyItems fault shall be returned. 
+			</wsdl:documentation>
+			<wsdl:input message="tar:GetAccessProfilesRequest"/>
+			<wsdl:output message="tar:GetAccessProfilesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileList">
+			<wsdl:documentation>
+				This method returns a list of access profile items, specified in the request 
+				Used for pagination, refer to Profile C. 
+				A call to this method shall return a StartReference when not all data is returned and more data is available.  
+				The reference shall be valid for retrieving the next set of data. 
+			</wsdl:documentation>
+			<wsdl:input message="tar:GetAccessProfileListRequest"/>
+			<wsdl:output message="tar:GetAccessProfileListResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="CreateAccessProfile">
+			<wsdl:documentation>
+			</wsdl:documentation>
+			<wsdl:input message="tar:CreateAccessProfileRequest"/>
+			<wsdl:output message="tar:CreateAccessProfileResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="ModifyAccessProfile">
+			<wsdl:documentation>
+			</wsdl:documentation>
+			<wsdl:input message="tar:ModifyAccessProfileRequest"/>
+			<wsdl:output message="tar:ModifyAccessProfileResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteAccessProfile">
+			<wsdl:documentation>
+				This method deletes the specified access profile. 
+				The response shall only have those items which could not be deleted by the device.  
+				However, the tokens that were not found by the device will not be considered as failure to delete  
+				and are silently ignored and marked deleted. 
+				SOAP_OK indicates all requested entities have been successfully processed by the ONVIF service;  
+				in this case, the returned response array may be empty.       
+				The device may or may not delete the access profile if it is associated with one or more credentials. 
+				If the access profile is not deleted then the 'ReferenceInUse' fault must be generated. 
+				If the access profile is deleted, all access policies associated to this access profile will also be deleted.
+			</wsdl:documentation>
+			<wsdl:input message="tar:DeleteAccessProfileRequest"/>
+			<wsdl:output message="tar:DeleteAccessProfileResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<!--Protocol & data format for the operations and messages for the port type 'AccessRulesPort'-->
+	<wsdl:binding name="AccessRulesBinding" type="tar:AccessRulesPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetServiceCapabilities">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/GetServiceCapabilities"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileInfo">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/GetAccessProfileInfo"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileInfoList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/GetAccessProfileInfoList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfiles">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/GetAccessProfiles"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetAccessProfileList">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/GetAccessProfileList"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreateAccessProfile">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/CreateAccessProfile"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ModifyAccessProfile">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/ModifyAccessProfile"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteAccessProfile">
+			<soap:operation soapAction="http://www.onvif.org/ver10/accessrules/wsdl/DeleteAccessProfile"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+</wsdl:definitions>

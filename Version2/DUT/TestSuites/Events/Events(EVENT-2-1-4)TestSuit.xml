@@ -1,0 +1,1079 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Managment" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.01" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Correct response.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+        STEP 1 - Get Event service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Send Subscribe request
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 3 - Check that the DUT returned Subscribe response
+        STEP PASSED
+
+        STEP 4 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 5 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 6 - Validate CurrentTime and TerminationTime
+        STEP PASSED
+
+        STEP 7 - Check if the DUT returned SubscriptionReference
+        STEP PASSED
+
+        STEP 8 - Check if SubscriptionReference contains address
+        STEP PASSED
+
+        STEP 9 - Check that URL specified is valid
+        STEP PASSED
+
+        STEP 10 - Renew subscription
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 11 - Check that the DUT returned Renew response
+        STEP PASSED
+
+        STEP 12 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 13 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 14 - Validate times
+        STEP PASSED
+
+        STEP 15 - Renew subscription - use xs:DateTime format for TerminationTime
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 16 - Check that the DUT returned Renew response
+        STEP PASSED
+
+        STEP 17 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 18 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 19 - Check termination time in request and response
+        STEP PASSED
+
+        STEP 20 - Check TerminationTime and CurrentTime in response
+        STEP PASSED
+
+        STEP 21 - Delete Subscription Manager
+        Send unsubscribe request
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.68/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime type="now+diff">10</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.02" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Wrong response: TerminationTime less than CurrentTime+InitialTermination time for Subscribe</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Wrong response: TerminationTime less than CurrentTime+InitialTermination time for Subscribe.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+<![CDATA[
+EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Send Subscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that the DUT returned Subscribe response
+   STEP PASSED
+
+   STEP 4 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+      TerminationTime < CurrentTime + InitialTerminationTime
+   STEP FAILED
+
+TEST FAILED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">9</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.03" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Wrong response: TerminationTime less than CurrentTime+InitialTermination time for first Renew</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Wrong response: TerminationTime less than CurrentTime+InitialTermination time for first Renew.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+<![CDATA[
+EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Send Subscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that the DUT returned Subscribe response
+   STEP PASSED
+
+   STEP 4 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 7 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 8 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 9 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 10 - Renew subscription
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 11 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 12 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 13 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 14 - Validate times
+      TerminationTime < CurrentTime + InitialTerminationTime
+   STEP FAILED
+
+   STEP 15 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+TEST FAILED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">9</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.04" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Wrong response: TerminationTime less than CurrentTime+InitialTermination time for second Renew</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Wrong response: TerminationTime
+      less than CurrentTime+InitialTermination time for second Renew.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+<![CDATA[
+EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Send Subscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that the DUT returned Subscribe response
+   STEP PASSED
+
+   STEP 4 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 7 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 8 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 9 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 10 - Renew subscription
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 11 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 12 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 13 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 14 - Validate times
+   STEP PASSED
+
+   STEP 15 - Renew subscription - use xs:DateTime format for TerminationTime
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 16 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 17 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 18 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 19 - Check termination time in request and response
+      TerminationTime (in Response) < InitialTerminationTime
+   STEP FAILED
+
+   STEP 20 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+TEST FAILED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime type="now+diff">10</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">5</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.05" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Wrong response: TerminationTime less than CurrentTime for second Renew</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Wrong response: TerminationTime
+      less than CurrentTime for second Renew.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+<![CDATA[
+EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Send Subscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that the DUT returned Subscribe response
+   STEP PASSED
+
+   STEP 4 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 7 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 8 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 9 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 10 - Renew subscription
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 11 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 12 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 13 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 14 - Validate times
+   STEP PASSED
+
+   STEP 15 - Renew subscription - use xs:DateTime format for TerminationTime
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 16 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 17 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 18 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 19 - Check termination time in request and response
+      TerminationTime (in Response) < InitialTerminationTime
+   STEP FAILED
+
+   STEP 20 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+TEST FAILED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime type="now+diff">10</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">5</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.06" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Incorrect times in response</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when termination time in response is less than current time
+      (NOTE: this fails since in this case termination time is less
+      than requested termination time...)
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+<![CDATA[
+EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+   STEP 1 - Get Event service address
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 2 - Send Subscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 3 - Check that the DUT returned Subscribe response
+   STEP PASSED
+
+   STEP 4 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 5 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 6 - Validate CurrentTime and TerminationTime
+   STEP PASSED
+
+   STEP 7 - Check if the DUT returned SubscriptionReference
+   STEP PASSED
+
+   STEP 8 - Check if SubscriptionReference contains address
+   STEP PASSED
+
+   STEP 9 - Check that URL specified is valid
+   STEP PASSED
+
+   STEP 10 - Renew subscription
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 11 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 12 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 13 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 14 - Validate times
+   STEP PASSED
+
+   STEP 15 - Renew subscription - use xs:DateTime format for TerminationTime
+      Transmit done
+      Receive done
+   STEP PASSED
+
+   STEP 16 - Check that the DUT returned Renew response
+   STEP PASSED
+
+   STEP 17 - Check that CurrentTime is specified
+   STEP PASSED
+
+   STEP 18 - Check that TerminationTime is specified
+   STEP PASSED
+
+   STEP 19 - Check termination time in request and response
+      TerminationTime (in Response) < InitialTerminationTime
+   STEP FAILED
+
+   STEP 20 - Delete Subscription Manager
+      Send unsubscribe request
+      Transmit done
+      Receive done
+   STEP PASSED
+
+TEST FAILED
+]]>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime type="now+diff">10</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">-10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.EV.BNI.EVENT-2-1-4.07" ONVIFTestID="EVENT-2-1-4" Enabled="true">
+    <TestName>BASIC NOTIFICATION INTERFACE - RENEW</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      Check BASIC NOTIFICATION INTERFACE - RENEW test
+      when DUT return Correct response.
+    </Description>
+    <ExpectedResult>
+      <TestSummary>
+        EVENT-2-1-4 BASIC NOTIFICATION INTERFACE - RENEW
+
+        STEP 1 - Get Event service address
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 2 - Send Subscribe request
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 3 - Check that the DUT returned Subscribe response
+        STEP PASSED
+
+        STEP 4 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 5 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 6 - Validate CurrentTime and TerminationTime
+        STEP PASSED
+
+        STEP 7 - Check if the DUT returned SubscriptionReference
+        STEP PASSED
+
+        STEP 8 - Check if SubscriptionReference contains address
+        STEP PASSED
+
+        STEP 9 - Check that URL specified is valid
+        STEP PASSED
+
+        STEP 10 - Renew subscription
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 11 - Check that the DUT returned Renew response
+        STEP PASSED
+
+        STEP 12 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 13 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 14 - Validate times
+        STEP PASSED
+
+        STEP 15 - Renew subscription - use xs:DateTime format for TerminationTime
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        STEP 16 - Check that the DUT returned Renew response
+        STEP PASSED
+
+        STEP 17 - Check that CurrentTime is specified
+        STEP PASSED
+
+        STEP 18 - Check that TerminationTime is specified
+        STEP PASSED
+
+        STEP 19 - Check termination time in request and response
+        STEP PASSED
+
+        STEP 20 - Check TerminationTime and CurrentTime in response
+        STEP PASSED
+
+        STEP 21 - Delete Subscription Manager
+        Send unsubscribe request
+        Transmit done
+        Receive done
+        STEP PASSED
+
+        TEST PASSED
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Category>Events</Category>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <Capabilities xmlns:tt="http://www.onvif.org/ver10/schema">
+          <tt:Events>
+            <tt:XAddr>http://CAMERA_IP/EventService.asmx</tt:XAddr>
+            <tt:WSSubscriptionPolicySupport>false</tt:WSSubscriptionPolicySupport>
+            <tt:WSPullPointSupport>false</tt:WSPullPointSupport>
+            <tt:WSPausableSubscriptionManagerInterfaceSupport>false</tt:WSPausableSubscriptionManagerInterfaceSupport>
+          </tt:Events>
+        </Capabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>Subscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <InitialTerminationTime>PT10S</InitialTerminationTime>
+        <Address ignore="1">http://192.168.10.66/onvif_notify_server</Address>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wsa5="http://www.w3.org/2005/08/addressing" >
+          <wsnt:SubscriptionReference>
+            <wsa5:Address>http://192.168.10.209/Web_Service?Idx=0</wsa5:Address>
+          </wsnt:SubscriptionReference>
+          <wsnt:CurrentTime>2010-09-07T13:32:51</wsnt:CurrentTime>
+          <wsnt:TerminationTime>2010-09-07T13:33:01</wsnt:TerminationTime>
+        </SubscribeResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="3">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime>PT10S</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime differance="true">10</TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>SMSRenew</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <TerminationTime ignore="1">1900-01-01T01:02:01+03:00</TerminationTime>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <RenewResponse xmlns:a="http://docs.oasis-open.org/wsn/b-2">
+          <a:TerminationTime>2011-06-09T13:27:46Z</a:TerminationTime>
+          <a:CurrentTime>1900-01-01T01:01:01+03:00</a:CurrentTime>
+        </RenewResponse>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <CurrentTime type="now"></CurrentTime>
+        <TerminationTime type="fromrequest"></TerminationTime>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="5">
+      <Command>SMSUnsubscribe</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>

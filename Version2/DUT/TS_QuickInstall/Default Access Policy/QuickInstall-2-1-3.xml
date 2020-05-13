@@ -1,0 +1,974 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Recording service" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>Default access policy - Anonymous</Name>
+    <Description>
+    </Description>
+  </Parameters>
+  <Test ID="TC.QuickInstall.F00" ONVIFTestID="Features" Enabled="true">
+    <TestName>QUICK_INSTALL Features detection</TestName>
+    <Name>GetServices and Digest suported</Name>
+    <Description>
+      GetServices - supported.
+      Digest - supported.
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id="2">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network IPFilter="true" ZeroConfiguration="true" IPVersion6="true" DynDNS="true" Dot11Configuration="true" HostnameFromDHCP="true" NTP="0" />
+          <tds:Security TLS1.0="true" TLS1.1="true" TLS1.2="true" OnboardKeyGeneration="true" AccessPolicyConfig="true" Dot1X="true" RemoteUserHandling="true" X.509Token="true" SAMLToken="true" KerberosToken="true" MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" RELToken="true" SupportedEAPMethods="1 2 3" />
+          <tds:System DiscoveryResolve="true" DiscoveryBye="true" RemoteDiscovery="true" SystemBackup="true" SystemLogging="true" FirmwareUpgrade="true" HttpFirmwareUpgrade="true" HttpSystemBackup="true" HttpSystemLogging="true" HttpSupportInformation="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+  </Test>
+  
+  <Test ID="TC.QUICK_INSTALL-2-1-3.01" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>Correct response - all annex's commands have Anonymous level</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+     <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+       <ChangeAuth>
+          <Command authMode="Anonymous">GetServiceCapabilities</Command>
+       <Command authMode="Anonymous">GetUsers</Command>
+       <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+       <Command authMode="Anonymous">CreateUsers</Command>
+        <Command authMode="Administrator">SystemReboot</Command>
+         
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <!--<Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>-->
+        </ArrayOfService>
+      </ResponseParameters>
+      
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Administrator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>Normal</Response>
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+    
+    
+     
+      
+  </Test>
+  <Test ID="TC.QUICK_INSTALL-2-1-3.02" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>The DUT allows Anonymous access to the SystemReboot</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+        
+   STEP 20 - Waiting for HTTP 401 error(Unauthorized)
+      The command SystemReboot is processed successfully by the DUT but HTTP 401 error(Unauthorized) is expected
+   STEP FAILED
+
+      </TestSummary>
+    </ExpectedResult>
+     <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+       <ChangeAuth>
+          <Command authMode="Anonymous">GetServiceCapabilities</Command>
+       <Command authMode="Anonymous">GetUsers</Command>
+       <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+       <Command authMode="Anonymous">CreateUsers</Command>
+        <Command authMode="Anonymous">SystemReboot</Command>
+         
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="2">
+      <Command>Device10.SetSystemFactoryDefault</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <FactoryDefault>Hard</FactoryDefault>
+      </RequestParameters>
+      <ResponseParameters>
+       
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Administrator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>Normal</Response>
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+    
+    
+     
+      
+  </Test>
+  <Test ID="TC.QUICK_INSTALL-2-1-3.03" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>The DUT does not allow Operator access to the SystemReboot</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+    STEP 17 - Reboot device
+      Transmit done
+      Receive done
+      Digest authentication FAILED (HTTP status 401 received)
+   STEP FAILED
+
+
+
+      </TestSummary>
+    </ExpectedResult>
+     <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+       <ChangeAuth>
+          <Command authMode="Anonymous">GetServiceCapabilities</Command>
+       <Command authMode="Anonymous">GetUsers</Command>
+       <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+       <Command authMode="Anonymous">CreateUsers</Command>
+        <Command authMode="Administrator">SystemReboot</Command>
+         
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+      
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+     
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    
+    
+    
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>Normal</Response>
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+    
+    
+     
+      
+  </Test>
+  <Test ID="TC.QUICK_INSTALL-2-1-3.04" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>Fault to SystemReboot</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+     <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+       <ChangeAuth>
+          <Command authMode="Anonymous">GetServiceCapabilities</Command>
+       <Command authMode="Anonymous">GetUsers</Command>
+       <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+       <Command authMode="Anonymous">CreateUsers</Command>
+        <Command authMode="Administrator">SystemReboot</Command>
+         
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="2">
+      <Command>Device10.SetSystemFactoryDefault</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <FactoryDefault>Hard</FactoryDefault>
+      </RequestParameters>
+      <ResponseParameters>
+       
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Administrator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+    
+    
+     
+      
+  </Test>
+  <Test ID="TC.QUICK_INSTALL-2-1-3.05" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>No response to SystemReboot</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+     <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+       <ChangeAuth>
+          <Command authMode="Anonymous">GetServiceCapabilities</Command>
+       <Command authMode="Anonymous">GetUsers</Command>
+       <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+       <Command authMode="Anonymous">CreateUsers</Command>
+        <Command authMode="Administrator">SystemReboot</Command>
+         
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="2">
+      <Command>Device10.SetSystemFactoryDefault</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        
+        <FactoryDefault>Hard</FactoryDefault>
+      </RequestParameters>
+      <ResponseParameters>
+       
+      </ResponseParameters>
+      
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Administrator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+          
+          
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+        
+      </ResponseParameters>
+    </Step>
+    
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>NoResponse</Response>
+ 
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+    
+    
+     
+      
+  </Test>
+  <Test ID="TC.QUICK_INSTALL-2-1-3.06" ONVIFTestID="QUICK_INSTALL-2-1-3" Enabled="true">
+    <TestName>Default access policy - Operator</TestName>
+    <Name>A.1 all annex's commands have Administrator level</Name>
+    <Description>
+      Check Default access policy - Operator
+      when DUT sends correct response
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      First of all press 'Check' on the Discovery tab
+      to set initial authentification level
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id="0">
+      <Command>GetDeviceInformation</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <Manufacturer>DUT Simulator</Manufacturer>
+        <Model>DUT</Model>
+        <FirmwareVersion>000000</FirmwareVersion>
+        <SerialNumber>000000000000000000</SerialNumber>
+        <HardwareId>H00000</HardwareId>
+      </ResponseParameters>
+      <ChangeAuth>
+        <Command authMode="Administrator">GetServiceCapabilities</Command>
+        <Command authMode="Administrator">GetUsers</Command>
+        <Command authMode="Administrator">SetSystemFactoryDefault</Command>
+        <Command authMode="Administrator">CreateUsers</Command>
+        <Command authMode="Administrator">SystemReboot</Command>
+
+      </ChangeAuth>
+    </Step>
+    <Step id="7">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceEvents10/EventService.asmx</tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+
+    </Step>
+    <Step id="2">
+      <Command>Device10.SetSystemFactoryDefault</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+
+        <FactoryDefault>Hard</FactoryDefault>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+
+    </Step>
+    <Step id="3">
+      <Command>Device10.GetServiceCapabilities</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+      </RequestParameters>
+      <ResponseParameters>
+        <DeviceServiceCapabilities xmlns:tds="http://www.onvif.org/ver10/device/wsdl">
+          <tds:Network NTP="1" IPVersion6="true" ZeroConfiguration="true" DynDNS="true" IPFilter="true" DHCPv6="true" />
+          <tds:Security MaxPasswordLength="10"  MaxUserNameLength="8" HttpDigest="true" />
+          <tds:System SystemLogging="true" DiscoveryBye="true" />
+        </DeviceServiceCapabilities>
+      </ResponseParameters>
+    </Step>
+    <Step id ="4">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+
+
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Administrator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>GetUsers</Command>
+      <Response>Normal</Response>
+      <ResponseParameters>
+        <ArrayOfUser xmlns:tt="http://www.onvif.org/ver10/schema">
+
+
+          <User>
+            <tt:Username>admin</tt:Username>
+            <tt:UserLevel>Administrator</tt:UserLevel>
+          </User>
+        </ArrayOfUser>
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>CreateUsers</Command>
+      <Response>Normal</Response>
+      <AddUsers>true</AddUsers>
+      <RequestParameters>
+        <User>
+          <UserLevel>Operator</UserLevel>
+        </User>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+
+    <Step id="3">
+      <Command>Device10.SystemReboot</Command>
+      <Response>Normal</Response>
+      <ResponseParameters  UseAnyNodes="false">
+        <string>reboot...</string>
+      </ResponseParameters>
+    </Step>
+
+
+
+
+  </Test>
+</TestSuit>

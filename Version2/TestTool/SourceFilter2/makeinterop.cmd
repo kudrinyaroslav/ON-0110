@@ -1,0 +1,1 @@
+"C:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin\TlbImp.exe"  Debug\SourceFilter2.tlb /out:ONVIFRTSPFilter1506.dll

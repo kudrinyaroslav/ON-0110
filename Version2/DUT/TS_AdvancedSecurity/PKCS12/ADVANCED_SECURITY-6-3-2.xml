@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSuit Name="Device Management" Version="0.1">
+  <Parameters>
+    <TimeOut>100000</TimeOut>
+    <Name>ADVANCED_SECURITY-6-3-2 Upload PKCS12 - decryption fails</Name>
+    <Description>
+      TODO:
+      - empty
+      - no
+    </Description>
+  </Parameters>
+  <Test ID = "TC.ADVANCED_SECURITY-6-3-2.01" ONVIFTestID="ADVANCED_SECURITY-6-3-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-6-3-2 Upload PKCS12 - decryption fails</TestName>
+    <Name>Incorrect: - DUT sends UploadCertificateWithPrivateKeyInPKCS12Response</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadPassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Passphrase>AdditionalPassphrase</Passphrase>
+        <PassphraseAlias>ONVIF_Passphrase_Test</PassphraseAlias>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>PassphraseID1</string>
+      </ResponseParameters>
+      <!--<ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>-->
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.UploadCertificateWithPrivateKeyInPKCS12</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertWithPrivateKey></CertWithPrivateKey>
+        <CertificationPathAlias>ONVIF_Certification_Path_Test</CertificationPathAlias>
+        <KeyAlias>ONVIF_Key_Test</KeyAlias>
+        <IgnoreAdditionalCertificates>true</IgnoreAdditionalCertificates>
+        <EncryptionPassphraseID>PassphraseID1</EncryptionPassphraseID>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>certPathID1</string>
+    </ResponseParameters>
+      <ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.GetCertificationPath</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificationPathID>certPathID1</CertificationPathID>
+      </RequestParameters>
+      <ResponseParameters>
+        <CertificationPath xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl">
+          <tas:CertificateID>certificateID1</tas:CertificateID>
+          <tas:Alias>ONVIF_Certification_Path_Test</tas:Alias>
+        </CertificationPath>
+      </ResponseParameters>
+    </Step>
+    <Step id ="5">
+      <Command>AdvancedSecurity10.DeleteCertificationPath</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificationPathID>certPathID1</CertificationPathID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="6">
+      <Command>AdvancedSecurity10.DeleteCertificate</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <CertificateID>certificateID1</CertificateID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="7">
+      <Command>AdvancedSecurity10.DeleteKey</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <KeyID>keyID1</KeyID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+    <Step id ="8">
+      <Command>AdvancedSecurity10.DeletePassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <PassphraseID>PassphraseID1</PassphraseID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-6-3-2.02" ONVIFTestID="ADVANCED_SECURITY-6-3-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-6-3-2 Upload PKCS12 - decryption fails</TestName>
+    <Name>Correct response</Name>
+    <Description>
+      The DUT sends all correct responses
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>PASSED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadPassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Passphrase>AdditionalPassphrase</Passphrase>
+        <PassphraseAlias>ONVIF_Passphrase_Test</PassphraseAlias>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>PassphraseID1</string>
+      </ResponseParameters>
+      <!--<ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>-->
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.UploadCertificateWithPrivateKeyInPKCS12</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>DecryptionFailed</Subcode>
+      <RequestParameters>
+        <CertWithPrivateKey></CertWithPrivateKey>
+        <CertificationPathAlias>ONVIF_Certification_Path_Test</CertificationPathAlias>
+        <KeyAlias>ONVIF_Key_Test</KeyAlias>
+        <IgnoreAdditionalCertificates>true</IgnoreAdditionalCertificates>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>certPathID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.DeletePassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <PassphraseID>PassphraseID1</PassphraseID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-6-3-2.03" ONVIFTestID="ADVANCED_SECURITY-6-3-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-6-3-2 Upload PKCS12 - decryption fails</TestName>
+    <Name>Unexpected SOAP 1.2 Fault message</Name>
+    <Description>
+      
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadPassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Passphrase>AdditionalPassphrase</Passphrase>
+        <PassphraseAlias>ONVIF_Passphrase_Test</PassphraseAlias>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>PassphraseID1</string>
+      </ResponseParameters>
+      <!--<ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>-->
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadCertificateWithPrivateKeyInPKCS12</Command>
+      <Response>Fault</Response>
+      <Code>Sender</Code>
+      <Subcode>InvalidArgVal</Subcode>
+      <Subcode>BadPCKS12File</Subcode>
+      <RequestParameters>
+        <CertWithPrivateKey></CertWithPrivateKey>
+        <CertificationPathAlias>ONVIF_Certification_Path_Test</CertificationPathAlias>
+        <KeyAlias>ONVIF_Key_Test</KeyAlias>
+        <IgnoreAdditionalCertificates>true</IgnoreAdditionalCertificates>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>certPathID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.DeletePassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <PassphraseID>PassphraseID1</PassphraseID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+  <Test ID = "TC.ADVANCED_SECURITY-6-3-2.04" ONVIFTestID="ADVANCED_SECURITY-6-3-2" Enabled="true">
+    <TestName>ADVANCED_SECURITY-6-3-2 Upload PKCS12 - decryption fails</TestName>
+    <Name>No response to UploadCertificateWithPrivateKeyInPKCS12</Name>
+    <Description>
+
+    </Description>
+    <ExpectedResult>
+      <ONVIFTestResult>FAILED</ONVIFTestResult>
+      <TestSummary>
+      </TestSummary>
+    </ExpectedResult>
+    <Step id ="1">
+      <Command>Device10.GetServices</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <IncludeCapability>False</IncludeCapability>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <ArrayOfService xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/device/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/events/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+
+          <Service>
+            <tds:Namespace>http://www.onvif.org/ver10/advancedsecurity/wsdl</tds:Namespace>
+            <tds:XAddr>http://localhost/onvif/ServiceDevice10/DeviceServiceFake.asmx </tds:XAddr>
+            <tds:Version>
+              <tt:Major>2</tt:Major>
+              <tt:Minor>1</tt:Minor>
+            </tds:Version>
+          </Service>
+        </ArrayOfService>
+      </ResponseParameters>
+    </Step>
+    <Step id ="2">
+      <Command>AdvancedSecurity10.UploadPassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <Passphrase>AdditionalPassphrase</Passphrase>
+        <PassphraseAlias>ONVIF_Passphrase_Test</PassphraseAlias>
+      </RequestParameters>
+      <ResponseParameters>
+        <string>PassphraseID1</string>
+      </ResponseParameters>
+      <!--<ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>-->
+    </Step>
+    <Step id ="3">
+      <Command>AdvancedSecurity10.UploadCertificateWithPrivateKeyInPKCS12</Command>
+      <Response>NoResponse</Response>
+      <RequestParameters>
+        <CertWithPrivateKey></CertWithPrivateKey>
+        <CertificationPathAlias>ONVIF_Certification_Path_Test</CertificationPathAlias>
+        <KeyAlias>ONVIF_Key_Test</KeyAlias>
+        <IgnoreAdditionalCertificates>true</IgnoreAdditionalCertificates>
+      </RequestParameters>
+      <ResponseParameters special="1">
+        <string>certPathID1</string>
+      </ResponseParameters>
+      <ResponseParametersAdditional>
+        <KeyID>keyID1</KeyID>
+      </ResponseParametersAdditional>
+    </Step>
+    <Step id ="4">
+      <Command>AdvancedSecurity10.DeletePassphrase</Command>
+      <Response>Normal</Response>
+      <RequestParameters>
+        <PassphraseID>PassphraseID1</PassphraseID>
+      </RequestParameters>
+      <ResponseParameters>
+
+      </ResponseParameters>
+    </Step>
+  </Test>
+</TestSuit>
+
